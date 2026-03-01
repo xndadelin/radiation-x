@@ -6,1270 +6,969 @@
 <title>Radiații X — Aplicații</title>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
-body{font-family:'Inter',system-ui,-apple-system,'Helvetica Neue',Arial,sans-serif;background:#f5f5f7;color:#1d1d1f;line-height:1.7;overflow-x:hidden}
-::selection{background:rgba(0,122,255,.15);color:#000}
-::-webkit-scrollbar{width:6px}
-::-webkit-scrollbar-track{background:#f5f5f7}
-::-webkit-scrollbar-thumb{background:rgba(0,0,0,.15);border-radius:3px}
-::-webkit-scrollbar-thumb:hover{background:rgba(0,0,0,.3)}
-
-:root{
-  --accent:#1d1d1f;
-  --accent15:rgba(0,0,0,.04);
-  --accent40:rgba(0,0,0,.12);
-  --text:#1d1d1f;
-  --text2:#424245;
-  --text3:#6e6e73;
-  --text4:#86868b;
-  --bg:#f5f5f7;
-  --bg2:#ffffff;
-  --border:rgba(0,0,0,.08);
-  --blue:#0071e3;
-}
-
-/* ====== NAV ====== */
-.nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 48px;transition:background .4s,border .4s}
-.nav.scrolled{background:rgba(245,245,247,.85);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid var(--border)}
-.nav-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:64px}
-.nav-logo{font-size:1.1rem;font-weight:800;letter-spacing:-.03em}
-.nav-logo .x{color:var(--blue)}
-.nav-links{display:flex;gap:4px;list-style:none}
-.nav-links a{font-size:.7rem;font-weight:500;letter-spacing:.06em;color:var(--text3);padding:6px 14px;border-radius:6px;text-decoration:none;transition:color .3s,background .3s}
-.nav-links a:hover,.nav-links a.active{color:var(--blue);background:rgba(0,113,227,.06)}
-.nav-toggle{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:8px;z-index:101}
-.nav-toggle span{width:20px;height:1.5px;background:var(--text);border-radius:1px;transition:all .3s}
-.nav-toggle.open span:nth-child(1){transform:rotate(45deg) translate(4px,4px)}
-.nav-toggle.open span:nth-child(2){opacity:0}
-.nav-toggle.open span:nth-child(3){transform:rotate(-45deg) translate(4px,-4px)}
-
-/* ====== HERO ====== */
-.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:120px 32px 80px;position:relative;overflow:hidden}
-.hero-bg{position:absolute;inset:0;z-index:0}
-.hero-bg img{width:100%;height:100%;object-fit:cover;opacity:.10;filter:grayscale(100%)}
-.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(0,0,0,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,0,0,.03) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse,black 20%,transparent 70%);-webkit-mask-image:radial-gradient(ellipse,black 20%,transparent 70%);pointer-events:none;z-index:1}
-.hero>*:not(.hero-bg):not(.hero-grid){position:relative;z-index:2}
-.hero-overline{font-size:.7rem;font-weight:500;letter-spacing:.2em;color:var(--text3);margin-bottom:24px;opacity:0;animation:fadeUp .8s .2s forwards}
-.hero-title{font-size:clamp(3rem,8vw,7rem);font-weight:800;letter-spacing:-.04em;line-height:1;margin-bottom:28px;opacity:0;animation:fadeUp .8s .4s forwards}
+html{overflow:hidden;height:100%}
+body{font-family:Georgia,'Times New Roman',serif;background:#fff;color:#222;line-height:1.7;overflow:hidden;height:100%;font-size:16px}
+::selection{background:rgba(0,60,120,.15);color:#000}
+:root{--text:#222;--text2:#444;--text3:#666;--text4:#888;--bg:#fff;--bg2:#f8f8f8;--border:rgba(0,0,0,.1);--blue:#1a5276}
+.deck{height:100vh;overflow:hidden;position:relative}
+.slide{position:absolute;inset:0;display:flex;align-items:flex-start;justify-content:center;padding:60px 48px;opacity:0;pointer-events:none;transition:opacity .4s ease,transform .4s ease;transform:translateY(30px);overflow-y:auto}
+.slide.active{opacity:1;pointer-events:auto;transform:translateY(0)}
+.slide-inner{max-width:900px;width:100%;margin:auto}
+.slide-nav{position:fixed;bottom:28px;right:32px;display:flex;gap:8px;z-index:200}
+.slide-nav button{width:40px;height:40px;border:1px solid var(--border);border-radius:4px;background:rgba(255,255,255,.9);cursor:pointer;font-size:1rem;color:var(--text3);display:flex;align-items:center;justify-content:center;transition:color .2s,border-color .2s}
+.slide-nav button:hover{color:var(--blue);border-color:var(--blue)}
+.slide-nav button:disabled{opacity:.3;cursor:default;color:var(--text4);border-color:var(--border)}
+.slide-counter{position:fixed;bottom:36px;left:32px;font-size:.75rem;color:var(--text4);font-family:'Helvetica Neue',Arial,sans-serif;z-index:200}
+.slide-progress{position:fixed;top:0;left:0;height:3px;background:var(--blue);z-index:300;transition:width .35s ease}
+.slide-dots{position:fixed;right:14px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:6px;z-index:200}
+.slide-dots button{width:8px;height:8px;border-radius:50%;border:1.5px solid var(--border);background:transparent;cursor:pointer;padding:0;transition:all .2s}
+.slide-dots button.active{background:var(--blue);border-color:var(--blue)}
+.hero-slide{text-align:center;flex-direction:column;position:relative;overflow:hidden;padding:0;width:100%;height:100vh;align-items:center}
+.hero-slide .hero-bg{position:absolute;inset:0;z-index:0;width:100%;height:100%}
+.hero-slide .hero-bg img{width:100%;height:100%;object-fit:cover;opacity:.07;filter:grayscale(100%)}
+.hero-slide .hero-content{position:relative;z-index:2}
+.hero-overline{font-size:.8rem;color:var(--text3);margin-bottom:16px;font-family:'Helvetica Neue',Arial,sans-serif}
+.hero-title{font-size:clamp(2.5rem,6vw,4.5rem);font-weight:700;letter-spacing:-.02em;line-height:1.1;margin-bottom:16px}
 .hero-title .x{color:var(--blue)}
-.hero-sub{font-size:clamp(.95rem,1.3vw,1.15rem);color:var(--text2);max-width:540px;line-height:1.9;font-weight:400;margin-bottom:32px;opacity:0;animation:fadeUp .8s .6s forwards}
-.hero-line{width:40px;height:2px;background:var(--blue);opacity:0;animation:fadeUp .8s .8s forwards}
-.hero-scroll{position:absolute;bottom:36px;font-size:.6rem;letter-spacing:.15em;color:var(--text4);opacity:0;animation:fadeUp .8s 1s forwards}
-.hero-scroll::after{content:'';display:block;width:1px;height:32px;background:linear-gradient(var(--text4),transparent);margin:10px auto 0}
-
-@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
-
-/* ====== SECTIONS ====== */
-.section{padding:120px 48px;position:relative}
-.section:nth-child(odd){background:var(--bg)}
-.section:nth-child(even){background:var(--bg2)}
-.section-inner{max-width:1100px;margin:0 auto}
-.section-header{margin-bottom:64px}
-.section-number{font-family:'SF Mono','JetBrains Mono',monospace;font-size:.7rem;color:var(--blue);letter-spacing:.15em;display:block;margin-bottom:12px}
-.section-title{font-size:clamp(2rem,4vw,3.2rem);font-weight:800;letter-spacing:-.03em;line-height:1.15;margin-bottom:12px}
-.section-accent{width:32px;height:2px;background:var(--blue);border-radius:2px;margin-bottom:20px}
-.section-desc{font-size:.92rem;color:var(--text2);line-height:1.85;max-width:600px;font-weight:400}
-
-/* ====== SECTION IMAGE ====== */
-.section-img{width:100%;max-height:400px;border-radius:16px;overflow:hidden;margin-bottom:48px;box-shadow:0 4px 24px rgba(0,0,0,.08)}
-.section-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s ease}
-.section-img:hover img{transform:scale(1.03)}
-
-/* ====== APPLICATION ITEMS ====== */
-.app-list{display:flex;flex-direction:column;gap:0}
-.app-item{display:grid;grid-template-columns:220px 1fr;gap:40px;padding:32px 0;border-bottom:1px solid var(--border);align-items:baseline}
+.hero-sub{font-size:1rem;color:var(--text2);max-width:480px;margin:0 auto 20px;line-height:1.8}
+.hero-line{width:36px;height:2px;background:var(--blue);margin:0 auto 20px}
+.hero-start{font-size:.75rem;color:var(--text4);margin-top:24px;font-family:'Helvetica Neue',Arial,sans-serif}
+.s-number{font-size:.7rem;color:var(--blue);font-weight:600;font-family:'Helvetica Neue',Arial,sans-serif;margin-bottom:6px;display:block}
+.s-title{font-size:1.7rem;font-weight:700;letter-spacing:-.01em;line-height:1.2;margin-bottom:8px}
+.s-accent{width:24px;height:2px;background:var(--blue);margin-bottom:12px}
+.s-desc{font-size:.92rem;color:var(--text2);line-height:1.8;max-width:600px;margin-bottom:24px}
+.s-img{width:100%;max-height:280px;border-radius:4px;overflow:hidden;margin-bottom:24px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.s-img img{width:100%;height:100%;object-fit:cover;display:block}
+.app-list{display:flex;flex-direction:column}
+.app-item{display:grid;grid-template-columns:180px 1fr;gap:20px;padding:16px 0;border-bottom:1px solid var(--border);align-items:baseline}
 .app-item:last-child{border-bottom:none}
-.app-name{font-size:.9rem;font-weight:700;letter-spacing:-.01em;color:var(--text);position:relative;padding-left:20px}
-.app-name::before{content:'';position:absolute;left:0;top:7px;width:6px;height:6px;border-radius:50%;border:1.5px solid var(--text4);transition:all .3s}
-.app-item:hover .app-name::before{border-color:var(--blue);background:var(--blue);box-shadow:0 0 8px rgba(0,113,227,.25)}
-.app-item:hover .app-name{color:var(--blue)}
-.app-detail{font-size:.86rem;color:var(--text2);line-height:1.9;font-weight:400}
-
-/* ====== REVEAL ====== */
-.reveal{opacity:0;transform:translateY(28px);transition:opacity .7s cubic-bezier(.4,0,.2,1),transform .7s cubic-bezier(.4,0,.2,1)}
-.reveal.visible{opacity:1;transform:translateY(0)}
-.app-item.reveal:nth-child(1){transition-delay:0s}
-.app-item.reveal:nth-child(2){transition-delay:.06s}
-.app-item.reveal:nth-child(3){transition-delay:.12s}
-.app-item.reveal:nth-child(4){transition-delay:.18s}
-.app-item.reveal:nth-child(5){transition-delay:.24s}
-.app-item.reveal:nth-child(6){transition-delay:.30s}
-.app-item.reveal:nth-child(7){transition-delay:.36s}
-.app-item.reveal:nth-child(8){transition-delay:.42s}
-
-/* ====== INTERACTIVE BLOCKS ====== */
-.interactive-block{background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:48px;margin:48px 0;box-shadow:0 2px 20px rgba(0,0,0,.04)}
-.interactive-block h3{font-size:1.3rem;font-weight:700;margin-bottom:8px}
-.interactive-block .ib-sub{font-size:.85rem;color:var(--text3);margin-bottom:28px}
-
-/* ====== INTERACTIVE: SPECTRUM ====== */
-.spectrum-container{width:100%;max-width:700px;margin:0 auto}
-.spectrum-bar-wrap{position:relative;margin-bottom:8px}
-.spectrum-bar{display:flex;height:56px;border-radius:12px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.1)}
-.spectrum-seg{flex:1;cursor:pointer;transition:opacity .2s;position:relative}
+.app-name{font-size:.85rem;font-weight:700;color:var(--text);font-family:'Helvetica Neue',Arial,sans-serif}
+.app-detail{font-size:.82rem;color:var(--text2);line-height:1.75}
+.dose-list{list-style:none;display:flex;flex-direction:column;gap:6px;margin-top:12px}
+.dose-list li{padding:8px 12px;background:var(--bg2);border-radius:3px;border:1px solid var(--border);font-size:.82rem;line-height:1.6;color:var(--text2)}
+.ib{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:24px;margin-bottom:20px}
+.ib h3{font-size:1.05rem;font-weight:700;margin-bottom:4px;font-family:'Helvetica Neue',Arial,sans-serif}
+.ib .ib-sub{font-size:.82rem;color:var(--text3);margin-bottom:14px}
+.spectrum-container{max-width:680px;margin:0 auto}
+.spectrum-bar-wrap{position:relative;margin-bottom:4px}
+.spectrum-bar{display:flex;height:42px;border-radius:3px;overflow:hidden;border:1px solid var(--border)}
+.spectrum-seg{flex:1;cursor:pointer;position:relative}
 .spectrum-seg:hover{opacity:.8}
-.spectrum-seg.active::after{content:'';position:absolute;inset:0;border:3px solid #fff;border-radius:0;pointer-events:none}
-.spectrum-seg:first-child{border-radius:12px 0 0 12px}
-.spectrum-seg:last-child{border-radius:0 12px 12px 0}
-.spectrum-seg:first-child.active::after{border-radius:12px 0 0 12px}
-.spectrum-seg:last-child.active::after{border-radius:0 12px 12px 0}
-.spectrum-xray-indicator{position:absolute;top:-22px;font-size:.65rem;font-weight:700;color:var(--blue);letter-spacing:.05em}
-.spectrum-labels{display:flex;font-size:.6rem;color:var(--text4);letter-spacing:.04em;padding:0 2px}
+.spectrum-seg.active::after{content:'';position:absolute;inset:0;border:2px solid #fff;pointer-events:none}
+.spectrum-xray-indicator{position:absolute;top:-18px;font-size:.6rem;font-weight:600;color:var(--blue)}
+.spectrum-labels{display:flex;font-size:.55rem;color:var(--text4)}
 .spectrum-labels span{flex:1;text-align:center}
-.spectrum-info{margin-top:16px;padding:20px;background:var(--bg);border-radius:12px;min-height:80px;transition:all .3s}
-.spectrum-info h4{font-size:.9rem;font-weight:700;margin-bottom:4px}
-.spectrum-info p{font-size:.82rem;color:var(--text2);line-height:1.7}
-
-/* ====== RÖNTGEN TUBE SIMULATOR ====== */
-.tube-sim{display:flex;flex-direction:column;align-items:center;gap:28px}
-.tube-svg-wrap{width:100%;max-width:680px;position:relative}
+.spectrum-info{margin-top:10px;padding:12px;background:#fff;border-radius:4px;min-height:50px}
+.spectrum-info h4{font-size:.82rem;font-weight:700;margin-bottom:2px;font-family:'Helvetica Neue',Arial,sans-serif}
+.spectrum-info p{font-size:.78rem;color:var(--text2);line-height:1.65}
+.sim-slide{padding:20px 24px}
+.sim-slide .slide-inner{max-width:1100px}
+.tube-sim{display:flex;flex-direction:column;align-items:center;gap:8px}
+.tube-svg-wrap{width:100%;max-width:560px;position:relative}
+.sim-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;max-width:1100px;margin-top:4px}
+.sim-grid .tube-controls{max-width:none;width:100%}
+.sim-grid .tube-readout{max-width:none;width:100%;grid-template-columns:repeat(2,1fr)}
+.sim-grid .tube-spectrum{max-width:none;width:100%}
+.sim-grid .tube-spectrum canvas{width:100%;height:auto}
 .tube-svg-wrap svg{width:100%;height:auto;display:block}
-/* component tooltips */
-.tube-tooltip{position:absolute;padding:10px 14px;background:rgba(0,0,0,.88);color:#fff;font-size:.72rem;line-height:1.6;border-radius:10px;max-width:220px;pointer-events:none;opacity:0;transition:opacity .25s;z-index:10;backdrop-filter:blur(8px)}
+.tube-tooltip{position:absolute;padding:6px 10px;background:rgba(0,0,0,.85);color:#fff;font-size:.7rem;line-height:1.5;border-radius:3px;max-width:200px;pointer-events:none;opacity:0;transition:opacity .2s;z-index:10}
 .tube-tooltip.show{opacity:1}
-.tube-tooltip::after{content:'';position:absolute;bottom:-5px;left:50%;transform:translateX(-50%);border-left:5px solid transparent;border-right:5px solid transparent;border-top:5px solid rgba(0,0,0,.88)}
-/* controls row */
-.tube-controls{display:flex;gap:24px;flex-wrap:wrap;justify-content:center;width:100%;max-width:640px}
-.tube-ctrl{flex:1;min-width:150px;display:flex;flex-direction:column;gap:6px;background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:14px 16px}
-.tube-ctrl label{font-size:.65rem;font-weight:600;letter-spacing:.08em;color:var(--text4)}
-.tube-ctrl input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:5px;border-radius:3px;background:var(--border);outline:none;cursor:pointer;margin:4px 0}
-.tube-ctrl input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:16px;height:16px;border-radius:50%;background:var(--blue);cursor:pointer;box-shadow:0 2px 8px rgba(0,113,227,.3);transition:transform .15s}
-.tube-ctrl input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2)}
-.tube-ctrl input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:var(--blue);cursor:pointer;border:none;box-shadow:0 2px 8px rgba(0,113,227,.3)}
-.tube-ctrl .ctrl-val{font-family:'SF Mono','JetBrains Mono',monospace;font-size:.82rem;font-weight:700;color:var(--blue)}
-/* material selector */
-.tube-ctrl select{-webkit-appearance:none;appearance:none;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:6px 10px;font-family:'SF Mono','JetBrains Mono',monospace;font-size:.78rem;font-weight:600;color:var(--text);cursor:pointer;outline:none;transition:border-color .2s}
-.tube-ctrl select:focus{border-color:var(--blue)}
-/* readouts grid */
-.tube-readout{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;width:100%;max-width:640px}
-.tube-readout .ro-item{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;text-align:center}
-.tube-readout .ro-label{font-size:.58rem;font-weight:500;letter-spacing:.1em;color:var(--text4);display:block;margin-bottom:3px}
-.tube-readout .ro-val{font-family:'SF Mono','JetBrains Mono',monospace;font-size:.82rem;font-weight:700;color:var(--text);transition:color .3s}
-/* readout & control tooltips */
+.tube-tooltip::after{content:'';position:absolute;bottom:-4px;left:50%;transform:translateX(-50%);border-left:4px solid transparent;border-right:4px solid transparent;border-top:4px solid rgba(0,0,0,.85)}
+.tube-controls{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;width:100%;max-width:620px}
+.tube-ctrl{flex:1;min-width:140px;display:flex;flex-direction:column;gap:4px;background:#fff;border:1px solid var(--border);border-radius:4px;padding:10px 12px}
+.tube-ctrl label{font-size:.6rem;font-weight:600;letter-spacing:.03em;color:var(--text4);font-family:'Helvetica Neue',Arial,sans-serif}
+.tube-ctrl input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:3px;border-radius:2px;background:var(--border);outline:none;cursor:pointer;margin:3px 0}
+.tube-ctrl input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:12px;height:12px;border-radius:50%;background:var(--blue);cursor:pointer}
+.tube-ctrl input[type=range]::-moz-range-thumb{width:12px;height:12px;border-radius:50%;background:var(--blue);cursor:pointer;border:none}
+.tube-ctrl .ctrl-val{font-family:monospace;font-size:.78rem;font-weight:700;color:var(--blue)}
+.tube-ctrl select{background:var(--bg2);border:1px solid var(--border);border-radius:3px;padding:4px 8px;font-family:monospace;font-size:.75rem;font-weight:600;color:var(--text);cursor:pointer;outline:none}
+.tube-readout{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;width:100%;max-width:620px}
+.tube-readout .ro-item{background:#fff;border:1px solid var(--border);border-radius:4px;padding:8px 10px;text-align:center}
+.tube-readout .ro-label{font-size:.52rem;font-weight:500;letter-spacing:.04em;color:var(--text4);display:block;margin-bottom:1px;font-family:'Helvetica Neue',Arial,sans-serif}
+.tube-readout .ro-val{font-family:monospace;font-size:.78rem;font-weight:700;color:var(--text)}
 .ro-item[data-info]{position:relative;cursor:help}
-.ro-item[data-info]::before{content:attr(data-info);position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%) scale(.92);padding:10px 14px;background:rgba(0,0,0,.88);color:#fff;font-size:.7rem;line-height:1.6;font-weight:400;letter-spacing:0;border-radius:10px;max-width:240px;min-width:160px;width:max-content;pointer-events:none;opacity:0;transition:opacity .25s,transform .25s;z-index:12;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);text-align:left;font-family:'Inter',system-ui,sans-serif}
-.ro-item[data-info]::after{content:'';position:absolute;bottom:calc(100% + 3px);left:50%;transform:translateX(-50%);border-left:5px solid transparent;border-right:5px solid transparent;border-top:5px solid rgba(0,0,0,.88);opacity:0;transition:opacity .25s;z-index:12}
-.ro-item[data-info]:hover::before{opacity:1;transform:translateX(-50%) scale(1)}
-.ro-item[data-info]:hover::after{opacity:1}
-/* info icon on readout items */
-.ro-item[data-info] .ro-label::after{content:' ⓘ';font-size:.55rem;opacity:.5}
-/* control tooltips */
+.ro-item[data-info]::before{content:attr(data-info);position:absolute;bottom:calc(100% + 5px);left:50%;transform:translateX(-50%);padding:6px 10px;background:rgba(0,0,0,.85);color:#fff;font-size:.65rem;line-height:1.5;border-radius:3px;max-width:220px;min-width:140px;width:max-content;pointer-events:none;opacity:0;transition:opacity .2s;z-index:12;text-align:left;font-family:Georgia,serif}
+.ro-item[data-info]::after{content:'';position:absolute;bottom:calc(100%);left:50%;transform:translateX(-50%);border-left:4px solid transparent;border-right:4px solid transparent;border-top:4px solid rgba(0,0,0,.85);opacity:0;transition:opacity .2s;z-index:12}
+.ro-item[data-info]:hover::before,.ro-item[data-info]:hover::after{opacity:1}
+.ro-item[data-info] .ro-label::after{content:' \2139';font-size:.5rem;opacity:.4}
 .tube-ctrl[data-info]{position:relative;cursor:help}
-.tube-ctrl[data-info]::before{content:attr(data-info);position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%) scale(.92);padding:10px 14px;background:rgba(0,0,0,.88);color:#fff;font-size:.7rem;line-height:1.6;font-weight:400;letter-spacing:0;border-radius:10px;max-width:260px;min-width:160px;width:max-content;pointer-events:none;opacity:0;transition:opacity .25s,transform .25s;z-index:12;backdrop-filter:blur(8px);text-align:left;font-family:'Inter',system-ui,sans-serif}
-.tube-ctrl[data-info]::after{content:'';position:absolute;bottom:calc(100% + 3px);left:50%;transform:translateX(-50%);border-left:5px solid transparent;border-right:5px solid transparent;border-top:5px solid rgba(0,0,0,.88);opacity:0;transition:opacity .25s;z-index:12}
-.tube-ctrl[data-info]:hover::before{opacity:1;transform:translateX(-50%) scale(1)}
-.tube-ctrl[data-info]:hover::after{opacity:1}
-.tube-ctrl[data-info] label::after{content:' ⓘ';font-size:.5rem;opacity:.4}
-/* spectrum chart */
-.tube-spectrum{width:100%;max-width:640px}
-.tube-spectrum canvas{width:100%;height:180px;border-radius:12px;border:1px solid var(--border);background:var(--bg)}
-.tube-spectrum-label{font-size:.65rem;color:var(--text4);text-align:center;margin-top:6px;letter-spacing:.04em}
-/* electron beam animation */
+.tube-ctrl[data-info]::before{content:attr(data-info);position:absolute;bottom:calc(100% + 5px);left:50%;transform:translateX(-50%);padding:6px 10px;background:rgba(0,0,0,.85);color:#fff;font-size:.65rem;line-height:1.5;border-radius:3px;max-width:240px;min-width:140px;width:max-content;pointer-events:none;opacity:0;transition:opacity .2s;z-index:12;text-align:left;font-family:Georgia,serif}
+.tube-ctrl[data-info]::after{content:'';position:absolute;bottom:calc(100%);left:50%;transform:translateX(-50%);border-left:4px solid transparent;border-right:4px solid transparent;border-top:4px solid rgba(0,0,0,.85);opacity:0;transition:opacity .2s;z-index:12}
+.tube-ctrl[data-info]:hover::before,.tube-ctrl[data-info]:hover::after{opacity:1}
+.tube-ctrl[data-info] label::after{content:' \2139';font-size:.45rem;opacity:.4}
+.tube-spectrum{width:100%;max-width:620px}
+.tube-spectrum canvas{width:100%;height:180px;border-radius:3px;border:1px solid var(--border);background:#fff}
+.tube-spectrum-label{font-size:.65rem;color:var(--text3);text-align:center;margin-top:4px}
 @keyframes electronFlow{0%{stroke-dashoffset:24}100%{stroke-dashoffset:0}}
 @keyframes xrayPulse{0%,100%{opacity:.25}50%{opacity:.95}}
 @keyframes filamentPulse{0%,100%{opacity:.6}50%{opacity:1}}
 .electron-beam{stroke-dasharray:4 8;animation:electronFlow .4s linear infinite}
 .xray-line{animation:xrayPulse 1.2s ease-in-out infinite}
 .filament-wire{animation:filamentPulse 2s ease-in-out infinite}
-/* hoverable SVG parts */
-.tube-part{cursor:pointer;transition:opacity .2s}
-.tube-part:hover{opacity:.8}
-@media(max-width:600px){
-  .tube-controls{gap:12px}
-  .tube-ctrl{min-width:130px;padding:10px 12px}
-  .tube-readout{grid-template-columns:repeat(2,1fr)}
-}
-
-/* ====== TIMELINE ====== */
-.timeline{position:relative;max-width:800px;margin:0 auto;padding:20px 0}
-.timeline::before{content:'';position:absolute;left:50%;top:0;bottom:0;width:2px;background:var(--border);transform:translateX(-50%)}
-.tl-item{position:relative;width:50%;padding:0 40px 48px;cursor:pointer}
-.tl-item:nth-child(odd){left:0;text-align:right}
-.tl-item:nth-child(even){left:50%;text-align:left}
-.tl-dot{position:absolute;top:4px;width:14px;height:14px;border-radius:50%;background:var(--bg2);border:2.5px solid var(--border);transition:all .4s;z-index:2}
-.tl-item:nth-child(odd) .tl-dot{right:-7px}
-.tl-item:nth-child(even) .tl-dot{left:-7px}
-.tl-item:hover .tl-dot,.tl-item.tl-active .tl-dot{border-color:var(--blue);background:var(--blue);box-shadow:0 0 12px rgba(0,113,227,.3)}
-.tl-year{font-family:'SF Mono','JetBrains Mono',monospace;font-size:.75rem;font-weight:700;color:var(--blue);letter-spacing:.05em;display:block;margin-bottom:4px}
-.tl-title{font-size:.88rem;font-weight:700;color:var(--text);margin-bottom:4px;transition:color .3s}
-.tl-item:hover .tl-title{color:var(--blue)}
-.tl-desc{font-size:.8rem;color:var(--text3);line-height:1.7;max-height:0;overflow:hidden;transition:max-height .5s cubic-bezier(.4,0,.2,1),opacity .4s,margin .3s;opacity:0;margin-top:0}
-.tl-item.tl-active .tl-desc{max-height:200px;opacity:1;margin-top:8px}
-.tl-connector{position:absolute;top:10px;width:28px;height:1px;background:var(--border);transition:background .3s}
-.tl-item:nth-child(odd) .tl-connector{right:0}
-.tl-item:nth-child(even) .tl-connector{left:0}
-.tl-item:hover .tl-connector,.tl-item.tl-active .tl-connector{background:var(--blue)}
-
-@media(max-width:700px){
-  .timeline::before{left:20px}
-  .tl-item{width:100%;left:0!important;text-align:left!important;padding:0 0 36px 48px}
-  .tl-item .tl-dot{left:-27px!important;right:auto!important}
-  .tl-item .tl-connector{left:0!important;right:auto!important;width:20px}
-}
-
-/* ====== FOOTER ====== */
-.footer{padding:80px 48px 40px;background:var(--bg2);border-top:1px solid var(--border);text-align:center}
-.footer-logo{font-size:1.6rem;font-weight:800;letter-spacing:-.03em;margin-bottom:16px}
+.tube-part{cursor:pointer}.tube-part:hover{opacity:.85}
+.footer-slide{text-align:center;flex-direction:column;align-items:center}
+.footer-logo{font-size:1.4rem;font-weight:700;margin-bottom:10px;font-family:'Helvetica Neue',Arial,sans-serif}
 .footer-logo .x{color:var(--blue)}
-.footer-line{width:32px;height:1px;background:var(--border);margin:0 auto 20px}
-.footer-tagline{font-size:.8rem;color:var(--text4);font-style:italic;margin-bottom:8px}
-.footer-credit{font-size:.72rem;color:var(--text4);letter-spacing:.04em}
-
-/* ====== RESPONSIVE ====== */
-@media(max-width:900px){
-  .nav{padding:0 24px}
-  .nav-links{display:none;position:fixed;inset:0;background:rgba(245,245,247,.97);flex-direction:column;align-items:center;justify-content:center;gap:8px}
-  .nav-links.open{display:flex}
-  .nav-links a{font-size:.9rem;padding:10px 24px}
-  .nav-toggle{display:flex}
-  .section{padding:80px 24px}
-  .app-item{grid-template-columns:1fr;gap:8px}
-  .section-header{margin-bottom:40px}
-  .interactive-block{padding:28px 20px}
+.footer-line{width:24px;height:1px;background:var(--border);margin:0 auto 12px}
+.footer-tagline{font-size:.85rem;color:var(--text4);font-style:italic;margin-bottom:6px}
+.footer-credit{font-size:.72rem;color:var(--text4)}
+@media(max-width:768px){
+.slide{padding:48px 20px}
+.app-item{grid-template-columns:1fr;gap:4px}
+.tube-readout{grid-template-columns:repeat(2,1fr)}
+.tube-controls{gap:8px}
+.tube-ctrl{min-width:120px;padding:8px}
+.slide-dots{display:none}
+.slide-nav{bottom:16px;right:16px}
+.slide-counter{bottom:22px;left:16px}
 }
 @media(max-width:480px){
-  .section{padding:60px 18px}
-  .hero{padding:100px 20px 60px}
-  .app-item{padding:24px 0}
-  .footer{padding:60px 18px 32px}
-  .interactive-block{padding:24px 16px}
-  .dose-grid{grid-template-columns:1fr 1fr}
+.slide{padding:40px 14px}
+.hero-title{font-size:2.2rem}
+.s-title{font-size:1.3rem}
 }
-@media(prefers-reduced-motion:reduce){
-  *{animation-duration:.01ms!important;transition-duration:.01ms!important}
-  .reveal{opacity:1;transform:none}
-}
+@media(prefers-reduced-motion:reduce){.slide{transition:none}}
 </style>
 </head>
 <body>
+<div class="deck" id="deck">
+<div class="slide-progress" id="slideProgress" style="width:0%"></div>
+<div class="slide-dots" id="slideDots"></div>
 
-<nav class="nav" id="nav">
-  <div class="nav-inner">
-    <div class="nav-logo">Radiații<span class="x">X</span></div>
-    <button class="nav-toggle" id="navToggle" aria-label="Meniu"><span></span><span></span><span></span></button>
-    <ul class="nav-links" id="navLinks">
-      <li><a href="#medicina">Medicină</a></li>
-      <li><a href="#securitate">Securitate</a></li>
-      <li><a href="#industrie">Industrie</a></li>
-      <li><a href="#cercetare">Cercetare</a></li>
-      <li><a href="#arta">Artă</a></li>
-      <li><a href="#astronomie">Astronomie</a></li>
-      <li><a href="#alte">Alte aplicații</a></li>
-    </ul>
-  </div>
-</nav>
+<div class="slide hero-slide active" data-slide="0">
+<div class="hero-bg"><img src="https://images.unsplash.com/photo-1516549655169-df83a0774514?w=1600&q=80" alt=""></div>
+<div class="hero-content">
+<div class="hero-overline">Wilhelm Conrad Roentgen, 1895</div>
+<h1 class="hero-title">Radiatii<span class="x">X</span></h1>
+<p class="hero-sub">Proiect fizica &mdash; Aplicatiile radiatiilor X<br>Sofian Adelin Mihai &middot; Clasa a XII-a G</p>
+<div class="hero-line"></div>
+<p class="hero-start">Foloseste sagetile pentru a naviga</p>
+</div>
+</div>
 
-<!-- ==================== HERO ==================== -->
-<header class="hero" id="hero">
-  <div class="hero-bg">
-    <img src="https://images.unsplash.com/photo-1516549655169-df83a0774514?w=1600&q=80" alt="Radiografie medicală">
-  </div>
-  <div class="hero-grid"></div>
-  <span class="hero-overline">Wilhelm Conrad Röntgen · 1895</span>
-  <h1 class="hero-title">Radiații<span class="x">X</span></h1>
-  <p class="hero-sub">De la diagnosticarea bolilor la explorarea universului, radiațiile X au revoluționat modul în care vedem lumea — literalmente. O privire completă asupra celor 35+ de aplicații care au transformat medicina, industria, arta și știința.</p>
-  <div class="hero-line"></div>
-  <div class="hero-scroll">Scroll</div>
-</header>
+<div class="slide" data-slide="1">
+<div class="slide-inner">
+<span class="s-number">01</span>
+<h2 class="s-title">Medicina &amp; sanatate</h2>
+<div class="s-accent"></div>
+<p class="s-desc">Radiatiile X sunt coloana vertebrala a diagnosticului medical modern. Ele permit vizualizarea non-invaziva a structurilor interne ale corpului uman &mdash; de la oase si organe pana la vasele de sange si celulele canceroase. Aproximativ 70% din toate deciziile clinice sunt influentate de imagistica medicala bazata pe raze X.</p>
+<div class="s-img"><img src="https://images.unsplash.com/photo-1530497610245-94d3c16cda28?w=1200&q=80" alt="Radiografie medicala" loading="lazy"></div>
+<div class="ib">
+<h3>&#9762; Doze de radiatie &mdash; context</h3>
+<ul class="dose-list">
+<li><strong>&#9992; Zbor intern (1-2 ore):</strong> ~0.01 mSv</li>
+<li><strong>&#129723; Radiografie toracica:</strong> ~0.02 mSv &mdash; echivalent cu 2-3 zile de radiatie naturala</li>
+<li><strong>&#127758; Zbor transatlantic:</strong> ~0.08 mSv</li>
+<li><strong>&#129658; Mamografie:</strong> ~0.4 mSv</li>
+<li><strong>&#127807; Fond natural anual:</strong> ~2.4 mSv</li>
+<li><strong>&#128300; CT toracic:</strong> ~7 mSv &mdash; echivalent cu ~3 ani de fond natural</li>
+<li><strong>&#128105;&#8205;&#9877;&#65039; Limita profesionala anuala:</strong> 20 mSv</li>
+<li><strong>&#9888;&#65039; Prag efecte detectabile:</strong> 100 mSv &middot; Doza letala: ~4000-5000 mSv</li>
+</ul>
+</div>
+</div>
+</div>
 
-<!-- ==================== 01 MEDICINĂ ==================== -->
-<section class="section" id="medicina">
-  <div class="section-inner">
-    <div class="section-header reveal">
-      <span class="section-number">01</span>
-      <h2 class="section-title">Medicină & sănătate</h2>
-      <div class="section-accent"></div>
-      <p class="section-desc">Radiațiile X sunt coloana vertebrală a diagnosticului medical modern. Ele permit vizualizarea non-invazivă a structurilor interne ale corpului uman — de la oase și organe până la vasele de sânge și celulele canceroase. Astăzi, aproximativ 70% din toate deciziile clinice sunt influențate de imagistică medicală bazată pe raze X.</p>
-    </div>
+<div class="slide" data-slide="2">
+<div class="slide-inner">
+<span class="s-number">01 &mdash; Aplicatii medicale (1/2)</span>
+<div class="app-list">
+<div class="app-item"><div class="app-name">Radiografie conventionala</div><div class="app-detail">Cea mai veche aplicatie a razelor X, din 1896. Un fascicul traverseaza corpul, creand o imagine 2D pe un detector. Oasele apar albe, tesuturile moi in gri. Folosita pentru fracturi, infectii pulmonare, afectiuni dentare.</div></div>
+<div class="app-item"><div class="app-name">Tomografie computerizata (CT)</div><div class="app-detail">Inventata in 1971 (Nobel 1979). Roteste un tub de raze X in jurul pacientului, captand sute de imagini din unghiuri diferite. Genereaza sectiuni transversale si reconstructii 3D. Un scan complet dureaza sub 5 secunde.</div></div>
+<div class="app-item"><div class="app-name">Mamografie</div><div class="app-detail">Radiografie specializata cu doze reduse pentru examinarea sanului. Detecteaza tumori si microcalcificari cu 2-3 ani inainte de a fi palpabile. A redus mortalitatea prin cancer de san cu 20-40%.</div></div>
+<div class="app-item"><div class="app-name">Fluoroscopie</div><div class="app-detail">Imagine continua, in timp real &mdash; &bdquo;film&rdquo; cu raze X. Permite observarea miscarii organelor si ghidarea cateterismului cardiac, studii digestive cu bariu, plasarea de proteze.</div></div>
+</div>
+</div>
+</div>
 
-    <div class="section-img reveal">
-      <img src="https://images.unsplash.com/photo-1530497610245-94d3c16cda28?w=1200&q=80" alt="Radiografie medicală" loading="lazy">
-    </div>
+<div class="slide" data-slide="3">
+<div class="slide-inner">
+<span class="s-number">01 &mdash; Aplicatii medicale (2/2)</span>
+<div class="app-list">
+<div class="app-item"><div class="app-name">Radioterapie</div><div class="app-detail">Fascicule focalizate de raze X de 6-18 MeV distrug celulele canceroase prin deteriorarea ADN-ului. IMRT si radioterapia stereotactica livreaza doze cu precizie sub-milimetrica. ~50% din pacientii cu cancer beneficiaza de radioterapie.</div></div>
+<div class="app-item"><div class="app-name">Densitometrie osoasa (DEXA)</div><div class="app-detail">Doua fascicule cu energii diferite masoara densitatea minerala osoasa. Standard de aur pentru osteoporoza. T-score sub -2.5 = osteoporoza. Doza de 10x mai mica decat o radiografie toracica.</div></div>
+<div class="app-item"><div class="app-name">Angiografie</div><div class="app-detail">Substanta de contrast iodata injectata prin cateter face vasele vizibile pe fluoroscopie. Detecteaza stenoze, anevrisme, disectii de aorta. Permite angioplastie si plasare de stenturi imediat.</div></div>
+<div class="app-item"><div class="app-name">Brachiterapie</div><div class="app-detail">Radioterapie interna: surse radioactive miniaturale (Ir-192, Cs-137, I-125) plasate direct in tumora. Razele X ghideaza plasarea. Doza scade rapid cu distanta, protejand tesuturile sanatoase.</div></div>
+</div>
+</div>
+</div>
 
-    <!-- Doze de Radiație — informație text -->
-    <div class="interactive-block reveal">
-      <h3>☢️ Doze de radiație — context</h3>
-      <p style="font-size:.92rem;color:var(--text2);line-height:1.8;margin-bottom:16px">Razele X implică expunere la radiație ionizantă, dar dozele din procedurile medicale sunt foarte mici comparativ cu radiația naturală de fond. Iată câteva exemple comparative:</p>
-      <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:12px">
-        <li style="padding:14px 18px;background:var(--bg);border-radius:12px;border:1px solid var(--border);font-size:.88rem;line-height:1.7;color:var(--text2)"><strong>✈️ Zbor intern (1-2 ore):</strong> ~0.01 mSv — radiația cosmică crește cu altitudinea.</li>
-        <li style="padding:14px 18px;background:var(--bg);border-radius:12px;border:1px solid var(--border);font-size:.88rem;line-height:1.7;color:var(--text2)"><strong>🫁 Radiografie toracică:</strong> ~0.02 mSv — echivalentul a 2-3 zile de radiație naturală de fond.</li>
-        <li style="padding:14px 18px;background:var(--bg);border-radius:12px;border:1px solid var(--border);font-size:.88rem;line-height:1.7;color:var(--text2)"><strong>🌍 Zbor transatlantic dus-întors:</strong> ~0.08 mSv — expunerea crește din cauza radiației cosmice la altitudini mari.</li>
-        <li style="padding:14px 18px;background:var(--bg);border-radius:12px;border:1px solid var(--border);font-size:.88rem;line-height:1.7;color:var(--text2)"><strong>🩺 Mamografie:</strong> ~0.4 mSv — doza este mică raportat la beneficiul detectării precoce a cancerului de sânge.</li>
-        <li style="padding:14px 18px;background:var(--bg);border-radius:12px;border:1px solid var(--border);font-size:.88rem;line-height:1.7;color:var(--text2)"><strong>🌿 Fond natural anual:</strong> ~2.4 mSv — din radon, radiație cosmică, alimente și materiale de construcție.</li>
-        <li style="padding:14px 18px;background:var(--bg);border-radius:12px;border:1px solid var(--border);font-size:.88rem;line-height:1.7;color:var(--text2)"><strong>🔬 CT toracic:</strong> ~7 mSv — echivalent cu aproximativ 3 ani de radiație naturală de fond.</li>
-        <li style="padding:14px 18px;background:var(--bg);border-radius:12px;border:1px solid var(--border);font-size:.88rem;line-height:1.7;color:var(--text2)"><strong>👨‍⚕️ Limita profesională anuală:</strong> 20 mSv — pentru lucrătorii expuși la radiații (medici radiologi, tehnicieni nucleari).</li>
-        <li style="padding:14px 18px;background:var(--bg);border-radius:12px;border:1px solid var(--border);font-size:.88rem;line-height:1.7;color:var(--text2)"><strong>⚠️ Prag efecte detectabile:</strong> 100 mSv — la această doză se detectează primele efecte statistice. Doza acută letală este ~4000-5000 mSv.</li>
-      </ul>
-    </div>
+<div class="slide" data-slide="4">
+<div class="slide-inner">
+<span class="s-number">02</span>
+<h2 class="s-title">Securitate &amp; control</h2>
+<div class="s-accent"></div>
+<p class="s-desc">Razele X sunt esentiale in securitatea publica &mdash; inspectia non-invaziva a bagajelor, vehiculelor si persoanelor. Miliarde de obiecte sunt scanate anual.</p>
+<div class="s-img"><img src="https://images.unsplash.com/photo-1556388158-158ea5ccacbd?w=1200&q=80" alt="Control securitate" loading="lazy"></div>
+<div class="app-list">
+<div class="app-item"><div class="app-name">Scanarea bagajelor</div><div class="app-detail">Imagini color codificate cromatic: organic &rarr; portocaliu, metal &rarr; albastru, intermediar &rarr; verde. Sisteme CT 3D cu AI pentru detectarea automata a explozivilor. 500-1800 bagaje/ora.</div></div>
+<div class="app-item"><div class="app-name">Scanarea containerelor</div><div class="app-detail">Acceleratoare liniare de 2-9 MeV scaneaza containere de 6-12 m. Penetreaza 300-400 mm otel. Detecteaza contrabanda, persoane ascunse, materiale nucleare.</div></div>
+<div class="app-item"><div class="app-name">Scanere corporale</div><div class="app-detail">Backscatter cu raze X de joasa energie reflectate de piele. Doza: 3-9 minute de fond natural. Versiunile moderne afiseaza doar anomalii pe avatar generic.</div></div>
+<div class="app-item"><div class="app-name">Detectarea bug-urilor</div><div class="app-detail">Raze X portabile detecteaza microfoane si camere ascunse in pereti, mobilier sau electronice. Folosita in ambasade si birouri securizate.</div></div>
+</div>
+</div>
+</div>
 
-    <div class="app-list">
-      <div class="app-item reveal">
-        <div class="app-name">Radiografie convențională</div>
-        <div class="app-detail">Cea mai veche și răspândită aplicație a razelor X, folosită încă din 1896. Un fascicul de radiații traversează corpul și creează o imagine 2D pe un detector digital (sau, tradițional, pe film). Oasele, care absorb mai multe radiații, apar albe, iar țesuturile moi în nuanțe de gri. Se folosește pentru diagnosticarea fracturilor, infecțiilor pulmonare (pneumonie, tuberculoză), cardiomegaliei, afecțiunilor dentare (carii profunde, abcese, poziția dinților de minte) și corpurilor străine ingerate. O radiografie durează sub o secundă și expune pacientul la o doză de radiații echivalentă cu câteva zile de radiație naturală de fond.</div>
-      </div>
-      <div class="app-item reveal">
-        <div class="app-name">Tomografie computerizată (CT)</div>
-        <div class="app-detail">Inventată în 1971 de Godfrey Hounsfield (Premiul Nobel 1979), tomografia computerizată rotește un tub de raze X în jurul pacientului, captând sute de imagini din unghiuri diferite. Un computer le combină pentru a genera secțiuni transversale (și reconstrucții 3D complete) ale organelor, vaselor de sânge, oaselor și țesuturilor moi. CT-ul modern realizează un scan complet al corpului în sub 5 secunde. Este indispensabil în diagnosticarea cancerului (localizarea și stadializarea tumorilor), traumatismelor cranio-cerebrale și abdominale, emboliei pulmonare, accidentelor vasculare cerebrale și bolilor cardiovasculare. CT-ul cu contrast iodic permite vizualizarea detaliată a vaselor de sânge (angio-CT).</div>
-      </div>
-      <div class="app-item reveal">
-        <div class="app-name">Mamografie</div>
-        <div class="app-detail">Formă specializată de radiografie cu doze reduse de radiații, concepută special pentru examinarea țesutului mamar. Sânul este ușor comprimat între două plăci pentru a uniformiza țesutul și a reduce doza necesară. Poate detecta tumori, microcalcificări (grupuri de depozite minerale asociate frecvent cu cancerul incipient) și alte anomalii cu mult înainte ca acestea să fie palpabile — uneori cu 2-3 ani mai devreme. Mamografia digitală modernă (2D și tomosinteza 3D) a redus mortalitatea prin cancer de sân cu 20-40% în rândul femeilor care efectuează screening regulat. Se recomandă anual sau bianual femeilor peste 40-50 de ani.</div>
-      </div>
-      <div class="app-item reveal">
-        <div class="app-name">Fluoroscopie</div>
-        <div class="app-detail">Spre deosebire de radiografia statică, fluoroscopia oferă o imagine continuă, în timp real, a structurilor interne — practic un „film" cu raze X. Un fascicul continuu de raze X generează imagini video pe un ecran, permițând medicilor să observe mișcarea organelor, fluidelor și instrumentelor în corp. Se folosește pentru ghidarea cateterismului cardiac (plasarea stenturilor în artere blocate), studii ale sistemului digestiv cu substanță de contrast bariumică, artografie, ghidarea plasării de proteze și dispozitive și reducerea fracturilor.</div>
-      </div>
-      <div class="app-item reveal">
-        <div class="app-name">Radioterapie</div>
-        <div class="app-detail">Utilizează fascicule focalizate de raze X cu energie foarte ridicată (fotoni de 6-18 MeV, de mii de ori mai energetici decât cei din radiografie) pentru a distruge celulele canceroase prin deteriorarea ireversibilă a ADN-ului lor. Radioterapia modernă include tehnici precum IMRT (Intensity-Modulated Radiation Therapy) și radioterapia stereotactică (SRS/SBRT), care livrează doze uriașe cu precizie sub-milimetrică în 1-5 ședințe. Aproximativ 50% din pacienții cu cancer beneficiază de radioterapie la un moment dat.</div>
-      </div>
-      <div class="app-item reveal">
-        <div class="app-name">Densitometrie osoasă (DEXA)</div>
-        <div class="app-detail">DEXA (Dual-Energy X-ray Absorptiometry) utilizează simultan două fascicule de raze X cu energii diferite pentru a măsura cu precizie densitatea minerală osoasă (BMD). Este standardul de aur pentru diagnosticarea osteoporozei și osteopeniei, evaluarea riscului de fracturi și monitorizarea răspunsului la tratamentul anti-osteoporotic. Rezultatul se exprimă ca un T-score: valori sub -2.5 indică osteoporoză. Doza de radiații este extrem de mică — de 10 ori mai puțin decât o radiografie toracică.</div>
-      </div>
-      <div class="app-item reveal">
-        <div class="app-name">Angiografie</div>
-        <div class="app-detail">O substanță de contrast radioopacă pe bază de iod este injectată direct în vasele de sânge printr-un cateter subțire, făcându-le vizibile pe fluoroscopie. Permite detectarea stenozelor, ocluziilor, anevrismelor, malformațiilor arterio-venoase și disecțiilor de aortă. Angiografia coronariană rămâne standardul de aur pentru evaluarea bolii coronariene — și permite intervenții terapeutice imediate: angioplastia cu balon și plasarea de stenturi.</div>
-      </div>
-      <div class="app-item reveal">
-        <div class="app-name">Brachiterapie</div>
-        <div class="app-detail">Formă de radioterapie internă în care surse radioactive miniaturale (granule de iridiu-192, cesiu-137 sau iod-125) sunt plasate direct în interiorul sau în apropierea imediată a tumorii. Razele X și fluoroscopia sunt utilizate pentru ghidarea și verificarea precisă a plasării acestor surse. Se folosește frecvent în tratamentul cancerului de col uterin, prostată, sân, cap și gât, esofag și piele. Avantajul major: doza de radiații scade rapid cu distanța, protejând țesuturile sănătoase din jur.</div>
-      </div>
-    </div>
-  </div>
-</section>
+<div class="slide" data-slide="5">
+<div class="slide-inner">
+<span class="s-number">03</span>
+<h2 class="s-title">Industrie &mdash; Testare non-distructiva</h2>
+<div class="s-accent"></div>
+<p class="s-desc">Testarea non-distructiva (NDT) cu raze X este obligatorie in industriile unde un defect intern invizibil poate avea consecinte catastrofale.</p>
+<div class="s-img"><img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=1200&q=80" alt="Inspectie industriala" loading="lazy"></div>
+<div class="app-list">
+<div class="app-item"><div class="app-name">Inspectarea sudurilor</div><div class="app-detail">Dezvaluie porozitati, incluziuni, fisuri interne. Obligatorie (ASME, ISO) pentru conducte de gaz, reactoare nucleare, poduri. Surse X (100-450 kV) sau gamma (Ir-192).</div></div>
+<div class="app-item"><div class="app-name">Micro-fisuri in aviatie</div><div class="app-detail">Detecteaza fisuri de micrometri in paleti turbine, longeroni aripi, tren de aterizare. Obligatorie la intervale regulate (EASA/FAA).</div></div>
+<div class="app-item"><div class="app-name">Microelectronica</div><div class="app-detail">Singura metoda non-distructiva de inspectat lipituri BGA, wire bond, PCB-uri multilayer. Rezolutie sub 1 um. Sisteme AXI integrate in liniile SMT.</div></div>
+</div>
+</div>
+</div>
 
-<!-- ==================== 02 SECURITATE ==================== -->
-<section class="section" id="securitate">
-  <div class="section-inner">
-    <div class="section-header reveal">
-      <span class="section-number">02</span>
-      <h2 class="section-title">Securitate & control</h2>
-      <div class="section-accent"></div>
-      <p class="section-desc">Razele X sunt esențiale în menținerea securității publice, permițând inspecția non-invazivă și rapidă a bagajelor, vehiculelor și persoanelor. Miliarde de obiecte sunt scanate anual în aeroporturi, gări și puncte vamale din întreaga lume.</p>
-    </div>
+<div class="slide" data-slide="6">
+<div class="slide-inner">
+<span class="s-number">03 &mdash; Industrie (continuare)</span>
+<div class="app-list">
+<div class="app-item"><div class="app-name">Inspectia alimentelor</div><div class="app-detail">Detecteaza contaminanti fizici: sticla, pietre, oase, ceramica. Functioneaza prin folii metalizate. Viteze de 30-100 m/min, sensibilitate 0.3 mm.</div></div>
+<div class="app-item"><div class="app-name">Masurarea grosimii</div><div class="app-detail">Gauge-uri X masoara fara contact grosimea pe linii de productie continua. Tolerante de &plusmn;0.1-1 um pe otel, aluminiu, plastic, hartie, sticla.</div></div>
+<div class="app-item"><div class="app-name">Analiza anvelopelor</div><div class="app-detail">Vizualizeaza structura interna: corduri otel, benzi Kevlar, straturi cauciuc. Detecteaza delaminare, rupturi ale cordurilor, vulcanizare defectuoasa.</div></div>
+</div>
+</div>
+</div>
 
-    <div class="section-img reveal">
-      <img src="https://images.unsplash.com/photo-1556388158-158ea5ccacbd?w=1200&q=80" alt="Control securitate aeroport" loading="lazy">
-    </div>
+<div class="slide" data-slide="7">
+<div class="slide-inner">
+<span class="s-number">04</span>
+<h2 class="s-title">Cercetare stiintifica &amp; analiza</h2>
+<div class="s-accent"></div>
+<p class="s-desc">De la structura ADN-ului pana la fabricarea tranzistorilor atomici, razele X au generat peste 29 de Premii Nobel.</p>
+<div class="s-img"><img src="https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=1200&q=80" alt="Cristalografie" loading="lazy"></div>
+<div class="ib">
+<h3>&#128202; Spectrul electromagnetic interactiv</h3>
+<p class="ib-sub">Apasa pe o zona a spectrului pentru detalii.</p>
+<div class="spectrum-container" id="spectrumContainer">
+<div class="spectrum-bar-wrap">
+<span class="spectrum-xray-indicator" style="left:73%">Raze X &#8595;</span>
+<div class="spectrum-bar" id="spectrumBar">
+<div class="spectrum-seg" data-idx="0" style="background:linear-gradient(90deg,#1a1a3e,#2d2d6b)"></div>
+<div class="spectrum-seg" data-idx="1" style="background:linear-gradient(90deg,#2d2d6b,#8b4513)"></div>
+<div class="spectrum-seg" data-idx="2" style="background:linear-gradient(90deg,#8b0000,#ff0000);flex:2"></div>
+<div class="spectrum-seg" data-idx="3" style="background:linear-gradient(90deg,#ff0000,#ff8c00,#ffff00,#00ff00,#00bfff,#0000ff,#8b00ff);flex:2"></div>
+<div class="spectrum-seg" data-idx="4" style="background:linear-gradient(90deg,#6a0dad,#3b0764);flex:2"></div>
+<div class="spectrum-seg active" data-idx="5" style="background:linear-gradient(90deg,#1a0533,#0d0220)"></div>
+<div class="spectrum-seg" data-idx="6" style="background:linear-gradient(90deg,#06010f,#020005)"></div>
+</div>
+</div>
+<div class="spectrum-labels">
+<span>Unde radio</span><span>Microunde</span><span style="flex:2">Infrarosu</span><span style="flex:2">Vizibil</span><span style="flex:2">UV</span><span>Raze X</span><span>Gamma</span>
+</div>
+<div class="spectrum-info" id="spectrumInfo">
+<h4>Raze X</h4>
+<p><strong>&#955;:</strong> 0.01&ndash;10 nm &middot; <strong>E:</strong> 100 eV &ndash; 100 keV<br>Descoperite de Roentgen in 1895. Penetreaza tesuturile moi dar sunt absorbite de oase si metale.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
 
-    <div class="app-list">
-      <div class="app-item reveal">
-        <div class="app-name">Scanarea bagajelor</div>
-        <div class="app-detail">Scanerele de bagaje din aeroporturi folosesc raze X pentru a crea imagini color ale conținutului. Materialele sunt codificate cromatic: organice → portocaliu, metale → albastru/negru, intermediare → verde. Sistemele moderne CT pentru bagaje generează imagini 3D rotabile și aplică AI pentru detectarea automată a explozivilor și armelor. Un scanner procesează 500-1800 bagaje pe oră.</div>
-      </div>
-      <div class="app-item reveal">
-        <div class="app-name">Scanarea containerelor și vehiculelor</div>
-        <div class="app-detail">Sisteme de raze X de mare putere (acceleratoare liniare de 2-9 MeV) sunt instalate la punctele vamale și porturi maritime pentru a scana containere de marfă de 6-12 metri și vehicule întregi. Fasciculul de energie înaltă poate penetra până la 300-400 mm de oțel. Permit detectarea contrabandei, a mărfurilor nedeclarate, a persoanelor ascunse și a materialelor nucleare sau radioactive.</div>
-      </div>
-      <div class="app-item reveal">
-        <div class="app-name">Scanere corporale (Backscatter)</div>
-        <div class="app-detail">Scanerele corporale de tip backscatter utilizează raze X de foarte joasă energie care se reflectă de pe suprafața pielii și a hainelor, dezvăluind obiecte ascunse: arme, cuțite, explozivi. Doza de radiație per scan este echivalentă cu 3-9 minute de radiație naturală de fond. Versiunile moderne afișează doar anomaliile pe un avatar generic, protejând intimitatea.</div>
-      </div>
-      <div class="app-item reveal">
-        <div class="app-name">Detectarea dispozitivelor de ascultare</div>
-        <div class="app-detail">Serviciile de securitate și contrainformații folosesc raze X portabile pentru a detecta microfoane, camere și bug-uri ascunse în pereți, mobilier sau obiecte electronice. Radiografia dezvăluie componentele electronice (circuite, baterii, antene) care nu sunt vizibile exterior. Folosită în ambasade, birouri guvernamentale și săli de ședințe securizate.</div>
-      </div>
-    </div>
-  </div>
-</section>
+<div class="slide sim-slide" data-slide="8">
+<div class="slide-inner">
+<span class="s-number">04 &mdash; Simulatorul tubului Roentgen</span>
+<p class="ib-sub" style="margin-bottom:8px">Controleaza tensiunea, curentul si materialul anodului. Tine cursorul peste componente pentru explicatii.</p>
+<div class="tube-sim" id="tubeSim">
+<div class="tube-svg-wrap" id="tubeSvgWrap">
+<div class="tube-tooltip" id="tubeTooltip"></div>
+<svg id="tubeSvg" viewBox="0 0 700 360" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<radialGradient id="glassGrad"><stop offset="0%" stop-color="#a8d8ff" stop-opacity=".12"/><stop offset="100%" stop-color="transparent"/></radialGradient>
+<radialGradient id="heatGrad"><stop offset="0%" stop-color="#ff6b35"/><stop offset="30%" stop-color="#ff3b00" stop-opacity=".8"/><stop offset="100%" stop-color="transparent"/></radialGradient>
+<radialGradient id="focusGlow"><stop offset="0%" stop-color="#0071e3" stop-opacity=".3"/><stop offset="100%" stop-color="transparent"/></radialGradient>
+<filter id="glow"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+<filter id="xrayGlow"><feGaussianBlur stdDeviation="2.5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+<linearGradient id="coolingGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#00b4d8" stop-opacity=".15"/><stop offset="100%" stop-color="#0077b6" stop-opacity=".05"/></linearGradient>
+<clipPath id="envelopeClip"><ellipse cx="350" cy="175" rx="280" ry="130"/></clipPath>
+</defs>
+<g clip-path="url(#envelopeClip)" opacity=".04">
+<line x1="100" y1="50" x2="100" y2="300" stroke="#000" stroke-width=".5"/><line x1="150" y1="50" x2="150" y2="300" stroke="#000" stroke-width=".5"/>
+<line x1="200" y1="50" x2="200" y2="300" stroke="#000" stroke-width=".5"/><line x1="250" y1="50" x2="250" y2="300" stroke="#000" stroke-width=".5"/>
+<line x1="300" y1="50" x2="300" y2="300" stroke="#000" stroke-width=".5"/><line x1="350" y1="50" x2="350" y2="300" stroke="#000" stroke-width=".5"/>
+<line x1="400" y1="50" x2="400" y2="300" stroke="#000" stroke-width=".5"/><line x1="450" y1="50" x2="450" y2="300" stroke="#000" stroke-width=".5"/>
+<line x1="500" y1="50" x2="500" y2="300" stroke="#000" stroke-width=".5"/><line x1="550" y1="50" x2="550" y2="300" stroke="#000" stroke-width=".5"/>
+<line x1="70" y1="100" x2="630" y2="100" stroke="#000" stroke-width=".5"/><line x1="70" y1="150" x2="630" y2="150" stroke="#000" stroke-width=".5"/>
+<line x1="70" y1="200" x2="630" y2="200" stroke="#000" stroke-width=".5"/><line x1="70" y1="250" x2="630" y2="250" stroke="#000" stroke-width=".5"/>
+</g>
+<ellipse cx="350" cy="175" rx="280" ry="130" fill="url(#glassGrad)"/>
+<ellipse cx="350" cy="175" rx="280" ry="130" fill="none" stroke="#c7c7cc" stroke-width="3" opacity=".5"/>
+<ellipse cx="350" cy="175" rx="274" ry="124" fill="none" stroke="#ddd" stroke-width="1" opacity=".25"/>
+<text x="350" y="85" fill="#86868b" font-size="9" text-anchor="middle" font-family="system-ui" letter-spacing=".15em" opacity=".5">VACUUM ~10&#8315;&#8310; Pa</text>
+<g class="tube-part" data-tip="Catodul (filament de wolfram) este incalzit la ~2200 C prin efect Joule. Electronii sunt emisi prin emisie termoionica.">
+<rect x="92" y="100" width="6" height="150" rx="3" fill="#86868b" opacity=".6"/>
+<rect x="102" y="108" width="4" height="134" rx="2" fill="#6e6e73" opacity=".4"/>
+<path d="M106 118 L130 125 L130 225 L106 232" stroke="#6e6e73" stroke-width="2.5" fill="none" opacity=".7"/>
+<path d="M106 118 L130 125 L130 225 L106 232" stroke="none" fill="#6e6e73" opacity=".08"/>
+<path d="M110 135 Q128 142 110 149 Q128 156 110 163 Q128 170 110 177 Q128 184 110 191 Q128 198 110 205 Q128 212 110 219" stroke="#ff9500" stroke-width="2.5" fill="none" class="filament-wire" id="filament"/>
+<ellipse cx="120" cy="175" rx="24" ry="48" fill="#ff6b35" opacity=".1" id="filamentGlow" filter="url(#glow)"/>
+<ellipse cx="135" cy="175" rx="10" ry="30" fill="#0071e3" opacity="0" id="thermionicCloud"/>
+</g>
+<g class="tube-part" data-tip="Anodul (tinta) &mdash; disc metalic inclinat la 12-17 grade. ~1% energie devine raze X, ~99% devine caldura.">
+<polygon points="540,105 558,105 545,245 527,245" fill="#9e9ea3"/>
+<polygon points="540,105 558,105 558,112 540,112" fill="#78788c" opacity=".5"/>
+<line x1="540" y1="105" x2="527" y2="245" stroke="#6e6e73" stroke-width="2"/>
+<ellipse cx="534" cy="175" rx="8" ry="14" fill="#ff3b00" opacity="0" id="focalSpot" filter="url(#glow)"/>
+<g id="heatWaves" opacity="0">
+<path d="M560 145 Q570 150 560 155" stroke="#ff6b35" stroke-width="1" fill="none" opacity=".4"/>
+<path d="M565 165 Q575 170 565 175" stroke="#ff6b35" stroke-width="1" fill="none" opacity=".3"/>
+<path d="M560 185 Q570 190 560 195" stroke="#ff6b35" stroke-width="1" fill="none" opacity=".4"/>
+</g>
+<rect x="558" y="130" width="14" height="90" rx="4" fill="url(#coolingGrad)" stroke="#00b4d8" stroke-width="1" opacity=".4" id="coolingBlock"/>
+<text x="565" y="180" fill="#00b4d8" font-size="7" text-anchor="middle" font-family="system-ui" transform="rotate(-90,565,180)" opacity=".5">RACIRE</text>
+</g>
+<g class="tube-part" data-tip="Fereastra de beriliu (Be, Z=4) &mdash; permite trecerea razelor X, mentine vidul.">
+<rect x="590" y="152" width="8" height="46" rx="2" fill="#b8c9d9" opacity=".6" stroke="#8aa4b8" stroke-width="1"/>
+<text x="610" y="172" fill="#86868b" font-size="7" font-family="system-ui" opacity=".6">Be</text>
+<text x="610" y="182" fill="#86868b" font-size="6" font-family="system-ui" opacity=".4">fereastra</text>
+</g>
+<g class="tube-part" data-tip="Ecran de plumb (Pb, Z=82) &mdash; absoarbe razele X nedorite. Doar cele prin fereastra Be sunt utilizate.">
+<path d="M80 60 L620 60 L630 100 Q640 175 630 250 L620 290 L80 290 L70 250 Q60 175 70 100 Z" fill="none" stroke="#6e6e73" stroke-width="2" stroke-dasharray="6 4" opacity=".2"/>
+<text x="350" y="52" fill="#86868b" font-size="8" text-anchor="middle" font-family="system-ui" opacity=".35">ECRAN Pb</text>
+</g>
+<text x="120" y="42" fill="#86868b" font-size="10" font-weight="600" text-anchor="middle" font-family="system-ui">CATOD (-)</text>
+<text x="548" y="42" fill="#86868b" font-size="10" font-weight="600" text-anchor="middle" font-family="system-ui">ANOD (+)</text>
+<g id="electronBeamGroup" opacity="0" filter="url(#glow)">
+<line x1="135" y1="162" x2="532" y2="168" stroke="#0071e3" stroke-width="1.5" class="electron-beam" opacity=".3"/>
+<line x1="135" y1="168" x2="532" y2="172" stroke="#0071e3" stroke-width="2.5" class="electron-beam"/>
+<line x1="135" y1="175" x2="532" y2="175" stroke="#0071e3" stroke-width="3" class="electron-beam"/>
+<line x1="135" y1="182" x2="532" y2="178" stroke="#0071e3" stroke-width="2.5" class="electron-beam"/>
+<line x1="135" y1="188" x2="532" y2="182" stroke="#0071e3" stroke-width="1.5" class="electron-beam" opacity=".3"/>
+</g>
+<g id="xrayGroup" opacity="0" filter="url(#xrayGlow)">
+<line x1="536" y1="175" x2="650" y2="100" stroke="#e040fb" stroke-width="1.5" class="xray-line" opacity=".5"/>
+<line x1="536" y1="175" x2="658" y2="130" stroke="#e040fb" stroke-width="1.8" class="xray-line" style="animation-delay:.15s" opacity=".6"/>
+<line x1="536" y1="175" x2="662" y2="155" stroke="#e040fb" stroke-width="2" class="xray-line" style="animation-delay:.3s" opacity=".7"/>
+<line x1="536" y1="175" x2="665" y2="175" stroke="#e040fb" stroke-width="2.5" class="xray-line" style="animation-delay:.45s" opacity=".9"/>
+<line x1="536" y1="175" x2="662" y2="195" stroke="#e040fb" stroke-width="2" class="xray-line" style="animation-delay:.6s" opacity=".7"/>
+<line x1="536" y1="175" x2="658" y2="220" stroke="#e040fb" stroke-width="1.8" class="xray-line" style="animation-delay:.75s" opacity=".6"/>
+<line x1="536" y1="175" x2="650" y2="250" stroke="#e040fb" stroke-width="1.5" class="xray-line" style="animation-delay:.9s" opacity=".5"/>
+<text x="668" y="173" fill="#e040fb" font-size="11" font-weight="700" font-family="system-ui">Raze X</text>
+<text x="668" y="185" fill="#e040fb" font-size="7" font-family="system-ui" opacity=".6" id="xrayWaveLabel">&#955; = &#8734;</text>
+</g>
+<g opacity=".3">
+<line x1="130" y1="295" x2="530" y2="295" stroke="#1d1d1f" stroke-width="1" stroke-dasharray="4 3"/>
+<polygon points="130,292 120,295 130,298" fill="#1d1d1f"/>
+<polygon points="530,292 540,295 530,298" fill="#1d1d1f"/>
+<text x="330" y="312" fill="#1d1d1f" font-size="8.5" text-anchor="middle" font-family="system-ui" id="voltageLabel">&#916;V = 0 kV</text>
+</g>
+<g opacity=".2">
+<path d="M95 260 L95 340 L555 340 L555 260" stroke="#1a5276" stroke-width="1" fill="none" stroke-dasharray="3 4"/>
+<text x="330" y="350" fill="#1a5276" font-size="7" text-anchor="middle" font-family="system-ui" id="currentLabel">I = 0 mA</text>
+</g>
+<g id="electronDots"></g>
+<g id="xrayDots"></g>
+</svg>
+</div>
+<div class="sim-grid">
+<div>
+<div class="tube-controls">
+<div class="tube-ctrl" data-info="Tensiunea accelereaza electronii. Mai mare = fotoni X cu energie mai mare.">
+<label>TENSIUNE (kV)</label>
+<input type="range" id="tubeVoltage" min="0" max="150" value="0" step="1">
+<span class="ctrl-val" id="tubeVoltageVal">0 kV</span>
+</div>
+<div class="tube-ctrl" data-info="Curentul controleaza cati electroni/s. Mai mult curent = mai multi fotoni X, dar energia maxima ramane aceeasi.">
+<label>CURENT (mA)</label>
+<input type="range" id="tubeCurrent" min="0" max="500" value="0" step="5">
+<span class="ctrl-val" id="tubeCurrentVal">0 mA</span>
+</div>
+<div class="tube-ctrl" data-info="Materialul anodului determina varfurile caracteristice. W = radiografie. Mo/Rh = mamografie. Cu = cristalografie.">
+<label>MATERIAL ANOD</label>
+<select id="tubeAnodeMat">
+<option value="W" selected>Wolfram (W, Z=74)</option>
+<option value="Mo">Molibden (Mo, Z=42)</option>
+<option value="Cu">Cupru (Cu, Z=29)</option>
+<option value="Rh">Rodiu (Rh, Z=45)</option>
+</select>
+<span class="ctrl-val" id="tubeAnodeInfo">Ka = 59.3 keV</span>
+</div>
+</div>
+<div class="tube-readout" style="margin-top:8px">
+<div class="ro-item" data-info="P = U x I. Doar ~1% devine raze X, restul = caldura."><span class="ro-label">PUTERE</span><span class="ro-val" id="roPower">0 W</span></div>
+<div class="ro-item" data-info="Duane-Hunt: lambda_min = 1240/kV (pm). Toata energia devine un foton."><span class="ro-label">&#955; MIN</span><span class="ro-val" id="roWavelength">&#8734;</span></div>
+<div class="ro-item" data-info="E_max = kV (keV). Majoritatea fotonilor au energie mai mica."><span class="ro-label">E MAX</span><span class="ro-val" id="roEnergy">0 keV</span></div>
+<div class="ro-item" data-info="Moale (<20 kV), Diagnostic (20-50), Dur (50-100), Foarte dur (>100)."><span class="ro-label">TIP RADIATIE</span><span class="ro-val" id="roType">&mdash;</span></div>
+<div class="ro-item" data-info="eta = 1.1e-9 x Z x V. La 100 kV cu W: ~0.8%."><span class="ro-label">EFICIENTA</span><span class="ro-val" id="roEfficiency">~0%</span></div>
+<div class="ro-item" data-info="La puteri >50 kW, anodul depaseste 2000 C. De aceea se folosesc anode rotative."><span class="ro-label">T ANOD</span><span class="ro-val" id="roTemp">25 &#176;C</span></div>
+</div>
+</div>
+<div>
+<div class="tube-spectrum">
+<canvas id="spectrumCanvas" width="640" height="180"></canvas>
+<p class="tube-spectrum-label">Curba albastra = <strong>Bremsstrahlung</strong> + varfuri violet = linii <strong>caracteristice</strong> (Ka, Kb). Linia rosie = &#955;<sub>min</sub> (Duane-Hunt).</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
 
-<!-- ==================== 03 INDUSTRIE ==================== -->
-<section class="section" id="industrie">
-  <div class="section-inner">
-    <div class="section-header reveal">
-      <span class="section-number">03</span>
-      <h2 class="section-title">Industrie — Testare non-distructivă</h2>
-      <div class="section-accent"></div>
-      <p class="section-desc">Testarea non-distructivă (NDT/NDE) cu raze X este o cerință obligatorie în industriile unde un defect intern invizibil poate avea consecințe catastrofale. De la avioane și reactoare nucleare la cipuri electronice și anvelope, razele X „văd" prin metal, plastic și compozite.</p>
-    </div>
+<div class="slide" data-slide="9">
+<div class="slide-inner">
+<span class="s-number">04 &mdash; Aplicatii in cercetare</span>
+<div class="app-list">
+<div class="app-item"><div class="app-name">Cristalografie cu raze X</div><div class="app-detail">Difractia prin cristale reconstruieste structura atomica. A dezvaluit ADN-ul (Watson &amp; Crick 1953, Fotografia 51 &mdash; Rosalind Franklin). Nobel: Laue 1914, Bragg 1915, Hodgkin 1964.</div></div>
+<div class="app-item"><div class="app-name">Spectroscopie XRF</div><div class="app-detail">Bombardeaza materialul cu raze X primare, electroni expulzati, raze X secundare caracteristice. Identifica elemente de la Na la U. Dispozitive portabile pentru analize de teren.</div></div>
+<div class="app-item"><div class="app-name">Difractie XRD</div><div class="app-detail">Identifica faze cristaline &mdash; amprenta digitala. Distinge compusi (calcit vs aragonit CaCO3). Esentiala in geologie, farmaceutica, criminalistica.</div></div>
+<div class="app-item"><div class="app-name">Micro-CT</div><div class="app-detail">CT miniaturizat cu rezolutie sub 1 micron. Anatomia insectelor, fosile, porozitatea cimentului, implantologie.</div></div>
+<div class="app-item"><div class="app-name">Litografie cu raze X</div><div class="app-detail">Scrie pattern-uri sub 10 nm &mdash; depasind limita UV. Tranzistori experimentali, nanostructuri fotonice.</div></div>
+<div class="app-item"><div class="app-name">Microscopie cu raze X</div><div class="app-detail">Rezolutie 20-50 nm pe probe hidratate si vii. Imagistica 3D celulara prin cryo-tomografie.</div></div>
+</div>
+</div>
+</div>
 
-    <div class="section-img reveal">
-      <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=1200&q=80" alt="Inspecție industrială" loading="lazy">
-    </div>
+<div class="slide" data-slide="10">
+<div class="slide-inner">
+<span class="s-number">05</span>
+<h2 class="s-title">Arta, arheologie &amp; istorie</h2>
+<div class="s-accent"></div>
+<p class="s-desc">Razele X permit privirea sub suprafata operelor de arta, a mumiilor si a artefactelor milenare, fara a le deteriora.</p>
+<div class="s-img"><img src="https://images.unsplash.com/photo-1594608661623-aa0bd3a69d98?w=1200&q=80" alt="Analiza opere de arta" loading="lazy"></div>
+<div class="app-list">
+<div class="app-item"><div class="app-name">Analiza picturilor</div><div class="app-detail">Dezvaluie schite initiale, pentimenti, picturi acoperite. A dezvaluit o femeie sub Peticul de iarba al lui Van Gogh. Macro-XRF cartografiaza pigmentii element cu element.</div></div>
+<div class="app-item"><div class="app-name">Scanarea mumiilor</div><div class="app-detail">Despachetare digitala prin CT &mdash; amulete intre bandaje, proteze antice, cauze ale mortii, reconstructie faciala digitala.</div></div>
+<div class="app-item"><div class="app-name">Autentificarea artei</div><div class="app-detail">XRF + XRD verifica autenticitatea. Albul de titan (TiO2, din 1920) intr-o pictura din sec. XVII = fals. Han van Meegeren demascat 1945.</div></div>
+<div class="app-item"><div class="app-name">Restaurare metalica</div><div class="app-detail">Dezvaluie inscriptii invizibile sub coroziune &mdash; pe spade vikinge, monede romane, instrumente medievale.</div></div>
+</div>
+</div>
+</div>
 
-    <div class="app-list">
-      <div class="app-item reveal">
-        <div class="app-name">Inspectarea sudurilor și turnărilor metalice</div>
-        <div class="app-detail">Radiografia industrială dezvăluie defecte interne invizibile: porozități, incluziuni de zgură, fisuri interne, lipsă de fuziune. Este obligatorie conform standardelor ASME, EN ISO, AWS pentru sudurile critice din conducte de gaz, recipiente sub presiune, reactoare nucleare, poduri și platforme petroliere. Se utilizează surse de raze X (100-450 kV) sau surse gamma (Ir-192, Co-60) pentru piese foarte groase.</div>
-      </div>
-      <div class="app-item reveal">
-        <div class="app-name">Detectarea micro-fisurilor în aviație</div>
-        <div class="app-detail">Micro-fisurile generate de oboseala materialului (fatigue) pot duce la defecțiuni catastrofale. Razele X de înaltă rezoluție detectează fisuri de câțiva micrometri în paletele turbinelor cu jet, longeronii aripilor și trenul de aterizare. Inspecția este obligatorie la intervale regulate de ore de zbor, conform programelor EASA/FAA.</div>
-      </div>
-      <div class="app-item reveal">
-        <div class="app-name">Controlul calității în microelectronică</div>
-        <div class="app-detail">Razele X sunt singura metodă non-distructivă de a inspecta lipiturile BGA sub cipuri, conexiunile wire bond, vias în PCB-uri multilayer și alinierea Die-urilor. Detectează lipiturile reci, scurtcircuitele, golurile de aer și delaminarea. Sistemele AXI sunt integrate direct în liniile de producție SMT. Rezoluția ajunge sub 1 µm pe sistemele de laborator.</div>
-      </div>
-      <div class="app-item reveal">
-        <div class="app-name">Inspecția produselor alimentare</div>
-        <div class="app-detail">Sistemele de raze X pe benzile transportoare detectează contaminanți fizici: fragmente de sticlă, pietre, oase, ceramică și plastic de înaltă densitate. Pot inspecta produse ambalate în folii metalizate (aluminiu). Operează la viteze de 30-100 m/min cu sensibilitate de la 0.3 mm.</div>
-      </div>
-      <div class="app-item reveal">
-        <div class="app-name">Măsurarea grosimii materialelor</div>
-        <div class="app-detail">Gauge-urile cu raze X măsoară în timp real și fără contact grosimea materialelor pe liniile de producție continuă (laminoare, mașini de extrudare). Mențin toleranțe de ±0.1-1 µm pe oțel, aluminiu, plastic, hârtie și sticlă la viteze de zeci de metri pe secundă.</div>
-      </div>
-      <div class="app-item reveal">
-        <div class="app-name">Analiza anvelopelor</div>
-        <div class="app-detail">Razele X vizualizează structura internă a anvelopelor: corduri de oțel, benzi Kevlar/nylon, straturi de cauciuc și geometria taloanelor. Detectează delaminarea, rupturi ale cordurilor metalice, vulcanizare defectuoasă și obiecte străine. Folosită atât în controlul calității cât și în analiza defecțiunilor.</div>
-      </div>
-    </div>
-  </div>
-</section>
+<div class="slide" data-slide="11">
+<div class="slide-inner">
+<span class="s-number">06</span>
+<h2 class="s-title">Astronomie &amp; geostiinte</h2>
+<div class="s-accent"></div>
+<p class="s-desc">Razele X din cosmos sunt emise de cele mai energetice fenomene din univers. Observarea lor ne permite sa studiem fizica in conditii imposibil de reprodus pe Pamant.</p>
+<div class="s-img"><img src="https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=1200&q=80" alt="Nebuloasa" loading="lazy"></div>
+<div class="app-list">
+<div class="app-item"><div class="app-name">Telescoape spatiale X</div><div class="app-detail">Atmosfera absoarbe razele X, de aceea telescoapele sunt in spatiu: Chandra, XMM-Newton, eROSITA. Observa gauri negre, supernove, pulsari, gaz fierbinte intergalactic.</div></div>
+<div class="app-item"><div class="app-name">Analiza rocilor planetare</div><div class="app-detail">XRF pe roverele Curiosity/Perseverance analizeaza roci martiene. PIXL: micro-XRF cu rezolutie 120 um. Au demonstrat prezenta apei pe Marte.</div></div>
+<div class="app-item"><div class="app-name">Interiorul Pamantului</div><div class="app-detail">Sincrotroane studiaza minerale la milioane de atmosfere. Au descoperit post-perovskita (2004) &mdash; principalul mineral al mantalei inferioare.</div></div>
+</div>
+</div>
+</div>
 
-<!-- ==================== 04 CERCETARE ==================== -->
-<section class="section" id="cercetare">
-  <div class="section-inner">
-    <div class="section-header reveal">
-      <span class="section-number">04</span>
-      <h2 class="section-title">Cercetare științifică & analiză</h2>
-      <div class="section-accent"></div>
-      <p class="section-desc">Razele X sunt instrumente fundamentale în cercetarea de frontieră. De la determinarea structurii dublu-helicoidale a ADN-ului până la fabricarea tranzistorilor de dimensiuni atomice, aceste tehnici au generat peste 29 de Premii Nobel.</p>
-    </div>
+<div class="slide" data-slide="12">
+<div class="slide-inner">
+<span class="s-number">07</span>
+<h2 class="s-title">Alte aplicatii</h2>
+<div class="s-accent"></div>
+<p class="s-desc">De la sterilizarea echipamentelor medicale la conservarea alimentelor si modificarea materialelor plastice.</p>
+<div class="s-img"><img src="https://images.unsplash.com/photo-1582719471384-894fbb16e074?w=1200&q=80" alt="Aplicatii diverse" loading="lazy"></div>
+<div class="app-list">
+<div class="app-item"><div class="app-name">Sterilizare medicala</div><div class="app-detail">Distrug ADN/ARN-ul microorganismelor. Sterilizeaza echipamente ambalate fara caldura. Doza standard: 25 kGy. Seringi, catetere, implanturi.</div></div>
+<div class="app-item"><div class="app-name">Iradierea alimentelor</div><div class="app-detail">Elimina Salmonella, E. coli, Listeria. Nu face alimentele radioactive. Aprobat de OMS, FAO, FDA. Doze: 0.1-10 kGy.</div></div>
+<div class="app-item"><div class="app-name">Polimerizare/reticulare</div><div class="app-detail">Cross-linking polimeric: imbunatateste rezistenta termica si chimica. Izolatie cabluri XLPE, tuburi termocontractibile, hidrogeli biomedicale.</div></div>
+<div class="app-item"><div class="app-name">Deseuri periculoase</div><div class="app-detail">CT/radiografie investigheaza containere fara deschidere. Iradierea neutralizeaza agenti biologici. Esential in decommissionarea nucleara.</div></div>
+</div>
+</div>
+</div>
 
-    <div class="section-img reveal">
-      <img src="https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=1200&q=80" alt="Laborator de cercetare — cristalografie" loading="lazy">
-    </div>
+<div class="slide footer-slide" data-slide="13">
+<div>
+<div class="footer-logo">Radiatii<span class="x">X</span></div>
+<div class="footer-line"></div>
+<p class="footer-tagline">Lumina invizibila care a schimbat lumea.</p>
+<p class="footer-credit">Wilhelm Conrad Roentgen &mdash; Premiul Nobel pentru Fizica, 1901</p>
+</div>
+</div>
 
-    <!-- Interactive: Electromagnetic Spectrum -->
-    <div class="interactive-block reveal">
-      <h3>📊 Spectrul electromagnetic interactiv</h3>
-      <p class="ib-sub">Apasă pe o zonă a spectrului pentru a vedea unde se află razele X comparativ cu lumina vizibilă, UV, infraroșu etc.</p>
-      <div class="spectrum-container" id="spectrumContainer">
-        <div class="spectrum-bar-wrap">
-          <span class="spectrum-xray-indicator" style="left:73%">Raze X ↓</span>
-          <div class="spectrum-bar" id="spectrumBar">
-            <div class="spectrum-seg" data-idx="0" style="background:linear-gradient(90deg,#1a1a3e,#2d2d6b)"></div>
-            <div class="spectrum-seg" data-idx="1" style="background:linear-gradient(90deg,#2d2d6b,#8b4513)"></div>
-            <div class="spectrum-seg" data-idx="2" style="background:linear-gradient(90deg,#8b0000,#ff0000);flex:2"></div>
-            <div class="spectrum-seg" data-idx="3" style="background:linear-gradient(90deg,#ff0000,#ff8c00,#ffff00,#00ff00,#00bfff,#0000ff,#8b00ff);flex:2"></div>
-            <div class="spectrum-seg" data-idx="4" style="background:linear-gradient(90deg,#6a0dad,#3b0764);flex:2"></div>
-            <div class="spectrum-seg active" data-idx="5" style="background:linear-gradient(90deg,#1a0533,#0d0220)"></div>
-            <div class="spectrum-seg" data-idx="6" style="background:linear-gradient(90deg,#06010f,#020005)"></div>
-          </div>
-        </div>
-        <div class="spectrum-labels">
-          <span>Unde radio</span>
-          <span>Microunde</span>
-          <span style="flex:2">Infraroșu</span>
-          <span style="flex:2">Vizibil</span>
-          <span style="flex:2">UV</span>
-          <span>Raze X</span>
-          <span>Gamma</span>
-        </div>
-        <div class="spectrum-info" id="spectrumInfo">
-          <h4>Raze X</h4>
-          <p><strong>Lungime de undă:</strong> 0.01–10 nm · <strong>Energie:</strong> 100 eV – 100 keV<br>Descoperite de Röntgen în 1895. Penetrează țesuturile moi dar sunt absorbite de oase și metale. Folosite extensiv în medicină (radiografii, CT), securitate (scanere), industrie (NDT) și cercetare (cristalografie, XRF).</p>
-        </div>
-      </div>
-    </div>
+</div>
 
-    <!-- Interactive: Röntgen Tube Simulator -->
-    <div class="interactive-block reveal">
-      <h3>⚡ Simulatorul tubului Röntgen</h3>
-      <p class="ib-sub">Controlează tensiunea, curentul și materialul anodului. Observă cum se schimbă fasciculul de electroni, spectrul de emisie și parametrii fizici în timp real.</p>
-      <div class="tube-sim" id="tubeSim">
-        <div class="tube-svg-wrap" id="tubeSvgWrap">
-          <!-- tooltip -->
-          <div class="tube-tooltip" id="tubeTooltip"></div>
-          <svg id="tubeSvg" viewBox="0 0 700 360" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <radialGradient id="glassGrad"><stop offset="0%" stop-color="#a8d8ff" stop-opacity=".12"/><stop offset="100%" stop-color="transparent"/></radialGradient>
-              <radialGradient id="heatGrad"><stop offset="0%" stop-color="#ff6b35"/><stop offset="30%" stop-color="#ff3b00" stop-opacity=".8"/><stop offset="100%" stop-color="transparent"/></radialGradient>
-              <radialGradient id="focusGlow"><stop offset="0%" stop-color="#0071e3" stop-opacity=".3"/><stop offset="100%" stop-color="transparent"/></radialGradient>
-              <filter id="glow"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-              <filter id="xrayGlow"><feGaussianBlur stdDeviation="2.5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-              <linearGradient id="coolingGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#00b4d8" stop-opacity=".15"/><stop offset="100%" stop-color="#0077b6" stop-opacity=".05"/></linearGradient>
-              <clipPath id="envelopeClip"><ellipse cx="350" cy="175" rx="280" ry="130"/></clipPath>
-            </defs>
-
-            <!-- background grid inside tube -->
-            <g clip-path="url(#envelopeClip)" opacity=".04">
-              <line x1="100" y1="50" x2="100" y2="300" stroke="#000" stroke-width=".5"/><line x1="150" y1="50" x2="150" y2="300" stroke="#000" stroke-width=".5"/>
-              <line x1="200" y1="50" x2="200" y2="300" stroke="#000" stroke-width=".5"/><line x1="250" y1="50" x2="250" y2="300" stroke="#000" stroke-width=".5"/>
-              <line x1="300" y1="50" x2="300" y2="300" stroke="#000" stroke-width=".5"/><line x1="350" y1="50" x2="350" y2="300" stroke="#000" stroke-width=".5"/>
-              <line x1="400" y1="50" x2="400" y2="300" stroke="#000" stroke-width=".5"/><line x1="450" y1="50" x2="450" y2="300" stroke="#000" stroke-width=".5"/>
-              <line x1="500" y1="50" x2="500" y2="300" stroke="#000" stroke-width=".5"/><line x1="550" y1="50" x2="550" y2="300" stroke="#000" stroke-width=".5"/>
-              <line x1="70" y1="100" x2="630" y2="100" stroke="#000" stroke-width=".5"/><line x1="70" y1="150" x2="630" y2="150" stroke="#000" stroke-width=".5"/>
-              <line x1="70" y1="200" x2="630" y2="200" stroke="#000" stroke-width=".5"/><line x1="70" y1="250" x2="630" y2="250" stroke="#000" stroke-width=".5"/>
-            </g>
-
-            <!-- glass envelope (double wall for realism) -->
-            <ellipse cx="350" cy="175" rx="280" ry="130" fill="url(#glassGrad)"/>
-            <ellipse cx="350" cy="175" rx="280" ry="130" fill="none" stroke="#c7c7cc" stroke-width="3" opacity=".5"/>
-            <ellipse cx="350" cy="175" rx="274" ry="124" fill="none" stroke="#ddd" stroke-width="1" opacity=".25"/>
-
-            <!-- vacuum label -->
-            <text x="350" y="85" fill="#86868b" font-size="9" text-anchor="middle" font-family="system-ui" letter-spacing=".15em" opacity=".5">VACUUM ~10⁻⁶ Pa</text>
-
-            <!-- ===== CATHODE ASSEMBLY ===== -->
-            <g class="tube-part" data-tip="Catodul (filament de wolfram) este încălzit la ~2200°C prin efect Joule. Electronii sunt emiși prin emisie termoionică — energia termică le permite să depășească bariera de potențial a metalului.">
-              <!-- support bracket -->
-              <rect x="92" y="100" width="6" height="150" rx="3" fill="#86868b" opacity=".6"/>
-              <rect x="102" y="108" width="4" height="134" rx="2" fill="#6e6e73" opacity=".4"/>
-              <!-- Wehnelt cup (focusing electrode) -->
-              <path d="M106 118 L130 125 L130 225 L106 232" stroke="#6e6e73" stroke-width="2.5" fill="none" opacity=".7"/>
-              <path d="M106 118 L130 125 L130 225 L106 232" stroke="none" fill="#6e6e73" opacity=".08"/>
-              <!-- filament coil -->
-              <path d="M110 135 Q128 142 110 149 Q128 156 110 163 Q128 170 110 177 Q128 184 110 191 Q128 198 110 205 Q128 212 110 219" stroke="#ff9500" stroke-width="2.5" fill="none" class="filament-wire" id="filament"/>
-              <!-- filament glow -->
-              <ellipse cx="120" cy="175" rx="24" ry="48" fill="#ff6b35" opacity=".1" id="filamentGlow" filter="url(#glow)"/>
-              <!-- thermionic cloud -->
-              <ellipse cx="135" cy="175" rx="10" ry="30" fill="#0071e3" opacity="0" id="thermionicCloud"/>
-            </g>
-
-            <!-- ===== ANODE ASSEMBLY ===== -->
-            <g class="tube-part" data-tip="Anodul (ținta) este un disc metalic înclinat la 12-17°. Electronii accelerați lovesc ținta, transformând ~1% din energie în raze X și ~99% în căldură. Materialul anodului determină vârfurile caracteristice din spectru.">
-              <!-- anode body (angled target face) -->
-              <polygon points="540,105 558,105 545,245 527,245" fill="#9e9ea3"/>
-              <polygon points="540,105 558,105 558,112 540,112" fill="#78788c" opacity=".5"/>
-              <!-- angled face line -->
-              <line x1="540" y1="105" x2="527" y2="245" stroke="#6e6e73" stroke-width="2"/>
-              <!-- focal spot -->
-              <ellipse cx="534" cy="175" rx="8" ry="14" fill="#ff3b00" opacity="0" id="focalSpot" filter="url(#glow)"/>
-              <!-- heat radiation waves -->
-              <g id="heatWaves" opacity="0">
-                <path d="M560 145 Q570 150 560 155" stroke="#ff6b35" stroke-width="1" fill="none" opacity=".4"/>
-                <path d="M565 165 Q575 170 565 175" stroke="#ff6b35" stroke-width="1" fill="none" opacity=".3"/>
-                <path d="M560 185 Q570 190 560 195" stroke="#ff6b35" stroke-width="1" fill="none" opacity=".4"/>
-              </g>
-              <!-- cooling system indicator -->
-              <rect x="558" y="130" width="14" height="90" rx="4" fill="url(#coolingGrad)" stroke="#00b4d8" stroke-width="1" opacity=".4" id="coolingBlock"/>
-              <text x="565" y="180" fill="#00b4d8" font-size="7" text-anchor="middle" font-family="system-ui" transform="rotate(-90,565,180)" opacity=".5">RĂCIRE</text>
-            </g>
-
-            <!-- ===== BERYLLIUM WINDOW ===== -->
-            <g class="tube-part" data-tip="Fereastra de beriliu (Be, Z=4) permite trecerea razelor X dar menține vidul interior. Beriliul este ales datorită numărului atomic mic — absoarbe minim razele X utile.">
-              <rect x="590" y="152" width="8" height="46" rx="2" fill="#b8c9d9" opacity=".6" stroke="#8aa4b8" stroke-width="1"/>
-              <text x="610" y="172" fill="#86868b" font-size="7" font-family="system-ui" opacity=".6">Be</text>
-              <text x="610" y="182" fill="#86868b" font-size="6" font-family="system-ui" opacity=".4">fereastră</text>
-            </g>
-
-            <!-- ===== LEAD SHIELD ===== -->
-            <g class="tube-part" data-tip="Scutul de plumb (Pb, Z=82) absoarbe razele X nedorite emise în toate direcțiile. Doar cele care trec prin fereastra de beriliu sunt utilizate — restul sunt blocate pentru protecția pacientului și a operatorului.">
-              <path d="M80 60 L620 60 L630 100 Q640 175 630 250 L620 290 L80 290 L70 250 Q60 175 70 100 Z" fill="none" stroke="#6e6e73" stroke-width="2" stroke-dasharray="6 4" opacity=".2"/>
-              <text x="350" y="52" fill="#86868b" font-size="8" text-anchor="middle" font-family="system-ui" opacity=".35" letter-spacing=".1em">ECRAN Pb</text>
-            </g>
-
-            <!-- ===== LABELS ===== -->
-            <text x="120" y="42" fill="#86868b" font-size="10" font-weight="600" text-anchor="middle" font-family="system-ui">CATOD (−)</text>
-            <text x="548" y="42" fill="#86868b" font-size="10" font-weight="600" text-anchor="middle" font-family="system-ui">ANOD (+)</text>
-
-            <!-- ===== ELECTRON BEAM ===== -->
-            <g id="electronBeamGroup" opacity="0" filter="url(#glow)">
-              <line x1="135" y1="162" x2="532" y2="168" stroke="#0071e3" stroke-width="1.5" class="electron-beam" opacity=".3"/>
-              <line x1="135" y1="168" x2="532" y2="172" stroke="#0071e3" stroke-width="2.5" class="electron-beam"/>
-              <line x1="135" y1="175" x2="532" y2="175" stroke="#0071e3" stroke-width="3" class="electron-beam"/>
-              <line x1="135" y1="182" x2="532" y2="178" stroke="#0071e3" stroke-width="2.5" class="electron-beam"/>
-              <line x1="135" y1="188" x2="532" y2="182" stroke="#0071e3" stroke-width="1.5" class="electron-beam" opacity=".3"/>
-            </g>
-
-            <!-- ===== X-RAY EMISSION ===== -->
-            <g id="xrayGroup" opacity="0" filter="url(#xrayGlow)">
-              <line x1="536" y1="175" x2="650" y2="100" stroke="#e040fb" stroke-width="1.5" class="xray-line" opacity=".5"/>
-              <line x1="536" y1="175" x2="658" y2="130" stroke="#e040fb" stroke-width="1.8" class="xray-line" style="animation-delay:.15s" opacity=".6"/>
-              <line x1="536" y1="175" x2="662" y2="155" stroke="#e040fb" stroke-width="2" class="xray-line" style="animation-delay:.3s" opacity=".7"/>
-              <line x1="536" y1="175" x2="665" y2="175" stroke="#e040fb" stroke-width="2.5" class="xray-line" style="animation-delay:.45s" opacity=".9"/>
-              <line x1="536" y1="175" x2="662" y2="195" stroke="#e040fb" stroke-width="2" class="xray-line" style="animation-delay:.6s" opacity=".7"/>
-              <line x1="536" y1="175" x2="658" y2="220" stroke="#e040fb" stroke-width="1.8" class="xray-line" style="animation-delay:.75s" opacity=".6"/>
-              <line x1="536" y1="175" x2="650" y2="250" stroke="#e040fb" stroke-width="1.5" class="xray-line" style="animation-delay:.9s" opacity=".5"/>
-              <!-- wavy X-ray label -->
-              <text x="668" y="173" fill="#e040fb" font-size="11" font-weight="700" font-family="system-ui">Raze X</text>
-              <text x="668" y="185" fill="#e040fb" font-size="7" font-family="system-ui" opacity=".6" id="xrayWaveLabel">λ = ∞</text>
-            </g>
-
-            <!-- ===== VOLTAGE INDICATOR ===== -->
-            <g opacity=".3">
-              <line x1="130" y1="295" x2="530" y2="295" stroke="#1d1d1f" stroke-width="1" stroke-dasharray="4 3"/>
-              <polygon points="130,292 120,295 130,298" fill="#1d1d1f"/>
-              <polygon points="530,292 540,295 530,298" fill="#1d1d1f"/>
-              <text x="330" y="312" fill="#1d1d1f" font-size="8.5" text-anchor="middle" font-family="system-ui" id="voltageLabel">ΔV = 0 kV</text>
-            </g>
-
-            <!-- ===== CURRENT PATH ===== -->
-            <g opacity=".2">
-              <path d="M95 260 L95 340 L555 340 L555 260" stroke="#0071e3" stroke-width="1" fill="none" stroke-dasharray="3 4"/>
-              <text x="330" y="350" fill="#0071e3" font-size="7" text-anchor="middle" font-family="system-ui" id="currentLabel">I = 0 mA</text>
-            </g>
-
-            <!-- electron particles -->
-            <g id="electronDots"></g>
-            <!-- x-ray photon particles -->
-            <g id="xrayDots"></g>
-          </svg>
-        </div>
-
-        <!-- controls -->
-        <div class="tube-controls">
-          <div class="tube-ctrl" data-info="Tensiunea accelerează electronii de la catod spre anod. Cu cât tensiunea e mai mare, cu atât electronii au mai multă energie cinetică, iar fotonii X produși au energie mai mare (lungime de undă mai mică). Tensiuni mici → raze X moale; tensiuni mari → raze X dure, penetrante.">
-            <label>TENSIUNE (kV)</label>
-            <input type="range" id="tubeVoltage" min="0" max="150" value="0" step="1">
-            <span class="ctrl-val" id="tubeVoltageVal">0 kV</span>
-          </div>
-          <div class="tube-ctrl" data-info="Curentul tubular controlează câți electroni sunt emiși pe secundă de catod. Mai mult curent = mai mulți electroni = mai mulți fotoni X emiși. Intensitatea fasciculului crește, dar energia maximă a fotonilor rămâne aceeași (determinată de tensiune).">
-            <label>CURENT TUBULAR (mA)</label>
-            <input type="range" id="tubeCurrent" min="0" max="500" value="0" step="5">
-            <span class="ctrl-val" id="tubeCurrentVal">0 mA</span>
-          </div>
-          <div class="tube-ctrl" data-info="Materialul anodului determină vârfurile caracteristice (Kα, Kβ) din spectrul de emisie. Wolfram (W) e standard pentru radiografie generală. Molibden (Mo) și Rodiu (Rh) se folosesc în mamografie. Cupru (Cu) e utilizat în cristalografia cu raze X.">
-            <label>MATERIAL ANOD</label>
-            <select id="tubeAnodeMat">
-              <option value="W" selected>Wolfram (W, Z=74)</option>
-              <option value="Mo">Molibden (Mo, Z=42)</option>
-              <option value="Cu">Cupru (Cu, Z=29)</option>
-              <option value="Rh">Rodiu (Rh, Z=45)</option>
-            </select>
-            <span class="ctrl-val" id="tubeAnodeInfo">K𝛼 = 59.3 keV</span>
-          </div>
-        </div>
-
-        <!-- readouts -->
-        <div class="tube-readout">
-          <div class="ro-item" data-info="Puterea electrică consumată de tub: P = U × I (tensiune × curent). Doar ~1% devine raze X — restul de ~99% se transformă în căldură în anod, de aceea sistemul de răcire este esențial.">
-            <span class="ro-label">PUTERE</span>
-            <span class="ro-val" id="roPower">0 W</span>
-          </div>
-          <div class="ro-item" data-info="Lungimea minimă de undă a fotonilor X emiși, dată de legea Duane-Hunt: λ_min = hc/eV = 1240/kV (în pm). Corespunde cazului în care TOATĂ energia cinetică a electronului se transformă într-un singur foton X.">
-            <span class="ro-label">λ MIN (DUANE-HUNT)</span>
-            <span class="ro-val" id="roWavelength">∞</span>
-          </div>
-          <div class="ro-item" data-info="Energia maximă a unui foton X emis — egală numeric cu tensiunea aplicată (în keV). Un electron accelerat prin 80 kV poate produce un foton de maxim 80 keV. Majoritatea fotonilor au energie mai mică (spectrul Bremsstrahlung).">
-            <span class="ro-label">E MAX FOTON</span>
-            <span class="ro-val" id="roEnergy">0 keV</span>
-          </div>
-          <div class="ro-item" data-info="Clasificarea razelor X după energia lor: Moale (<20 kV) — absorbite ușor, pt. mamografie. Diagnostic (20-50 kV) — radiografie standard. Dur (50-100 kV) — CT, fluoroscopie. Foarte dur (>100 kV) — penetrează metale groase.">
-            <span class="ro-label">TIP RADIAȚIE</span>
-            <span class="ro-val" id="roType">—</span>
-          </div>
-          <div class="ro-item" data-info="Doar o fracțiune minusculă din energia electronilor devine raze X. Eficiența crește cu numărul atomic (Z) al anodului și cu tensiunea: η ≈ 1.1×10⁻⁹ × Z × V. La 100 kV cu wolfram: ~0.8%. Restul = căldură.">
-            <span class="ro-label">EFICIENȚĂ</span>
-            <span class="ro-val" id="roEfficiency">~0%</span>
-          </div>
-          <div class="ro-item" data-info="Temperatura estimată a anodului. La puteri mari (>50 kW), anodul poate depăși 2000°C. De aceea se folosesc anode rotative (3000-10000 RPM) și răcire cu ulei/apă pentru a distribui căldura pe o suprafață mai mare.">
-            <span class="ro-label">T ANOD ESTIMATĂ</span>
-            <span class="ro-val" id="roTemp">25 °C</span>
-          </div>
-        </div>
-
-        <!-- live spectrum chart -->
-        <div class="tube-spectrum">
-          <canvas id="spectrumCanvas" width="640" height="180"></canvas>
-          <p class="tube-spectrum-label">Spectrul de emisie — curba albastră = <strong>Bremsstrahlung</strong> (radiație de frânare, spectru continuu) + vârfuri violet = linii <strong>caracteristice</strong> (Kα, Kβ) specifice materialului anodului. Linia roșie punctată = energia maximă.</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="app-list">
-      <div class="app-item reveal">
-        <div class="app-name">Cristalografie cu raze X</div>
-        <div class="app-detail">Când un fascicul de raze X traversează un cristal, atomii îl difractează, creând un pattern unic. Prin analiza matematică (transformata Fourier) se reconstruiește cu precizie atomică poziția fiecărui atom. Esențială pentru descoperirea structurii ADN-ului (Watson & Crick 1953, bazată pe „Fotografia 51" a Rosalind Franklin). A generat Premii Nobel în fizică (Laue 1914, Bragg 1915), chimie (Hodgkin 1964) și medicină.</div>
-      </div>
-      <div class="app-item reveal">
-        <div class="app-name">Spectroscopie de fluorescență XRF</div>
-        <div class="app-detail">XRF bombardează un material cu raze X primare care expulzează electroni din straturile interne ale atomilor. Electronii din straturile superioare emit raze X secundare cu energii caracteristice fiecărui element chimic. Identifică și cuantifică elementele de la Na la U. Folosită în geologie, metalurgie, controlul mediului, reciclare și arheometrie. Dispozitivele portabile XRF permit analize de teren.</div>
-      </div>
-      <div class="app-item reveal">
-        <div class="app-name">Difracție de raze X (XRD)</div>
-        <div class="app-detail">XRD identifică fazele cristaline — fiecare mineral produce un pattern unic, ca o „amprentă digitală". Spre deosebire de XRF (elemente chimice), XRD identifică compușii (distinge între calcit și aragonit CaCO₃). Esențială în geologie, industria cimentului, farmaceutică (identificarea polimorfilor) și criminalistică.</div>
-      </div>
-      <div class="app-item reveal">
-        <div class="app-name">Microtomografie (micro-CT)</div>
-        <div class="app-detail">Versiunea miniaturizată a CT-ului medical, cu rezoluție sub 1 micron — de sute de ori mai bună decât CT-ul medical. Utilizată în biologie (anatomia insectelor), paleontologie (fosile în matrice de rocă), știința materialelor (porozitatea cimentului, spume metalice) și implantologie.</div>
-      </div>
-      <div class="app-item reveal">
-        <div class="app-name">Litografie cu raze X</div>
-        <div class="app-detail">Datorită lungimii de undă foarte mici (0.01-10 nm), razele X pot „scrie" pattern-uri sub 10 nm — depășind limita de difracție a luminii UV. Folosită pentru fabricarea de tranzistori experimentali, nanostructuri pentru fotonică și plasmonică. Sincrotroanele și XFEL furnizează fasciculele necesare.</div>
-      </div>
-      <div class="app-item reveal">
-        <div class="app-name">Microscopie cu raze X</div>
-        <div class="app-detail">Microscoapele cu raze X moi oferă rezoluții de 20-50 nm cu avantajul de a vizualiza probe groase, hidratate și chiar vii — fără secționare, uscare sau coating metalic. Permit imagistica 3D a celulelor prin cryo-tomografie, dezvăluind organitele în starea lor naturală.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ==================== 05 ARTĂ ==================== -->
-<section class="section" id="arta">
-  <div class="section-inner">
-    <div class="section-header reveal">
-      <span class="section-number">05</span>
-      <h2 class="section-title">Artă, arheologie & istorie</h2>
-      <div class="section-accent"></div>
-      <p class="section-desc">Razele X permit „privirea" sub suprafața operelor de artă, a mumiilor și a artefactelor milenare, dezvăluind secretele lor fără a le atinge sau deteriora.</p>
-    </div>
-
-    <div class="section-img reveal">
-      <img src="https://images.unsplash.com/photo-1594608661623-aa0bd3a69d98?w=1200&q=80" alt="Muzeu — analiză opere de artă" loading="lazy">
-    </div>
-
-    <div class="app-list">
-      <div class="app-item reveal">
-        <div class="app-name">Analiza picturilor</div>
-        <div class="app-detail">Radiografia picturilor dezvăluie straturile de sub suprafață: schițele inițiale, pentimenti (modificări ale artistului), picturi acoperite și restaurări ulterioare. Radiografia a dezvăluit o pictură de femeie sub „Peticul de iarbă" al lui Van Gogh și schimbări majore sub lucrările lui Rembrandt, Caravaggio și Vermeer. Macro-XRF permite cartografierea element cu element a pigmenților.</div>
-      </div>
-      <div class="app-item reveal">
-        <div class="app-name">Scanarea mumiilor și artefactelor sigilate</div>
-        <div class="app-detail">CT-ul permite „despachetarea digitală" a mumiilor fără a le deteriora. Scanările 3D au descoperit amulete între bandaje, proteze dentare antice, cauze ale morții și boli, și au permis reconstrucția facială digitală. Artefactele sigilate pot fi examinate intern fără a fi deschise. Mumiile din Muzeul Britanic și Muzeul Egiptean au fost „re-descoperite" prin CT.</div>
-      </div>
-      <div class="app-item reveal">
-        <div class="app-name">Autentificarea operelor de artă</div>
-        <div class="app-detail">Combinația de radiografie, XRF și XRD poate verifica autenticitatea. XRF identifică pigmenții: prezența albului de titan (TiO₂, din 1920) într-o pictură „din sec. XVII" dovedește falsul. Celebrul falsificator Han van Meegeren a fost demascat în 1945 prin analiza chimică a pigmenților.</div>
-      </div>
-      <div class="app-item reveal">
-        <div class="app-name">Restaurarea obiectelor metalice istorice</div>
-        <div class="app-detail">Radiografia dezvăluie starea reală a metalului sub coroziune: inscripții, decorațiuni, detalii constructive și gradul de mineralizare. A dezvăluit inscripții complet invizibile pe spade vikinge, monede romane și instrumente muzicale medievale.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ==================== 06 ASTRONOMIE ==================== -->
-<section class="section" id="astronomie">
-  <div class="section-inner">
-    <div class="section-header reveal">
-      <span class="section-number">06</span>
-      <h2 class="section-title">Astronomie & geoștiințe</h2>
-      <div class="section-accent"></div>
-      <p class="section-desc">Razele X din cosmos sunt emise de cele mai energetice și extreme fenomene din univers. Observarea lor ne permite să studiem fizica în condiții imposibil de reprodus pe Pământ.</p>
-    </div>
-
-    <div class="section-img reveal">
-      <img src="https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=1200&q=80" alt="Nebuloasă — astronomie cu raze X" loading="lazy">
-    </div>
-
-    <div class="app-list">
-      <div class="app-item reveal">
-        <div class="app-name">Telescoape spațiale cu raze X</div>
-        <div class="app-detail">Atmosfera Pământului absoarbe complet razele X cosmice, deci telescoapele trebuie lansate în spațiu. Chandra (NASA), XMM-Newton (ESA) și eROSITA observă: materia care spiralează în găuri negre supermasive, rămășițele supernovelor, jeturile relativistice, pulsarii și gazul fierbinte din roiurile de galaxii.</div>
-      </div>
-      <div class="app-item reveal">
-        <div class="app-name">Analiza rocilor pe alte planete</div>
-        <div class="app-detail">Instrumentele XRF și APXS de pe roverele Curiosity și Perseverance analizează compoziția chimică a rocilor marțiene, identificând minerale formate în apă (sulfați, carbonați, fillosilicați) și demonstrând că Marte a avut condiții favorabile vieții. PIXL poate realiza micro-XRF cu rezoluție de 120 µm.</div>
-      </div>
-      <div class="app-item reveal">
-        <div class="app-name">Studiul interiorului Pământului</div>
-        <div class="app-detail">Sincrotroanele generează raze X intense pentru a studia mineralele la presiuni de 1-4 milioane de atmosfere și mii de grade — condiții din centrul Pământului. Au permis descoperirea post-perovskitei (2004), principalul mineral al mantalei inferioare, și înțelegerea propagării undelor seismice.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ==================== 07 ALTE APLICAȚII ==================== -->
-<section class="section" id="alte">
-  <div class="section-inner">
-    <div class="section-header reveal">
-      <span class="section-number">07</span>
-      <h2 class="section-title">Alte aplicații</h2>
-      <div class="section-accent"></div>
-      <p class="section-desc">Dincolo de domeniile majore, razele X au aplicații surprinzătoare și diverse — de la sterilizarea echipamentelor medicale la conservarea alimentelor și modificarea materialelor plastice.</p>
-    </div>
-
-    <div class="section-img reveal">
-      <img src="https://images.unsplash.com/photo-1582719471384-894fbb16e074?w=1200&q=80" alt="Aplicații diverse ale razelor X" loading="lazy">
-    </div>
-
-    <div class="app-list">
-      <div class="app-item reveal">
-        <div class="app-name">Sterilizarea echipamentelor medicale</div>
-        <div class="app-detail">Razele X distrug ADN-ul și ARN-ul microorganismelor, sterilizând echipamentele deja ambalate. Spre deosebire de autoclavare (121-134°C) sau oxid de etilenă (toxic), iradierea nu deteriorează plasticul, cauciucul sau materialele sensibile. Doza standard: 25 kGy. Se utilizează pentru seringi, catetere, implanturi, suturi și instrumente chirurgicale de unică folosință.</div>
-      </div>
-      <div class="app-item reveal">
-        <div class="app-name">Iradierea alimentelor</div>
-        <div class="app-detail">Iradierea elimină bacteriile patogene (Salmonella, E. coli, Listeria), paraziții și insectele, prelungind termenul de valabilitate fără a altera gustul sau valoarea nutritivă. Nu face alimentele radioactive. Aprobat de OMS, FAO, FDA și peste 60 de țări. Dozele variază de la 0.1 kGy (inhibarea germinării cartofilor) la 10 kGy (sterilizare completă).</div>
-      </div>
-      <div class="app-item reveal">
-        <div class="app-name">Polimerizarea și reticularea materialelor</div>
-        <div class="app-detail">Razele X creează legături chimice suplimentare între lanțurile polimerice (cross-linking), îmbunătățind rezistența termică, chimică și la uzură. Folosit pentru izolația cablurilor electrice (XLPE), tuburi termocontractibile, anvelope de performanță și hidrogeli biomedicale (lentile de contact, pansamente pentru arsuri).</div>
-      </div>
-      <div class="app-item reveal">
-        <div class="app-name">Analiza și neutralizarea deșeurilor periculoase</div>
-        <div class="app-detail">Radiografia și CT-ul investighează containerele de deșeuri periculoase (chimice, radioactive, biologice, explozive) fără deschidere. Dezvăluie tipul materialului, starea structurală a containerului și riscurile asociate. Iradierea cu doze mari poate neutraliza agenți biologici periculoși. Esențial în decommissionarea instalațiilor nucleare.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ==================== FOOTER ==================== -->
-<footer class="footer">
-  <div class="footer-logo">Radiații<span class="x">X</span></div>
-  <div class="footer-line"></div>
-  <p class="footer-tagline">Lumina invizibilă care a schimbat lumea.</p>
-  <p class="footer-credit">Wilhelm Conrad Röntgen — Premiul Nobel pentru Fizică, 1901</p>
-</footer>
+<div class="slide-nav">
+<button id="prevBtn" disabled aria-label="Slide anterioara">&larr;</button>
+<button id="nextBtn" aria-label="Slide urmatoare">&rarr;</button>
+</div>
+<div class="slide-counter" id="slideCounter">1 / 14</div>
 
 <script>
 (function(){
-  'use strict';
+'use strict';
+var slides=document.querySelectorAll('.slide');
+var totalSlides=slides.length;
+var currentSlide=0;
+var prevBtn=document.getElementById('prevBtn');
+var nextBtn=document.getElementById('nextBtn');
+var counter=document.getElementById('slideCounter');
+var progress=document.getElementById('slideProgress');
+var dotsContainer=document.getElementById('slideDots');
+for(var d=0;d<totalSlides;d++){
+var dot=document.createElement('button');
+dot.setAttribute('aria-label','Slide '+(d+1));
+if(d===0)dot.classList.add('active');
+dot.dataset.idx=d;
+dot.addEventListener('click',function(){goToSlide(parseInt(this.dataset.idx));});
+dotsContainer.appendChild(dot);
+}
+var dots=dotsContainer.querySelectorAll('button');
+function goToSlide(n){
+if(n<0||n>=totalSlides||n===currentSlide)return;
+slides[currentSlide].classList.remove('active');
+slides[currentSlide].style.transform=n>currentSlide?'translateY(-30px)':'translateY(30px)';
+currentSlide=n;
+slides[currentSlide].classList.add('active');
+slides[currentSlide].scrollTop=0;
+prevBtn.disabled=currentSlide===0;
+nextBtn.disabled=currentSlide===totalSlides-1;
+counter.textContent=(currentSlide+1)+' / '+totalSlides;
+progress.style.width=((currentSlide/(totalSlides-1))*100)+'%';
+dots.forEach(function(dd,i){dd.classList.toggle('active',i===currentSlide);});
+if(currentSlide===8&&typeof updateTube==='function'){
+setTimeout(updateTube,80);
+}
+}
+prevBtn.addEventListener('click',function(){goToSlide(currentSlide-1);});
+nextBtn.addEventListener('click',function(){goToSlide(currentSlide+1);});
+document.addEventListener('keydown',function(e){
+if(e.target.tagName==='INPUT'||e.target.tagName==='SELECT')return;
+if(e.key==='ArrowRight'||e.key==='ArrowDown'||e.key===' '){e.preventDefault();goToSlide(currentSlide+1);}
+else if(e.key==='ArrowLeft'||e.key==='ArrowUp'){e.preventDefault();goToSlide(currentSlide-1);}
+else if(e.key==='Home'){e.preventDefault();goToSlide(0);}
+else if(e.key==='End'){e.preventDefault();goToSlide(totalSlides-1);}
+});
+var wheelTimer=null;
+document.addEventListener('wheel',function(e){
+var activeSlide=slides[currentSlide];
+var isScrollable=activeSlide.scrollHeight>activeSlide.clientHeight;
+if(isScrollable){
+var atTop=activeSlide.scrollTop<=0;
+var atBottom=activeSlide.scrollTop+activeSlide.clientHeight>=activeSlide.scrollHeight-2;
+if(e.deltaY>0&&!atBottom)return;
+if(e.deltaY<0&&!atTop)return;
+}
+if(wheelTimer)return;
+wheelTimer=setTimeout(function(){wheelTimer=null;},600);
+if(e.deltaY>0)goToSlide(currentSlide+1);
+else if(e.deltaY<0)goToSlide(currentSlide-1);
+},{passive:true});
+var touchStartY=0;
+document.addEventListener('touchstart',function(e){touchStartY=e.touches[0].clientY;},{passive:true});
+document.addEventListener('touchend',function(e){
+var diff=touchStartY-e.changedTouches[0].clientY;
+if(Math.abs(diff)>50){
+if(diff>0)goToSlide(currentSlide+1);
+else goToSlide(currentSlide-1);
+}
+},{passive:true});
 
-  /* ====== REVEAL ON SCROLL ====== */
-  const revealEls = document.querySelectorAll('.reveal');
-  const revealObs = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
-  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-  revealEls.forEach(el => revealObs.observe(el));
+var spectrumSegs=document.querySelectorAll('.spectrum-seg');
+var spectrumInfo=document.getElementById('spectrumInfo');
+var spectrumData=[
+{name:'Unde radio',wave:'1 mm \u2013 100 km',energy:'< 0.001 eV',desc:'Cele mai lungi unde EM. Comunicatii radio, TV, Wi-Fi, Bluetooth, radar.'},
+{name:'Microunde',wave:'1 mm \u2013 30 cm',energy:'0.001\u20130.01 eV',desc:'Cuptoare cu microunde, comunicatii satelitare, telefonie 4G/5G, radiatia cosmica de fond (CMB).'},
+{name:'Infrarosu',wave:'700 nm \u2013 1 mm',energy:'0.01\u20131.7 eV',desc:'Radiatie termica. Telecomenzi, camere termice, fibra optica, telescopul James Webb.'},
+{name:'Lumina vizibila',wave:'380\u2013700 nm',energy:'1.7\u20133.3 eV',desc:'Singura radiatie vizibila ochiului uman. Violet (380 nm) \u2192 rosu (700 nm).'},
+{name:'Ultraviolet (UV)',wave:'10\u2013380 nm',energy:'3.3\u2013124 eV',desc:'Bronzare, arsuri solare, vitamina D, sterilizare, litografie.'},
+{name:'Raze X',wave:'0.01\u201310 nm',energy:'100 eV \u2013 100 keV',desc:'Descoperite de Roentgen 1895. Penetreaza tesuturi moi, absorbite de oase. Medicina, securitate, industrie, cercetare.'},
+{name:'Raze gamma',wave:'< 0.01 nm',energy:'> 100 keV',desc:'Cele mai energetice radiatii. Dezintegrari nucleare, supernovae, GRB-uri. Sterilizare, radioterapie.'}
+];
+spectrumSegs.forEach(function(seg){
+seg.addEventListener('click',function(){
+spectrumSegs.forEach(function(s){s.classList.remove('active');});
+seg.classList.add('active');
+var dd=spectrumData[parseInt(seg.dataset.idx)];
+spectrumInfo.innerHTML='<h4>'+dd.name+'</h4><p><strong>\u03BB:</strong> '+dd.wave+' \u00B7 <strong>E:</strong> '+dd.energy+'<br>'+dd.desc+'</p>';
+});
+});
 
-  /* ====== NAVBAR SCROLL ====== */
-  const nav = document.getElementById('nav');
-  window.addEventListener('scroll', () => {
-    nav.classList.toggle('scrolled', window.scrollY > 60);
-  }, { passive: true });
-
-  /* ====== ACTIVE NAV LINK ====== */
-  const sections = document.querySelectorAll('.section');
-  const navLinks = document.querySelectorAll('.nav-links a');
-  const linkObs = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if(e.isIntersecting){
-        const id = e.target.id;
-        navLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#'+id));
-      }
-    });
-  }, { threshold: 0.15, rootMargin: '-64px 0px -50% 0px' });
-  sections.forEach(s => linkObs.observe(s));
-
-  /* ====== MOBILE NAV ====== */
-  const toggle = document.getElementById('navToggle');
-  const links = document.getElementById('navLinks');
-  toggle.addEventListener('click', () => {
-    toggle.classList.toggle('open');
-    links.classList.toggle('open');
-    document.body.style.overflow = links.classList.contains('open') ? 'hidden' : '';
-  });
-  links.querySelectorAll('a').forEach(a => {
-    a.addEventListener('click', () => {
-      toggle.classList.remove('open');
-      links.classList.remove('open');
-      document.body.style.overflow = '';
-    });
-  });
-
-  /* ====== ELECTROMAGNETIC SPECTRUM ====== */
-  const spectrumSegs = document.querySelectorAll('.spectrum-seg');
-  const spectrumInfo = document.getElementById('spectrumInfo');
-
-  const spectrumData = [
-    { name:'Unde radio', wave:'1 mm – 100 km', energy:'< 0.001 eV', desc:'Cele mai lungi unde electromagnetice. Folosite pentru comunicații radio, TV, Wi-Fi, Bluetooth, radar și astronomie radio. Undele radio FM au ~3 m lungime.' },
-    { name:'Microunde', wave:'1 mm – 30 cm', energy:'0.001–0.01 eV', desc:'Folosite în cuptoarele cu microunde (2.45 GHz), comunicații satelitare, telefonie mobilă (4G/5G) și radiația cosmică de fond (CMB), urmă a Big Bang-ului.' },
-    { name:'Infraroșu', wave:'700 nm – 1 mm', energy:'0.01–1.7 eV', desc:'Radiația termică — tot ce are temperatură emite infraroșu. Folosit în telecomenzi, camere termice, spectroscopie, comunicații prin fibră optică și astronomie IR (telescopul James Webb).' },
-    { name:'Lumină vizibilă', wave:'380–700 nm', energy:'1.7–3.3 eV', desc:'Singura radiație electromagnetică vizibilă ochiului uman. De la violet (380 nm) prin albastru, verde, galben, portocaliu la roșu (700 nm). Soarele emite maxim în vizibil.' },
-    { name:'Ultraviolet (UV)', wave:'10–380 nm', energy:'3.3–124 eV', desc:'Cauzează bronzarea și arsurile solare. UV-A (bronzare), UV-B (arsuri, vitamina D), UV-C (germicid, absorbit de ozon). Folosit pentru sterilizare, criminalistică și litografie.' },
-    { name:'Raze X', wave:'0.01–10 nm', energy:'100 eV – 100 keV', desc:'Descoperite de Röntgen în 1895. Penetrează țesuturile moi dar sunt absorbite de oase și metale. Folosite extensiv în medicină (radiografii, CT), securitate (scanere), industrie (NDT) și cercetare (cristalografie, XRF).' },
-    { name:'Raze gamma', wave:'< 0.01 nm', energy:'> 100 keV', desc:'Cele mai energetice radiații electromagnetice. Emise de dezintegrări nucleare, supernovae și GRB-uri (gamma-ray bursts). Folosite pentru sterilizare, radioterapie și imagistică nucleară (PET, SPECT).' }
-  ];
-
-  if(spectrumSegs.length){
-    function showSpectrumInfo(idx){
-      var d = spectrumData[idx];
-      spectrumInfo.innerHTML = '<h4>' + d.name + '</h4><p><strong>Lungime de undă:</strong> ' + d.wave + ' · <strong>Energie:</strong> ' + d.energy + '<br>' + d.desc + '</p>';
-    }
-
-    spectrumSegs.forEach(function(seg){
-      seg.addEventListener('click', function(){
-        spectrumSegs.forEach(function(s){ s.classList.remove('active'); });
-        seg.classList.add('active');
-        showSpectrumInfo(parseInt(seg.dataset.idx));
-      });
-    });
-  }
-
-  /* ====== RÖNTGEN TUBE SIMULATOR ====== */
-  const tubeVoltage = document.getElementById('tubeVoltage');
-  const tubeCurrent = document.getElementById('tubeCurrent');
-  const tubeAnodeMat = document.getElementById('tubeAnodeMat');
-  const tubeVoltageVal = document.getElementById('tubeVoltageVal');
-  const tubeCurrentVal = document.getElementById('tubeCurrentVal');
-  const tubeAnodeInfo = document.getElementById('tubeAnodeInfo');
-  const roPower = document.getElementById('roPower');
-  const roWavelength = document.getElementById('roWavelength');
-  const roEnergy = document.getElementById('roEnergy');
-  const roType = document.getElementById('roType');
-  const roEfficiency = document.getElementById('roEfficiency');
-  const roTemp = document.getElementById('roTemp');
-  const electronBeamGroup = document.getElementById('electronBeamGroup');
-  const xrayGroup = document.getElementById('xrayGroup');
-  const focalSpot = document.getElementById('focalSpot');
-  const heatWaves = document.getElementById('heatWaves');
-  const filamentGlow = document.getElementById('filamentGlow');
-  const thermionicCloud = document.getElementById('thermionicCloud');
-  const voltageLabel = document.getElementById('voltageLabel');
-  const currentLabel = document.getElementById('currentLabel');
-  const xrayWaveLabel = document.getElementById('xrayWaveLabel');
-  const electronDots = document.getElementById('electronDots');
-  const xrayDots = document.getElementById('xrayDots');
-  const specCanvas = document.getElementById('spectrumCanvas');
-  const specCtx = specCanvas ? specCanvas.getContext('2d') : null;
-  const tubeTooltip = document.getElementById('tubeTooltip');
-  const tubeSvgWrap = document.getElementById('tubeSvgWrap');
-
-  /* anode materials: Ka, Kb energies in keV, Z */
-  const anodeMaterials = {
-    W:  { name:'Wolfram',  Z:74, Ka:59.3, Kb:67.2, color:'#9e9ea3' },
-    Mo: { name:'Molibden', Z:42, Ka:17.5, Kb:19.6, color:'#7a8a99' },
-    Cu: { name:'Cupru',    Z:29, Ka:8.05, Kb:8.91, color:'#b87333' },
-    Rh: { name:'Rodiu',    Z:45, Ka:20.2, Kb:22.7, color:'#c0c0cc' }
-  };
-
-  let eDots = [];
-  let xDots = [];
-
-  function createElectronDot(){
-    var c = document.createElementNS('http://www.w3.org/2000/svg','circle');
-    c.setAttribute('r','2');
-    c.setAttribute('fill','#0071e3');
-    var yOff = (Math.random()-0.5)*28;
-    c.setAttribute('cy', 175+yOff);
-    c.setAttribute('cx','135');
-    c.setAttribute('opacity','0.6');
-    electronDots.appendChild(c);
-    return {el:c, x:135, y:175+yOff, targetY:175+yOff*0.12, speed:2.5+Math.random()*4.5};
-  }
-
-  function createXrayDot(){
-    var c = document.createElementNS('http://www.w3.org/2000/svg','circle');
-    c.setAttribute('r','1.8');
-    c.setAttribute('fill','#e040fb');
-    c.setAttribute('opacity','0.7');
-    c.setAttribute('cx','536');
-    c.setAttribute('cy','175');
-    xrayDots.appendChild(c);
-    var angle = (Math.random()-0.5)*1.4;
-    return {el:c, x:536, y:175, vx:Math.cos(angle)*3.5, vy:Math.sin(angle)*3.5, life:0};
-  }
-
-  /* ---- TOOLTIP on SVG parts ---- */
-  if(tubeSvgWrap){
-    var parts = tubeSvgWrap.querySelectorAll('.tube-part');
-    parts.forEach(function(p){
-      p.addEventListener('mouseenter', function(e){
-        var tip = p.getAttribute('data-tip');
-        if(!tip) return;
-        tubeTooltip.textContent = tip;
-        tubeTooltip.classList.add('show');
-      });
-      p.addEventListener('mousemove', function(e){
-        var rect = tubeSvgWrap.getBoundingClientRect();
-        var x = e.clientX - rect.left;
-        var y = e.clientY - rect.top;
-        tubeTooltip.style.left = Math.min(x - 60, rect.width - 230) + 'px';
-        tubeTooltip.style.top = (y - tubeTooltip.offsetHeight - 14) + 'px';
-      });
-      p.addEventListener('mouseleave', function(){
-        tubeTooltip.classList.remove('show');
-      });
-    });
-  }
-
-  /* ---- SPECTRUM CHART (Canvas) ---- */
-  function drawSpectrum(kv, ma, mat){
-    if(!specCtx) return;
-    var W = specCanvas.width;
-    var H = specCanvas.height;
-    var dpr = window.devicePixelRatio || 1;
-    specCanvas.width = specCanvas.offsetWidth * dpr;
-    specCanvas.height = 180 * dpr;
-    W = specCanvas.width; H = specCanvas.height;
-    specCtx.setTransform(dpr,0,0,dpr,0,0);
-    var w = specCanvas.offsetWidth;
-    var h = 180;
-
-    specCtx.clearRect(0,0,w,h);
-
-    /* axes */
-    var padL=50, padR=20, padB=30, padT=15;
-    var gw = w-padL-padR;
-    var gh = h-padT-padB;
-
-    specCtx.strokeStyle = 'rgba(0,0,0,.1)';
-    specCtx.lineWidth = 1;
-    specCtx.beginPath();
-    specCtx.moveTo(padL,padT);
-    specCtx.lineTo(padL,padT+gh);
-    specCtx.lineTo(padL+gw,padT+gh);
-    specCtx.stroke();
-
-    /* axis labels */
-    specCtx.fillStyle = '#86868b';
-    specCtx.font = '9px system-ui';
-    specCtx.textAlign = 'center';
-    specCtx.fillText('Energie (keV)', padL+gw/2, h-3);
-    specCtx.save();
-    specCtx.translate(12, padT+gh/2);
-    specCtx.rotate(-Math.PI/2);
-    specCtx.fillText('Intensitate relativă', 0, 0);
-    specCtx.restore();
-
-    if(kv <= 0 || ma <= 0){
-      specCtx.fillStyle = '#86868b';
-      specCtx.font = '11px system-ui';
-      specCtx.textAlign = 'center';
-      specCtx.fillText('Crește tensiunea și curentul pentru a genera spectrul', w/2, h/2);
-      return;
-    }
-
-    var maxE = Math.max(kv * 1.1, 20);
-    var info = anodeMaterials[mat];
-    var maNorm = ma/500;
-
-    /* tick marks on x axis */
-    specCtx.fillStyle = '#86868b';
-    specCtx.font = '8px SF Mono, monospace';
-    specCtx.textAlign = 'center';
-    var step = maxE <= 30 ? 5 : maxE <= 80 ? 10 : 20;
-    for(var t=0; t<=maxE; t+=step){
-      var tx = padL + (t/maxE)*gw;
-      specCtx.fillText(t, tx, padT+gh+14);
-      specCtx.beginPath();
-      specCtx.moveTo(tx, padT+gh);
-      specCtx.lineTo(tx, padT+gh+4);
-      specCtx.strokeStyle = 'rgba(0,0,0,.15)';
-      specCtx.stroke();
-    }
-
-    /* Bremsstrahlung continuous spectrum: Kramers' approximation */
-    /* I(E) ∝ Z * (E_max - E) for E < E_max */
-    specCtx.beginPath();
-    var maxIntensity = info.Z * kv * maNorm;
-    var points = [];
-    for(var i=0; i<=200; i++){
-      var E = (i/200) * maxE;
-      var intensity = 0;
-      if(E > 0 && E < kv){
-        intensity = info.Z * (kv - E) / kv * maNorm;
-        /* low energy filter (inherent filtration ~2mm Al) */
-        var filterFactor = 1 - Math.exp(-E/3);
-        intensity *= filterFactor;
-      }
-      points.push({e:E, i:intensity});
-    }
-
-    /* normalize */
-    var peakI = 0;
-    points.forEach(function(p){ if(p.i > peakI) peakI = p.i; });
-
-    /* draw filled area */
-    specCtx.beginPath();
-    specCtx.moveTo(padL, padT+gh);
-    points.forEach(function(p){
-      var x = padL + (p.e/maxE)*gw;
-      var y = padT + gh - (peakI > 0 ? (p.i/peakI)*gh*0.7 : 0);
-      specCtx.lineTo(x, y);
-    });
-    specCtx.lineTo(padL+gw, padT+gh);
-    specCtx.closePath();
-    var grad = specCtx.createLinearGradient(padL,padT,padL,padT+gh);
-    grad.addColorStop(0, 'rgba(0,113,227,.25)');
-    grad.addColorStop(1, 'rgba(0,113,227,.02)');
-    specCtx.fillStyle = grad;
-    specCtx.fill();
-
-    /* draw line */
-    specCtx.beginPath();
-    points.forEach(function(p,idx){
-      var x = padL + (p.e/maxE)*gw;
-      var y = padT + gh - (peakI > 0 ? (p.i/peakI)*gh*0.7 : 0);
-      if(idx===0) specCtx.moveTo(x,y);
-      else specCtx.lineTo(x,y);
-    });
-    specCtx.strokeStyle = '#0071e3';
-    specCtx.lineWidth = 1.5;
-    specCtx.stroke();
-
-    /* characteristic peaks (Ka, Kb) if voltage is high enough */
-    function drawPeak(energy, label, heightFactor){
-      if(kv < energy * 1.1) return; /* need ~10% more voltage than edge */
-      var px = padL + (energy/maxE)*gw;
-      var peakH = gh * heightFactor * maNorm;
-      specCtx.beginPath();
-      /* gaussian-ish peak */
-      var sigma = gw * 0.008;
-      for(var dx=-sigma*3; dx<=sigma*3; dx+=1){
-        var val = peakH * Math.exp(-(dx*dx)/(2*sigma*sigma));
-        var baseY = padT + gh;
-        /* add bremsstrahlung base */
-        var eAtX = ((px+dx-padL)/gw)*maxE;
-        var baseI = 0;
-        if(eAtX > 0 && eAtX < kv){
-          baseI = info.Z*(kv-eAtX)/kv*maNorm*(1-Math.exp(-eAtX/3));
-          baseI = peakI > 0 ? (baseI/peakI)*gh*0.7 : 0;
-        }
-        var y = baseY - baseI - val;
-        if(dx === -sigma*3) specCtx.moveTo(px+dx, y);
-        else specCtx.lineTo(px+dx, y);
-      }
-      specCtx.strokeStyle = '#e040fb';
-      specCtx.lineWidth = 2;
-      specCtx.stroke();
-      /* label */
-      specCtx.fillStyle = '#e040fb';
-      specCtx.font = 'bold 8px SF Mono, monospace';
-      specCtx.textAlign = 'center';
-      specCtx.fillText(label, px, padT + gh - peakH - 8);
-      specCtx.fillText(energy + ' keV', px, padT + gh - peakH + 2);
-    }
-
-    drawPeak(info.Ka, 'Kα', 0.85);
-    drawPeak(info.Kb, 'Kβ', 0.55);
-
-    /* E_max line */
-    var emaxX = padL + (kv/maxE)*gw;
-    specCtx.beginPath();
-    specCtx.moveTo(emaxX, padT);
-    specCtx.lineTo(emaxX, padT+gh);
-    specCtx.strokeStyle = 'rgba(255,59,48,.4)';
-    specCtx.lineWidth = 1;
-    specCtx.setLineDash([4,3]);
-    specCtx.stroke();
-    specCtx.setLineDash([]);
-    specCtx.fillStyle = 'rgba(255,59,48,.7)';
-    specCtx.font = 'bold 8px SF Mono, monospace';
-    specCtx.textAlign = 'center';
-    specCtx.fillText('E_max=' + kv + 'kV', emaxX, padT+10);
-  }
-
-  function updateTube(){
-    var kv = parseInt(tubeVoltage.value);
-    var ma = parseInt(tubeCurrent.value);
-    var mat = tubeAnodeMat.value;
-    var info = anodeMaterials[mat];
-
-    tubeVoltageVal.textContent = kv + ' kV';
-    tubeCurrentVal.textContent = ma + ' mA';
-    tubeAnodeInfo.textContent = 'Kα = ' + info.Ka + ' keV';
-    voltageLabel.textContent = 'ΔV = ' + kv + ' kV';
-    currentLabel.textContent = 'I = ' + ma + ' mA';
-
-    /* power */
-    var power = kv * ma;
-    if(power >= 1000) roPower.textContent = (power/1000).toFixed(1) + ' kW';
-    else roPower.textContent = power + ' W';
-
-    /* min wavelength: λ_min(pm) = 1240 / kV */
-    if(kv > 0){
-      var lambdaPm = 1240 / kv;
-      var lambdaNm = lambdaPm / 1000;
-      roWavelength.textContent = lambdaNm < 0.1 ? lambdaPm.toFixed(1) + ' pm' : lambdaNm.toFixed(3) + ' nm';
-      roEnergy.textContent = kv + ' keV';
-      xrayWaveLabel.textContent = 'λ ≥ ' + (lambdaNm < 0.1 ? lambdaPm.toFixed(1) + 'pm' : lambdaNm.toFixed(2) + 'nm');
-    } else {
-      roWavelength.textContent = '∞';
-      roEnergy.textContent = '0 keV';
-      xrayWaveLabel.textContent = 'λ = ∞';
-    }
-
-    /* radiation type */
-    if(kv === 0) roType.textContent = '—';
-    else if(kv < 20) roType.textContent = 'Moale';
-    else if(kv < 50) roType.textContent = 'Diagnostic';
-    else if(kv < 100) roType.textContent = 'Dur';
-    else roType.textContent = 'Foarte dur';
-
-    /* efficiency: η ≈ 1.1×10⁻⁹ × Z × V(volts) */
-    var eff = kv > 0 ? (1.1e-9 * info.Z * kv * 1000 * 100) : 0;
-    roEfficiency.textContent = '~' + eff.toFixed(2) + '%';
-
-    /* estimated anode temp (rough: assume 90% heat, small focal spot) */
-    var tempC = 25 + (power * 0.99 * 0.015);
-    roTemp.textContent = tempC < 100 ? Math.round(tempC) + ' °C' : tempC < 1000 ? Math.round(tempC) + ' °C' : (tempC/1000).toFixed(1) + '×10³ °C';
-    if(tempC > 2000) roTemp.style.color = '#ff3b30';
-    else if(tempC > 500) roTemp.style.color = '#ff9500';
-    else roTemp.style.color = '';
-
-    /* visual intensities */
-    var kvN = kv/150;
-    var maN = ma/500;
-    var active = kv > 0 && ma > 0;
-    var beamOp = active ? (0.25 + maN*0.75) : 0;
-    var xrayOp = active ? (0.15 + kvN*0.85) : 0;
-    var focalOp = active ? Math.min(kvN*maN*2, 1) : 0;
-    var heatOp = active ? Math.min(kvN*maN*1.5, 0.7) : 0;
-
-    electronBeamGroup.setAttribute('opacity', beamOp.toFixed(2));
-    xrayGroup.setAttribute('opacity', xrayOp.toFixed(2));
-    focalSpot.setAttribute('opacity', focalOp.toFixed(2));
-    heatWaves.setAttribute('opacity', heatOp.toFixed(2));
-
-    /* filament glow & thermionic cloud */
-    filamentGlow.setAttribute('opacity', (maN > 0 ? 0.06 + maN*0.3 : 0.1).toFixed(2));
-    thermionicCloud.setAttribute('opacity', (active ? 0.05 + maN*0.15 : 0).toFixed(2));
-
-    /* beam speed */
-    electronBeamGroup.querySelectorAll('.electron-beam').forEach(function(l){
-      l.style.animationDuration = (kv > 0 ? Math.max(0.08, 0.5-kvN*0.42) : 0.4) + 's';
-    });
-    xrayGroup.querySelectorAll('.xray-line').forEach(function(l){
-      l.style.animationDuration = (kv > 0 ? Math.max(0.3, 1.2-kvN*0.9) : 1.2) + 's';
-    });
-
-    /* electron particles */
-    if(active){
-      var tc = Math.floor(3 + maN*18);
-      while(eDots.length < tc) eDots.push(createElectronDot());
-      while(eDots.length > tc){ var r=eDots.pop(); r.el.remove(); }
-    } else {
-      eDots.forEach(function(d){ d.el.remove(); });
-      eDots = [];
-    }
-
-    /* x-ray photon particles */
-    if(active){
-      var xc = Math.floor(1 + kvN*maN*8);
-      while(xDots.length < xc) xDots.push(createXrayDot());
-      while(xDots.length > xc){ var r2=xDots.pop(); r2.el.remove(); }
-    } else {
-      xDots.forEach(function(d){ d.el.remove(); });
-      xDots = [];
-    }
-
-    /* draw spectrum */
-    drawSpectrum(kv, ma, mat);
-  }
-
-  function animateParticles(){
-    var kv = parseInt(tubeVoltage.value);
-    var kvN = kv/150;
-    /* electrons */
-    eDots.forEach(function(d){
-      d.x += d.speed * (0.4 + kvN*0.8);
-      var prog = (d.x - 135) / 397;
-      d.el.setAttribute('cx', d.x);
-      d.el.setAttribute('cy', d.y + (d.targetY - d.y) * prog);
-      d.el.setAttribute('opacity', (0.3 + prog*0.5).toFixed(2));
-      if(d.x > 532){
-        d.x = 135;
-        d.y = 175 + (Math.random()-0.5)*28;
-        d.targetY = 175 + (d.y-175)*0.12;
-        d.speed = 2.5 + Math.random()*4.5;
-      }
-    });
-    /* x-ray photons */
-    xDots.forEach(function(d){
-      d.x += d.vx * 1.5;
-      d.y += d.vy * 1.5;
-      d.life++;
-      d.el.setAttribute('cx', d.x);
-      d.el.setAttribute('cy', d.y);
-      d.el.setAttribute('opacity', Math.max(0, 0.8 - d.life*0.015).toFixed(2));
-      if(d.x > 680 || d.x < 400 || d.y < 40 || d.y > 310 || d.life > 60){
-        d.x = 536; d.y = 175;
-        var angle = (Math.random()-0.5)*1.4;
-        d.vx = Math.cos(angle)*3.5;
-        d.vy = Math.sin(angle)*3.5;
-        d.life = 0;
-      }
-    });
-    requestAnimationFrame(animateParticles);
-  }
-
-  if(tubeVoltage){
-    tubeVoltage.addEventListener('input', updateTube);
-    tubeCurrent.addEventListener('input', updateTube);
-    tubeAnodeMat.addEventListener('change', updateTube);
-    updateTube();
-    animateParticles();
-    /* redraw spectrum on resize */
-    window.addEventListener('resize', function(){ updateTube(); });
-  }
-
+var tubeVoltage=document.getElementById('tubeVoltage');
+var tubeCurrent=document.getElementById('tubeCurrent');
+var tubeAnodeMat=document.getElementById('tubeAnodeMat');
+var tubeVoltageVal=document.getElementById('tubeVoltageVal');
+var tubeCurrentVal=document.getElementById('tubeCurrentVal');
+var tubeAnodeInfo=document.getElementById('tubeAnodeInfo');
+var roPower=document.getElementById('roPower');
+var roWavelength=document.getElementById('roWavelength');
+var roEnergy=document.getElementById('roEnergy');
+var roType=document.getElementById('roType');
+var roEfficiency=document.getElementById('roEfficiency');
+var roTemp=document.getElementById('roTemp');
+var electronBeamGroup=document.getElementById('electronBeamGroup');
+var xrayGroup=document.getElementById('xrayGroup');
+var focalSpot=document.getElementById('focalSpot');
+var heatWaves=document.getElementById('heatWaves');
+var filamentGlow=document.getElementById('filamentGlow');
+var thermionicCloud=document.getElementById('thermionicCloud');
+var voltageLabel=document.getElementById('voltageLabel');
+var currentLabel=document.getElementById('currentLabel');
+var xrayWaveLabel=document.getElementById('xrayWaveLabel');
+var electronDots=document.getElementById('electronDots');
+var xrayDotsSvg=document.getElementById('xrayDots');
+var specCanvas=document.getElementById('spectrumCanvas');
+var specCtx=specCanvas?specCanvas.getContext('2d'):null;
+var tubeTooltip=document.getElementById('tubeTooltip');
+var tubeSvgWrap=document.getElementById('tubeSvgWrap');
+var anodeMaterials={
+W:{name:'Wolfram',Z:74,Ka:59.3,Kb:67.2,Kedge:69.5},
+Mo:{name:'Molibden',Z:42,Ka:17.5,Kb:19.6,Kedge:20.0},
+Cu:{name:'Cupru',Z:29,Ka:8.05,Kb:8.91,Kedge:8.98},
+Rh:{name:'Rodiu',Z:45,Ka:20.2,Kb:22.7,Kedge:23.2}
+};
+var eDots=[];
+var xDots=[];
+function createElectronDot(){
+var c=document.createElementNS('http://www.w3.org/2000/svg','circle');
+c.setAttribute('r','2');
+c.setAttribute('fill','#1a5276');
+var yOff=(Math.random()-0.5)*28;
+c.setAttribute('cy',175+yOff);
+c.setAttribute('cx','135');
+c.setAttribute('opacity','0.6');
+electronDots.appendChild(c);
+return{el:c,x:135,y:175+yOff,targetY:175+yOff*0.12,speed:2.5+Math.random()*4.5};
+}
+function createXrayDot(){
+var c=document.createElementNS('http://www.w3.org/2000/svg','circle');
+c.setAttribute('r','1.8');
+c.setAttribute('fill','#e040fb');
+c.setAttribute('opacity','0.7');
+c.setAttribute('cx','536');
+c.setAttribute('cy','175');
+xrayDotsSvg.appendChild(c);
+var angle=(Math.random()-0.5)*1.4;
+return{el:c,x:536,y:175,vx:Math.cos(angle)*3.5,vy:Math.sin(angle)*3.5,life:0};
+}
+if(tubeSvgWrap){
+var parts=tubeSvgWrap.querySelectorAll('.tube-part');
+parts.forEach(function(p){
+p.addEventListener('mouseenter',function(){
+var tip=p.getAttribute('data-tip');
+if(!tip)return;
+tubeTooltip.textContent=tip;
+tubeTooltip.classList.add('show');
+});
+p.addEventListener('mousemove',function(e){
+var rect=tubeSvgWrap.getBoundingClientRect();
+var x=e.clientX-rect.left;
+var y=e.clientY-rect.top;
+tubeTooltip.style.left=Math.min(x-60,rect.width-210)+'px';
+tubeTooltip.style.top=(y-tubeTooltip.offsetHeight-12)+'px';
+});
+p.addEventListener('mouseleave',function(){tubeTooltip.classList.remove('show');});
+});
+}
+function drawSpectrum(kv,ma,mat){
+if(!specCtx)return;
+var dpr=window.devicePixelRatio||1;
+specCanvas.width=specCanvas.offsetWidth*dpr;
+specCanvas.height=180*dpr;
+specCtx.setTransform(dpr,0,0,dpr,0,0);
+var w=specCanvas.offsetWidth;
+var h=180;
+specCtx.clearRect(0,0,w,h);
+var padL=50,padR=20,padB=28,padT=18;
+var gw=w-padL-padR;
+var gh=h-padT-padB;
+specCtx.strokeStyle='rgba(0,0,0,.12)';
+specCtx.lineWidth=1;
+specCtx.beginPath();
+specCtx.moveTo(padL,padT);
+specCtx.lineTo(padL,padT+gh);
+specCtx.lineTo(padL+gw,padT+gh);
+specCtx.stroke();
+specCtx.fillStyle='#888';
+specCtx.font='8px system-ui';
+specCtx.textAlign='center';
+specCtx.fillText('\u03BB (pm)',padL+gw/2,h-3);
+specCtx.save();
+specCtx.translate(11,padT+gh/2);
+specCtx.rotate(-Math.PI/2);
+specCtx.fillText('I relativa',0,0);
+specCtx.restore();
+if(kv<=0||ma<=0){
+specCtx.fillStyle='#888';
+specCtx.font='10px system-ui';
+specCtx.textAlign='center';
+specCtx.fillText('Creste tensiunea si curentul',w/2,h/2);
+return;
+}
+var info=anodeMaterials[mat];
+var lambdaMin=1240/kv;
+var lambdaMax=Math.max(lambdaMin*5,80);
+if(lambdaMax>400)lambdaMax=400;
+var kaLam=1240/info.Ka;
+if(kv>=info.Kedge&&kaLam*1.3>lambdaMax)lambdaMax=kaLam*1.5;
+lambdaMax=Math.ceil(lambdaMax/10)*10;
+specCtx.fillStyle='#888';
+specCtx.font='7px monospace';
+specCtx.textAlign='center';
+var tickStep;
+if(lambdaMax<=40)tickStep=5;
+else if(lambdaMax<=80)tickStep=10;
+else if(lambdaMax<=200)tickStep=20;
+else tickStep=50;
+for(var t=0;t<=lambdaMax;t+=tickStep){
+var tx=padL+(t/lambdaMax)*gw;
+specCtx.fillText(t,tx,padT+gh+13);
+specCtx.beginPath();specCtx.moveTo(tx,padT+gh);specCtx.lineTo(tx,padT+gh+3);
+specCtx.strokeStyle='rgba(0,0,0,.12)';specCtx.stroke();
+if(t>0){specCtx.beginPath();specCtx.moveTo(tx,padT);specCtx.lineTo(tx,padT+gh);specCtx.strokeStyle='rgba(0,0,0,.04)';specCtx.stroke();}
+}
+var nPts=800;
+var bremPoints=[];
+for(var i=0;i<=nPts;i++){
+var lam=(i/nPts)*lambdaMax;
+var intensity=0;
+if(lam>lambdaMin&&lam>0.1){
+intensity=info.Z*ma*(1/(lam*lam))*(1/lambdaMin-1/lam);
+var Ekev=1240/lam;
+intensity*=(1-Math.exp(-Ekev/3));
+if(intensity<0)intensity=0;
+}
+bremPoints.push({l:lam,i:intensity});
+}
+function gaussianPeak(lam,centerLam,sigmaLam,amplitude){
+var dd=lam-centerLam;
+return amplitude*Math.exp(-(dd*dd)/(2*sigmaLam*sigmaLam));
+}
+var kaLamda=1240/info.Ka;
+var kbLamda=1240/info.Kb;
+var sigPm=lambdaMax*0.006;
+if(sigPm<0.8)sigPm=0.8;
+var bremAtKa=0;
+if(kaLamda>lambdaMin){
+bremAtKa=info.Z*ma*(1/(kaLamda*kaLamda))*(1/lambdaMin-1/kaLamda);
+bremAtKa*=(1-Math.exp(-info.Ka/3));
+}
+var kaAmp=(kv>=info.Kedge)?bremAtKa*7.0:0;
+var kbAmp=(kv>=info.Kedge)?bremAtKa*3.0:0;
+var totalPoints=[];
+for(var i2=0;i2<=nPts;i2++){
+var lam2=bremPoints[i2].l;
+var total=bremPoints[i2].i;
+if(kaAmp>0)total+=gaussianPeak(lam2,kaLamda,sigPm,kaAmp);
+if(kbAmp>0)total+=gaussianPeak(lam2,kbLamda,sigPm*0.8,kbAmp);
+totalPoints.push({l:lam2,i:total,brem:bremPoints[i2].i});
+}
+var iMax=parseInt(tubeCurrent.max);
+var refBremAtKa=0;
+if(kaLamda>lambdaMin){
+refBremAtKa=info.Z*iMax*(1/(kaLamda*kaLamda))*(1/lambdaMin-1/kaLamda);
+refBremAtKa*=(1-Math.exp(-info.Ka/3));
+}
+var refKaAmp=(kv>=info.Kedge)?refBremAtKa*7.0:0;
+var refKbAmp=(kv>=info.Kedge)?refBremAtKa*3.0:0;
+var maxI=0;
+for(var i3=0;i3<=nPts;i3++){
+var lam3=(i3/nPts)*lambdaMax;
+var refI=0;
+if(lam3>lambdaMin&&lam3>0.1){
+refI=info.Z*iMax*(1/(lam3*lam3))*(1/lambdaMin-1/lam3);
+refI*=(1-Math.exp(-(1240/lam3)/3));
+}
+if(refKaAmp>0)refI+=gaussianPeak(lam3,kaLamda,sigPm,refKaAmp);
+if(refKbAmp>0)refI+=gaussianPeak(lam3,kbLamda,sigPm*0.8,refKbAmp);
+if(refI>maxI)maxI=refI;
+}
+if(maxI===0)return;
+var usableH=gh*0.88;
+function valToY(val){
+var y=padT+gh-(val/maxI)*usableH;
+return Math.max(padT+2,y);
+}
+specCtx.save();
+specCtx.beginPath();
+specCtx.rect(padL,padT,gw,gh);
+specCtx.clip();
+specCtx.beginPath();
+specCtx.moveTo(padL,padT+gh);
+totalPoints.forEach(function(p){specCtx.lineTo(padL+(p.l/lambdaMax)*gw,valToY(p.i));});
+specCtx.lineTo(padL+gw,padT+gh);
+specCtx.closePath();
+var grad=specCtx.createLinearGradient(padL,padT,padL,padT+gh);
+grad.addColorStop(0,'rgba(26,82,118,.15)');
+grad.addColorStop(1,'rgba(26,82,118,.02)');
+specCtx.fillStyle=grad;
+specCtx.fill();
+specCtx.beginPath();
+totalPoints.forEach(function(p,idx){
+var x=padL+(p.l/lambdaMax)*gw;
+var y=valToY(p.i);
+if(idx===0)specCtx.moveTo(x,y);else specCtx.lineTo(x,y);
+});
+specCtx.strokeStyle='#1a5276';
+specCtx.lineWidth=2;
+specCtx.stroke();
+function drawCharLine(centerLam,sigma,amp,label){
+if(amp<=0)return;
+specCtx.beginPath();
+var drawing=false;
+var threshold=maxI*0.003;
+totalPoints.forEach(function(p){
+var peakVal=gaussianPeak(p.l,centerLam,sigma,amp);
+var x=padL+(p.l/lambdaMax)*gw;
+var y=valToY(p.i);
+if(peakVal>threshold){
+if(!drawing){specCtx.moveTo(x,y);drawing=true;}
+else specCtx.lineTo(x,y);
+}else if(drawing){specCtx.lineTo(x,y);drawing=false;}
+});
+specCtx.strokeStyle='#e040fb';
+specCtx.lineWidth=2.2;
+specCtx.stroke();
+var px=padL+(centerLam/lambdaMax)*gw;
+var peakTotal=0;
+totalPoints.forEach(function(p){
+if(Math.abs(p.l-centerLam)<lambdaMax/nPts*2&&p.i>peakTotal)peakTotal=p.i;
+});
+var labelY=Math.max(padT+16,valToY(peakTotal)-4);
+specCtx.fillStyle='#e040fb';
+specCtx.font='bold 8px monospace';
+specCtx.textAlign='center';
+specCtx.fillText(label,px,labelY-10);
+specCtx.fillText(centerLam.toFixed(1)+' pm',px,labelY-1);
+}
+drawCharLine(kaLamda,sigPm,kaAmp,'K\u03B1');
+drawCharLine(kbLamda,sigPm*0.8,kbAmp,'K\u03B2');
+specCtx.restore();
+var lminX=padL+(lambdaMin/lambdaMax)*gw;
+if(lminX>=padL&&lminX<=padL+gw){
+specCtx.beginPath();
+specCtx.moveTo(lminX,padT);
+specCtx.lineTo(lminX,padT+gh);
+specCtx.strokeStyle='rgba(255,59,48,.45)';
+specCtx.lineWidth=1;
+specCtx.setLineDash([4,3]);
+specCtx.stroke();
+specCtx.setLineDash([]);
+specCtx.fillStyle='rgba(255,59,48,.75)';
+specCtx.font='bold 7px monospace';
+specCtx.textAlign='left';
+var llx=lminX+3;
+if(llx+70>padL+gw)llx=lminX-70;
+specCtx.fillText('\u03BB_min='+lambdaMin.toFixed(1)+'pm',llx,padT+11);
+}
+specCtx.fillStyle='#888';
+specCtx.font='6px monospace';
+specCtx.textAlign='right';
+for(var yi=0;yi<=4;yi++){
+var frac=yi/4;
+var yy=padT+gh-frac*usableH;
+if(yy<padT)continue;
+specCtx.beginPath();specCtx.moveTo(padL-3,yy);specCtx.lineTo(padL,yy);
+specCtx.strokeStyle='rgba(0,0,0,.12)';specCtx.stroke();
+}
+}
+window.updateTube=function(){
+var kv=parseInt(tubeVoltage.value);
+var ma=parseInt(tubeCurrent.value);
+var mat=tubeAnodeMat.value;
+var info=anodeMaterials[mat];
+tubeVoltageVal.textContent=kv+' kV';
+tubeCurrentVal.textContent=ma+' mA';
+tubeAnodeInfo.textContent='K\u03B1 = '+info.Ka+' keV';
+voltageLabel.textContent='\u0394V = '+kv+' kV';
+currentLabel.textContent='I = '+ma+' mA';
+var power=kv*ma;
+if(power>=1000)roPower.textContent=(power/1000).toFixed(1)+' kW';
+else roPower.textContent=power+' W';
+if(kv>0){
+var lPm=1240/kv;
+var lNm=lPm/1000;
+roWavelength.textContent=lNm<0.1?lPm.toFixed(1)+' pm':lNm.toFixed(3)+' nm';
+roEnergy.textContent=kv+' keV';
+xrayWaveLabel.textContent='\u03BB \u2265 '+(lNm<0.1?lPm.toFixed(1)+'pm':lNm.toFixed(2)+'nm');
+}else{
+roWavelength.textContent='\u221E';
+roEnergy.textContent='0 keV';
+xrayWaveLabel.textContent='\u03BB = \u221E';
+}
+if(kv===0)roType.textContent='\u2014';
+else if(kv<20)roType.textContent='Moale';
+else if(kv<50)roType.textContent='Diagnostic';
+else if(kv<100)roType.textContent='Dur';
+else roType.textContent='Foarte dur';
+var eff=kv>0?(1.1e-9*info.Z*kv*1000*100):0;
+roEfficiency.textContent='~'+eff.toFixed(2)+'%';
+var tempC=25+(power*0.99*0.015);
+roTemp.textContent=tempC<100?Math.round(tempC)+' \u00B0C':tempC<1000?Math.round(tempC)+' \u00B0C':(tempC/1000).toFixed(1)+'\u00D710\u00B3 \u00B0C';
+if(tempC>2000)roTemp.style.color='#ff3b30';
+else if(tempC>500)roTemp.style.color='#ff9500';
+else roTemp.style.color='';
+var kvN=kv/150;
+var maN=ma/500;
+var active=kv>0&&ma>0;
+var beamOp=active?(0.25+maN*0.75):0;
+var xrayOp=active?(0.15+kvN*0.85):0;
+var focalOp=active?Math.min(kvN*maN*2,1):0;
+var heatOp=active?Math.min(kvN*maN*1.5,0.7):0;
+electronBeamGroup.setAttribute('opacity',beamOp.toFixed(2));
+xrayGroup.setAttribute('opacity',xrayOp.toFixed(2));
+focalSpot.setAttribute('opacity',focalOp.toFixed(2));
+heatWaves.setAttribute('opacity',heatOp.toFixed(2));
+filamentGlow.setAttribute('opacity',(maN>0?0.06+maN*0.3:0.1).toFixed(2));
+thermionicCloud.setAttribute('opacity',(active?0.05+maN*0.15:0).toFixed(2));
+electronBeamGroup.querySelectorAll('.electron-beam').forEach(function(l){
+l.style.animationDuration=(kv>0?Math.max(0.08,0.5-kvN*0.42):0.4)+'s';
+});
+xrayGroup.querySelectorAll('.xray-line').forEach(function(l){
+l.style.animationDuration=(kv>0?Math.max(0.3,1.2-kvN*0.9):1.2)+'s';
+});
+if(active){
+var tc=Math.floor(3+maN*18);
+while(eDots.length<tc)eDots.push(createElectronDot());
+while(eDots.length>tc){var r=eDots.pop();r.el.remove();}
+}else{
+eDots.forEach(function(dd){dd.el.remove();});
+eDots=[];
+}
+if(active){
+var xc=Math.floor(1+kvN*maN*8);
+while(xDots.length<xc)xDots.push(createXrayDot());
+while(xDots.length>xc){var r2=xDots.pop();r2.el.remove();}
+}else{
+xDots.forEach(function(dd){dd.el.remove();});
+xDots=[];
+}
+drawSpectrum(kv,ma,mat);
+};
+function animateParticles(){
+var kv=parseInt(tubeVoltage.value);
+var kvN=kv/150;
+eDots.forEach(function(dd){
+dd.x+=dd.speed*(0.4+kvN*0.8);
+var prog=(dd.x-135)/397;
+dd.el.setAttribute('cx',dd.x);
+dd.el.setAttribute('cy',dd.y+(dd.targetY-dd.y)*prog);
+dd.el.setAttribute('opacity',(0.3+prog*0.5).toFixed(2));
+if(dd.x>532){
+dd.x=135;
+dd.y=175+(Math.random()-0.5)*28;
+dd.targetY=175+(dd.y-175)*0.12;
+dd.speed=2.5+Math.random()*4.5;
+}
+});
+xDots.forEach(function(dd){
+dd.x+=dd.vx*1.5;
+dd.y+=dd.vy*1.5;
+dd.life++;
+dd.el.setAttribute('cx',dd.x);
+dd.el.setAttribute('cy',dd.y);
+dd.el.setAttribute('opacity',Math.max(0,0.8-dd.life*0.015).toFixed(2));
+if(dd.x>680||dd.x<400||dd.y<40||dd.y>310||dd.life>60){
+dd.x=536;dd.y=175;
+var angle=(Math.random()-0.5)*1.4;
+dd.vx=Math.cos(angle)*3.5;
+dd.vy=Math.sin(angle)*3.5;
+dd.life=0;
+}
+});
+requestAnimationFrame(animateParticles);
+}
+if(tubeVoltage){
+tubeVoltage.addEventListener('input',updateTube);
+tubeCurrent.addEventListener('input',updateTube);
+tubeAnodeMat.addEventListener('change',updateTube);
+updateTube();
+animateParticles();
+window.addEventListener('resize',function(){updateTube();});
+}
 })();
 </script>
 </body>

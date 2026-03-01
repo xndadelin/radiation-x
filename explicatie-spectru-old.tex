@@ -1,0 +1,557 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[romanian]{babel}
+\usepackage{amsmath, amssymb}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{tcolorbox}
+
+\geometry{margin=2.5cm}
+
+\definecolor{codeblue}{RGB}{0,113,227}
+\definecolor{codegray}{RGB}{134,134,139}
+\definecolor{peakcolor}{RGB}{224,64,251}
+\definecolor{redline}{RGB}{255,59,48}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=codeblue,
+    urlcolor=codeblue
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\textit{Simulatorul tubului Röntgen — Documentație}}
+\fancyhead[R]{\textit{Sofian Adelin Mihai}}
+\fancyfoot[C]{\thepage}
+
+\titleformat{\section}{\Large\bfseries\color{codeblue}}{§\thesection}{1em}{}
+\titleformat{\subsection}{\large\bfseries}{§\thesubsection}{1em}{}
+
+\lstset{
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{codeblue}\bfseries,
+    commentstyle=\color{codegray}\itshape,
+    stringstyle=\color{peakcolor},
+    breaklines=true,
+    frame=single,
+    rulecolor=\color{codegray!30},
+    backgroundcolor=\color{codegray!5},
+    numbers=left,
+    numberstyle=\tiny\color{codegray},
+    tabsize=2
+}
+
+\title{
+    \vspace{-1cm}
+    {\LARGE\bfseries Generarea graficului spectrului de emisie\\al tubului Röntgen}\\[0.5em]
+    {\large Documentație tehnică — cod și fizică}\\[1em]
+    {\normalsize Proiect la fizică · Aplicațiile radiațiilor X}
+}
+\author{Sofian Adelin Mihai \\ Clasa a XII-a G · Liceul „Petru Rareș"}
+\date{Martie 2026}
+
+\begin{document}
+
+\maketitle
+\thispagestyle{fancy}
+
+\tableofcontents
+\newpage
+
+% ============================================================
+\section{Prezentare generală}
+% ============================================================
+
+Graficul spectrului de emisie este desenat pe un element \texttt{<canvas>} HTML folosind API-ul Canvas 2D. Funcția principală este \texttt{drawSpectrum(kv, ma, mat)}, care primește trei parametri de la slider-ele interfeței:
+
+\begin{itemize}[leftmargin=2em]
+    \item \textbf{kv} — tensiunea de accelerare (0–150 kV)
+    \item \textbf{ma} — curentul tubular (0–500 mA)
+    \item \textbf{mat} — materialul anodului (W, Mo, Cu sau Rh)
+\end{itemize}
+
+Spectrul conține două componente fizice distincte:
+\begin{enumerate}
+    \item \textbf{Radiația Bremsstrahlung} (de frânare) — spectru continuu
+    \item \textbf{Radiația caracteristică} (Kα, Kβ) — vârfuri discrete
+\end{enumerate}
+
+\begin{tcolorbox}[colback=codeblue!5, colframe=codeblue, title=Fluxul de date]
+\centering
+\texttt{kV, mA, material} $\;\longrightarrow\;$ $\lambda_{\min}$ $\;\longrightarrow\;$ 800 puncte Bremsstrahlung $\;\longrightarrow\;$ + gaussiene K$\alpha$, K$\beta$ $\;\longrightarrow\;$ normalizare $\;\longrightarrow\;$ desen Canvas
+\end{tcolorbox}
+
+
+% ============================================================
+\section{Pregătirea canvas-ului (HiDPI / Retina)}
+% ============================================================
+
+Pentru a obține linii clare pe ecrane cu densitate mare de pixeli (Retina), canvas-ul este scalat:
+
+\begin{lstlisting}[language=Java]
+var dpr = window.devicePixelRatio || 1;
+specCanvas.width  = specCanvas.offsetWidth * dpr;
+specCanvas.height = 200 * dpr;
+specCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+var w = specCanvas.offsetWidth;  // latime logica
+var h = 200;                     // inaltime logica
+\end{lstlisting}
+
+Astfel, pe un ecran Retina ($\text{dpr} = 2$), canvas-ul are fizic $1280 \times 400$ pixeli, dar desenăm în coordonate logice de $640 \times 200$. Fiecare pixel logic corespunde la $2 \times 2$ pixeli fizici.
+
+
+% ============================================================
+\section{Layout-ul graficului}
+% ============================================================
+
+Se definesc marginile (padding) care lasă spațiu pentru etichete și axe:
+
+\begin{align*}
+    \text{padL} &= 55\text{px (stânga, pentru eticheta Y)} \\
+    \text{padR} &= 24\text{px (dreapta)} \\
+    \text{padT} &= 20\text{px (sus)} \\
+    \text{padB} &= 32\text{px (jos, pentru eticheta X)}
+\end{align*}
+
+Zona utilă a graficului:
+\[
+    gw = w - \text{padL} - \text{padR}, \qquad gh = h - \text{padT} - \text{padB}
+\]
+
+
+% ============================================================
+\section{Calculul domeniului de lungimi de undă}
+% ============================================================
+
+\subsection{Limita Duane-Hunt ($\lambda_{\min}$)}
+
+Lungimea de undă minimă a fotonilor X emiși este dată de \textbf{legea Duane-Hunt}. Aceasta corespunde cazului ideal în care \emph{toată} energia cinetică a electronului se transformă într-un singur foton:
+
+\begin{equation}
+    \boxed{\lambda_{\min} = \frac{hc}{eV} = \frac{1240}{kV} \;\text{(pm)}}
+\end{equation}
+
+unde $h$ este constanta lui Planck, $c$ viteza luminii, $e$ sarcina electronului, iar $V$ tensiunea de accelerare. Constanta $1240$ provine din $hc = 1240\;\text{eV·pm}$.
+
+\subsection{Limita superioară ($\lambda_{\max}$)}
+
+Se alege dinamic pentru a arăta curba completă fără prea multă „coadă":
+
+\begin{lstlisting}[language=Java]
+var lambdaMax = Math.max(lambdaMin * 5, 80);
+if (lambdaMax > 400) lambdaMax = 400;
+\end{lstlisting}
+
+Maximul Bremsstrahlung în spațiul $\lambda$ se află la $\approx 1.5 \times \lambda_{\min}$, deci $5 \times \lambda_{\min}$ arată curba completă cu coada ei.
+
+Dacă linia K$\alpha$ a materialului ales ar fi în afara domeniului, se extinde:
+
+\begin{lstlisting}[language=Java]
+var kaLam = 1240 / info.Ka;
+if (kv >= info.Kedge && kaLam * 1.3 > lambdaMax) {
+    lambdaMax = kaLam * 1.5;
+}
+lambdaMax = Math.ceil(lambdaMax / 10) * 10; // rotunjire
+\end{lstlisting}
+
+
+% ============================================================
+\section{Curba Bremsstrahlung (radiație de frânare)}
+% ============================================================
+
+\subsection{Formula Kramers în spațiul $\lambda$}
+
+Intensitatea radiației de frânare, adaptată din \textbf{legea lui Kramers} în funcție de lungimea de undă:
+
+\begin{equation}
+    \boxed{I(\lambda)\,d\lambda = C \cdot Z \cdot i \cdot \frac{1}{\lambda^2} \cdot \left(\frac{1}{\lambda_{\min}} - \frac{1}{\lambda}\right) \cdot f(\lambda)\;d\lambda}
+\end{equation}
+
+\noindent unde:
+\begin{itemize}[leftmargin=2em]
+    \item $C$ = constantă de proporționalitate (nu contează — graficul arată intensitate \emph{relativă})
+    \item $Z$ = numărul atomic al anodului (ex: W $\rightarrow$ 74)
+    \item $i$ = curentul tubular (mA) — factor liniar direct în formulă
+    \item $\lambda$ = lungimea de undă a fotonului emis (pm)
+    \item $\lambda_{\min} = 1240/\text{kV}$ = limita Duane-Hunt (pm)
+    \item $f(\lambda)$ = funcția de filtrare inerentă
+\end{itemize}
+
+\textbf{De ce $i$ apare direct:} Curentul $i$ reprezintă câți electroni lovesc anodul pe secundă. Mai mulți electroni $=$ mai mulți fotoni, dar fiecare foton are aceeași distribuție de energie (determinată doar de $V$ și $Z$). Deci $i$ este un simplu factor de scalare liniară — nu e nevoie de nicio „normalizare" precum $i/i_{\max}$.
+
+\textbf{Observații fizice:}
+\begin{itemize}[leftmargin=2em]
+    \item Pentru $\lambda \leq \lambda_{\min}$: $I = 0$ (nu există fotoni cu energie mai mare decât energia electronului)
+    \item Factorul $1/\lambda^2$ provine din conversia $dE \to d\lambda$ ($E = hc/\lambda \Rightarrow dE = -hc/\lambda^2 \, d\lambda$)
+    \item Curba crește brusc de la $\lambda_{\min}$, atinge un maxim la $\approx 1.5\lambda_{\min}$, apoi scade gradual
+\end{itemize}
+
+\subsection{Filtrul de atenuare (filtrare inerentă)}
+
+Tubul real are un geam de sticlă/beriliu care absoarbe preferențial fotonii de energie mică (lungime de undă mare). Se modelează ca un filtru exponențial echivalent cu $\sim$2\,mm aluminiu:
+
+\begin{equation}
+    f(\lambda) = 1 - e^{-E_{\text{keV}} / 3}, \qquad E_{\text{keV}} = \frac{1240}{\lambda}
+\end{equation}
+
+\begin{itemize}[leftmargin=2em]
+    \item La $E = 3$ keV ($\lambda \approx 413$ pm): $f \approx 0.63$ — atenuare semnificativă
+    \item La $E = 10$ keV ($\lambda = 124$ pm): $f \approx 0.96$ — aproape fără atenuare
+    \item La $E = 1$ keV ($\lambda = 1240$ pm): $f \approx 0.28$ — puternic atenuat
+\end{itemize}
+
+Acest filtru face ca partea din stânga a curbei (energii mici / $\lambda$ mari) să fie suprimată, exact ca în realitate.
+
+\subsection{Efectul curentului (mA)}
+
+Curentul tubular controlează \emph{câți} electroni lovesc anodul pe unitatea de timp. În formula Kramers, curentul $i$ apare ca \textbf{factor liniar direct}:
+\[
+    I(\lambda) \propto i \cdot (\text{restul formulei})
+\]
+
+Nu există nicio normalizare artificială — valoarea mA intră direct în calcul. Dublarea curentului dublează intensitatea la fiecare $\lambda$, fără a schimba forma curbei sau poziția maximului. Aceasta este diferența fundamentală față de tensiune (kV), care schimbă \emph{forma} curbei.
+
+\subsection{Generarea punctelor}
+
+Se generează 800 de puncte uniform distribuite pe intervalul $[0, \lambda_{\max}]$:
+
+\begin{lstlisting}[language=Java]
+var nPts = 800;
+for (var i = 0; i <= nPts; i++) {
+    var lam = (i / nPts) * lambdaMax;
+    var intensity = 0;
+    if (lam > lambdaMin && lam > 0.1) {
+        // Kramers: I = C * Z * i * (1/lam^2) * (1/lamMin - 1/lam)
+        intensity = Z * ma * (1/(lam*lam)) * (1/lambdaMin - 1/lam);
+        var Ekev = 1240 / lam;
+        intensity *= (1 - Math.exp(-Ekev / 3));  // filtrare
+    }
+    bremPoints.push({l: lam, i: intensity});
+}
+\end{lstlisting}
+
+
+% ============================================================
+\section{Vârfurile caracteristice (K$\alpha$, K$\beta$)}
+% ============================================================
+
+\subsection{Originea fizică}
+
+Când un electron accelerat are energie suficientă pentru a ioniza stratul K al atomului din anod (energie $\geq E_{\text{K-edge}}$), un electron dintr-un strat superior cade pe locul gol, emițând un foton X cu energie \emph{discretă, specifică elementului}:
+
+\begin{itemize}[leftmargin=2em]
+    \item \textbf{K$\alpha$}: tranziție L $\to$ K (mai probabilă, vârf mai intens)
+    \item \textbf{K$\beta$}: tranziție M $\to$ K (mai puțin probabilă, vârf mai slab)
+\end{itemize}
+
+\subsection{Condiția de activare}
+
+Vârfurile apar \textbf{doar dacă} energia electronilor depășește energia de legătură a stratului K:
+\[
+    \text{kV} \geq E_{\text{K-edge}}
+\]
+
+\begin{table}[h]
+\centering
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{|l|c|c|c|c|c|}
+\hline
+\textbf{Material} & \textbf{Z} & \textbf{K$\alpha$ (keV)} & \textbf{K$\beta$ (keV)} & \textbf{K-edge (keV)} & \textbf{$\lambda_{K\alpha}$ (pm)} \\
+\hline
+Wolfram (W)   & 74 & 59.3 & 67.2 & 69.5 & 20.9 \\
+Molibden (Mo) & 42 & 17.5 & 19.6 & 20.0 & 70.9 \\
+Cupru (Cu)    & 29 &  8.05 & 8.91 & 8.98 & 154.0 \\
+Rodiu (Rh)    & 45 & 20.2 & 22.7 & 23.2 & 61.4 \\
+\hline
+\end{tabular}
+\caption{Datele materialelor de anod folosite în simulator}
+\end{table}
+
+\subsection{Modelarea ca funcții gaussiene}
+
+Fiecare vârf este modelat ca o \textbf{funcție gaussiană} adăugată peste curba Bremsstrahlung:
+
+\begin{equation}
+    G(\lambda) = A \cdot \exp\!\left(-\frac{(\lambda - \lambda_c)^2}{2\sigma^2}\right)
+\end{equation}
+
+\noindent unde:
+\begin{itemize}[leftmargin=2em]
+    \item $\lambda_c = 1240 / E_K$ — centrul vârfului (în pm)
+    \item $\sigma = \lambda_{\max} \times 0.006$ — lățimea gaussienei (foarte mică = spike ascuțit)
+    \item $A$ = amplitudinea, calculată relativ la valoarea Bremsstrahlung la $\lambda_{K\alpha}$
+\end{itemize}
+
+\subsection{Amplitudinile vârfurilor}
+
+Se calculează mai întâi valoarea curbei Bremsstrahlung exact la $\lambda_{K\alpha}$:
+
+\begin{lstlisting}[language=Java]
+var bremAtKa = Z * ma * (1/(kaLam*kaLam)) * (1/lambdaMin - 1/kaLam);
+bremAtKa *= (1 - Math.exp(-Ka / 3));
+\end{lstlisting}
+
+Apoi amplitudinile sunt proporționale cu această valoare:
+\begin{align}
+    A_{K\alpha} &= 7.0 \times I_{\text{brem}}(\lambda_{K\alpha}) \\
+    A_{K\beta}  &= 3.0 \times I_{\text{brem}}(\lambda_{K\alpha})
+\end{align}
+
+Raportul $K\alpha : K\beta \approx 7 : 3$ reflectă faptul că tranziția L $\to$ K este de $\sim$2--3 ori mai probabilă decât M $\to$ K. K$\beta$ are și $\sigma$ mai mic ($\times 0.8$) pentru a fi ușor mai îngust.
+
+\subsection{Curba totală}
+
+La fiecare punct, intensitatea totală este:
+
+\begin{equation}
+    I_{\text{total}}(\lambda) = I_{\text{brem}}(\lambda) + G_{K\alpha}(\lambda) + G_{K\beta}(\lambda)
+\end{equation}
+
+
+% ============================================================
+\section{Normalizarea vizuală (referință la curentul maxim)}
+% ============================================================
+
+\subsection{Problema}
+
+Fizica e curată: $I(\lambda) \propto Z \cdot i \cdot \ldots$, cu $i$ direct în formulă. Dar pentru a \emph{desena} pe canvas, trebuie să convertim valorile în pixeli. Dacă normalizăm la $\max(I_{\text{total}})$, factorul $i$ se simplifică:
+\[
+    y = \frac{I(\lambda)}{\max_\lambda I(\lambda)} = \frac{\cancel{i} \cdot f(\lambda)}{\cancel{i} \cdot \max f(\lambda)} = \frac{f(\lambda)}{\max f(\lambda)}
+\]
+Curentul dispare matematic $\Rightarrow$ graficul arată identic la orice mA.
+
+\subsection{Soluția: referință fixă la $i_{\max}$}
+
+Normalizăm nu la maximul curbei \emph{curente}, ci la maximul unei \textbf{curbe de referință} calculată la curentul maxim al slider-ului ($i_{\max}$):
+
+\begin{lstlisting}[language=Java]
+// iMax = valoarea max a slider-ului, citita din DOM
+var iMax = parseInt(tubeCurrent.max); // = 500
+
+// Recalculam curba cu i = iMax (aceeasi fizica!)
+for (var i = 0; i <= nPts; i++) {
+    var lam = (i / nPts) * lambdaMax;
+    var refI = Z * iMax * (1/(lam*lam)) * ...;
+    // + peaks ...
+    if (refI > maxI) maxI = refI;
+}
+\end{lstlisting}
+
+Apoi convertim valorile reale (cu $i$ curent) la pixeli:
+\begin{equation}
+    y_{\text{pixel}} = \text{padT} + gh - \frac{I(\lambda, i_{\text{curent}})}{\max_\lambda I(\lambda, i_{\max})} \times \text{usableH}
+\end{equation}
+
+\subsection{De ce funcționează}
+
+\begin{itemize}[leftmargin=2em]
+    \item La $i = i_{\max} = 500$ mA: $\frac{I}{I_{\text{ref}}} = \frac{i_{\max}}{i_{\max}} = 1$ $\Rightarrow$ curba umple tot graficul
+    \item La $i = 250$ mA: $\frac{I}{I_{\text{ref}}} = \frac{250}{500} = 0.5$ $\Rightarrow$ curba umple 50\%
+    \item La $i = 50$ mA: $\frac{I}{I_{\text{ref}}} = \frac{50}{500} = 0.1$ $\Rightarrow$ curba umple 10\%
+\end{itemize}
+
+\subsection{De ce 500?}
+
+\textbf{500 nu este o constantă fizică.} Este pur și simplu valoarea maximă a slider-ului de curent din interfață (\texttt{<input max="500">}). Dacă slider-ul ar merge până la 1000 mA, am folosi 1000. Codul citește această valoare dinamic din DOM (\texttt{tubeCurrent.max}), deci se adaptează automat.
+
+Matematic, orice valoare de referință $i_{\text{ref}} > 0$ ar funcționa — am alege pur și simplu $i_{\text{ref}} = i_{\max}$ pentru ca la slider-ul la maxim curba să umple tot graficul, ceea ce este intuitiv vizual.
+
+
+% ============================================================
+\section{Desenul pe canvas}
+% ============================================================
+
+\subsection{Clipping (tăiere la zona graficului)}
+
+Se creează o regiune de clip rectangulară ca nimic să nu iasă din cadrul graficului:
+
+\begin{lstlisting}[language=Java]
+specCtx.save();
+specCtx.beginPath();
+specCtx.rect(padL, padT, gw, gh);
+specCtx.clip();
+\end{lstlisting}
+
+\subsection{Umplerea cu gradient}
+
+Sub curba totală se desenează o zonă umplută cu gradient albastru transparent:
+
+\begin{lstlisting}[language=Java]
+specCtx.moveTo(padL, padT + gh);          // porneste de pe axa X
+totalPoints.forEach(p => lineTo(x, y));   // urmeaza curba
+specCtx.lineTo(padL + gw, padT + gh);     // inchide la axa X
+specCtx.fillStyle = gradient(albastru 15% -> 2%);
+specCtx.fill();
+\end{lstlisting}
+
+\subsection{Curba continuă (albastră)}
+
+Toată curba totală (Bremsstrahlung + vârfuri) este trasată ca \textbf{o singură linie continuă} albastră:
+
+\begin{lstlisting}[language=Java]
+totalPoints.forEach(function(p, idx) {
+    var x = padL + (p.l / lambdaMax) * gw;
+    var y = valToY(p.i);
+    if (idx === 0) moveTo(x, y); else lineTo(x, y);
+});
+specCtx.strokeStyle = '#0071e3'; // albastru
+specCtx.lineWidth = 2;
+specCtx.stroke();
+\end{lstlisting}
+
+\subsection{Highlight magenta pe vârfuri}
+
+Funcția \texttt{drawCharLine()} retrasează \emph{doar porțiunea} din jurul fiecărui vârf caracteristic cu culoare \textcolor{peakcolor}{\textbf{magenta}} (\texttt{\#e040fb}):
+
+\begin{lstlisting}[language=Java]
+totalPoints.forEach(function(p) {
+    var peakVal = gaussianPeak(p.l, centerLam, sigma, amp);
+    if (peakVal > threshold) {
+        // deseneaza in magenta
+    }
+});
+\end{lstlisting}
+
+Se detectează automat unde contribuția gaussienei depășește un prag ($0.3\%$ din maxI) și se trasează acea secțiune peste linia albastră.
+
+\subsection{Etichete K$\alpha$ și K$\beta$}
+
+Deasupra fiecărui vârf se afișează:
+\begin{itemize}[leftmargin=2em]
+    \item Numele tranziției: \textcolor{peakcolor}{\textbf{K$\alpha$}} sau \textcolor{peakcolor}{\textbf{K$\beta$}}
+    \item Lungimea de undă: ex. \textcolor{peakcolor}{\texttt{20.9 pm}}
+\end{itemize}
+
+Poziția etichetei este calculată din vârful curbei totale la acel $\lambda$, cu clamp la marginea de sus a graficului.
+
+
+% ============================================================
+\section{Linia $\lambda_{\min}$ (Duane-Hunt)}
+% ============================================================
+
+O linie verticală \textcolor{redline}{\textbf{roșie punctată}} marchează limita Duane-Hunt:
+
+\begin{lstlisting}[language=Java]
+var lminX = padL + (lambdaMin / lambdaMax) * gw;
+specCtx.setLineDash([4, 3]);         // linie punctata
+specCtx.strokeStyle = 'rgba(255,59,48,.45)'; // rosu
+specCtx.stroke();
+specCtx.setLineDash([]);             // reset
+\end{lstlisting}
+
+Eticheta afișează: \textcolor{redline}{\texttt{$\lambda_{\min}$ = X.X pm}}.
+
+Fizic, această linie marchează faptul că \emph{niciun foton nu poate avea lungime de undă mai mică decât $\lambda_{\min}$} — toată energia cinetică a unui electron s-ar transforma într-un singur foton.
+
+
+% ============================================================
+\section{Axele și grid-ul}
+% ============================================================
+
+\subsection{Axa X — Lungime de undă $\lambda$ (pm)}
+
+Tick-urile sunt spațiate automat:
+\begin{itemize}[leftmargin=2em]
+    \item $\lambda_{\max} \leq 40$ pm $\Rightarrow$ pas = 5 pm
+    \item $\lambda_{\max} \leq 80$ pm $\Rightarrow$ pas = 10 pm
+    \item $\lambda_{\max} \leq 200$ pm $\Rightarrow$ pas = 20 pm
+    \item $\lambda_{\max} > 200$ pm $\Rightarrow$ pas = 50 pm
+\end{itemize}
+
+Fiecare tick are o linie scurtă ($+4$\,px) și o linie verticală de grid foarte subtilă (opacitate 4\%).
+
+\subsection{Axa Y — Intensitate relativă}
+
+4 tick-uri la 25\%, 50\%, 75\%, 100\% din intensitatea de referință, cu linii de grid orizontale subtile.
+
+
+% ============================================================
+\section{Rezumatul formulelor fizice}
+% ============================================================
+
+\begin{tcolorbox}[colback=codeblue!5, colframe=codeblue, title=Formulele cheie ale simulatorului]
+
+\textbf{1. Limita Duane-Hunt:}
+\[
+    \lambda_{\min} = \frac{1240}{\text{kV}} \;\text{(pm)}
+\]
+
+\textbf{2. Spectrul Bremsstrahlung (Kramers, în spațiul $\lambda$):}
+\[
+    I(\lambda)\,d\lambda = C \cdot Z \cdot i \cdot \frac{1}{\lambda^2} \cdot \left(\frac{1}{\lambda_{\min}} - \frac{1}{\lambda}\right) \cdot \left(1 - e^{-E/3}\right) d\lambda
+\]
+
+\textbf{3. Vârfuri caracteristice (gaussiene):}
+\[
+    G(\lambda) = A \cdot \exp\!\left(-\frac{(\lambda - \lambda_c)^2}{2\sigma^2}\right), \quad A_{K\alpha} = 7 \cdot I_{\text{brem}}(\lambda_{K\alpha}), \quad A_{K\beta} = 3 \cdot I_{\text{brem}}(\lambda_{K\alpha})
+\]
+
+\textbf{4. Eficiența conversiei:}
+\[
+    \eta \approx 1.1 \times 10^{-9} \cdot Z \cdot V \quad (\text{V în volți})
+\]
+
+\textbf{5. Puterea electrică:}
+\[
+    P = \text{kV} \times \text{mA} \quad (\text{W})
+\]
+
+\textbf{6. Energia maximă a fotonului:}
+\[
+    E_{\max} = e \cdot V = \text{kV} \quad (\text{keV})
+\]
+
+\end{tcolorbox}
+
+
+% ============================================================
+\section{Parametrii materialelor de anod}
+% ============================================================
+
+\begin{table}[h]
+\centering
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{|l|c|c|c|c|l|}
+\hline
+\textbf{Element} & $Z$ & $E_{K\alpha}$ (keV) & $E_{K\beta}$ (keV) & $E_{\text{K-edge}}$ (keV) & \textbf{Utilizare tipică} \\
+\hline
+Wolfram (W)   & 74 & 59.3  & 67.2  & 69.5  & Radiografie generală, CT \\
+Molibden (Mo) & 42 & 17.5  & 19.6  & 20.0  & Mamografie \\
+Cupru (Cu)    & 29 &  8.05 &  8.91 &  8.98 & Cristalografie (XRD) \\
+Rodiu (Rh)    & 45 & 20.2  & 22.7  & 23.2  & Mamografie (sâni denși) \\
+\hline
+\end{tabular}
+\caption{Materialele de anod și proprietățile lor}
+\end{table}
+
+
+% ============================================================
+\section{Clasificarea radiațiilor X după tensiune}
+% ============================================================
+
+\begin{table}[h]
+\centering
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{|l|c|l|}
+\hline
+\textbf{Tip} & \textbf{Tensiune} & \textbf{Aplicații} \\
+\hline
+Moale      & $< 20$ kV     & Mamografie, țesuturi moi \\
+Diagnostic & $20$--$50$ kV & Radiografie standard \\
+Dur        & $50$--$100$ kV & CT, fluoroscopie \\
+Foarte dur & $> 100$ kV    & Penetrare metale, radioterapie \\
+\hline
+\end{tabular}
+\caption{Clasificarea radiațiilor X}
+\end{table}
+
+
+\end{document}
