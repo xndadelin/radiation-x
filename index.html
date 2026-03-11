@@ -794,43 +794,133 @@
           />
         </div>
         <div class="hero-content">
-          <div class="hero-overline">Wilhelm Conrad Roentgen, 1895</div>
-          <h1 class="hero-title">Radiatii<span class="x">X</span></h1>
+          <div class="hero-overline">Wilhelm Conrad Röntgen, 1895</div>
+          <h1 class="hero-title">Radiații<span class="x">X</span></h1>
           <p class="hero-sub">
-            Proiect fizica &mdash; Aplicatiile radiatiilor X<br />Sofian Adelin
+            Proiect fizică &mdash; Aplicațiile radiațiilor X<br />Sofian Adelin
             Mihai &middot; Clasa a XII-a G
           </p>
           <div class="hero-line"></div>
-          <p class="hero-start">Foloseste sagetile pentru a naviga</p>
+          <p class="hero-start">Folosește săgețile pentru a naviga</p>
         </div>
       </div>
 
       <div class="slide" data-slide="1">
         <div class="slide-inner">
-          <span class="s-number">01</span>
-          <h2 class="s-title">Medicina &amp; sanatate</h2>
+          <span class="s-number">00</span>
+          <h2 class="s-title">Ce sunt radiațiile X?</h2>
           <div class="s-accent"></div>
           <p class="s-desc">
-            Radiatiile X sunt coloana vertebrala a diagnosticului medical
-            modern. Ele permit vizualizarea non-invaziva a structurilor interne
-            ale corpului uman &mdash; de la oase si organe pana la vasele de
-            sange si celulele canceroase. Aproximativ 70% din toate deciziile
-            clinice sunt influentate de imagistica medicala bazata pe raze X.
+            Radiațiile X sunt unde electromagnetice cu lungimi de undă între
+            0.01 și 10 nm, situate în spectrul EM între ultraviolet și razele
+            gamma. Au fost descoperite întâmplător de Wilhelm Conrad Röntgen
+            la 8 noiembrie 1895, în timp ce experimenta cu tuburi catodice.
+            Le-a numit „X" pentru că nu le cunoștea natura.
+          </p>
+          <div class="ib">
+            <h3>&#9889; Proprietăți fundamentale</h3>
+            <ul class="dose-list">
+              <li><strong>Lungime de undă:</strong> 0.01 – 10 nm (10 pm – 10 000 pm)</li>
+              <li><strong>Energie fotonică:</strong> ~100 eV – 100 keV</li>
+              <li><strong>Frecvență:</strong> 3 × 10¹⁶ – 3 × 10¹⁹ Hz</li>
+              <li><strong>Viteză:</strong> c = 3 × 10⁸ m/s (viteza luminii în vid)</li>
+              <li><strong>Natura duală:</strong> se comportă atât ca undă (difracție, interferență) cât și ca particulă (efect fotoelectric, efect Compton)</li>
+              <li><strong>Ionizante:</strong> au suficientă energie pentru a smulge electroni din atomi</li>
+            </ul>
+          </div>
+          <div class="ib">
+            <h3>&#128218; Interacțiuni cu materia</h3>
+            <ul class="dose-list">
+              <li><strong>Efect fotoelectric:</strong> fotonul X este absorbit complet, un electron este ejectat din atom. Predominant la energii joase și Z mare.</li>
+              <li><strong>Împrăștiere Compton:</strong> fotonul transferă parte din energie unui electron și este deviat. Predominant la energii medii.</li>
+              <li><strong>Producere de perechi:</strong> la energii > 1.02 MeV, fotonul se transformă în electron + pozitron lângă un nucleu.</li>
+              <li><strong>Împrăștiere Rayleigh:</strong> fotonul este deviat fără pierdere de energie (elastică). Important în imagistică.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide" data-slide="2">
+        <div class="slide-inner">
+          <span class="s-number">00</span>
+          <h2 class="s-title">Cum se produc radiațiile X?</h2>
+          <div class="s-accent"></div>
+          <p class="s-desc">
+            Radiațiile X se produc în principal prin două mecanisme fizice
+            care au loc atunci când electroni de mare viteză interacționează
+            cu materia. Ambele procese se întâmplă simultan în tubul Röntgen.
+          </p>
+          <div class="ib">
+            <h3>&#127774; Radiație de frânare (Bremsstrahlung)</h3>
+            <p>
+              Când un electron rapid trece pe lângă un nucleu atomic, câmpul
+              electric coulombian îl decelează și îl deviază. Conform
+              electrodinamicii clasice, orice sarcină accelerată emite radiație
+              electromagnetică. Energia fotonului emis depinde de cât de
+              aproape trece electronul de nucleu:
+            </p>
+            <ul class="dose-list">
+              <li><strong>Spectru continuu:</strong> de la 0 până la energia cinetică maximă a electronului</li>
+              <li><strong>Limita Duane-Hunt:</strong> λ<sub>min</sub> = hc / eV = 1240 / V(kV) pm &mdash; toată energia cinetică devine un singur foton</li>
+              <li><strong>Intensitate:</strong> I ∝ Z × I<sub>tub</sub> × V² &mdash; crește cu Z-ul anodului și tensiunea aplicată</li>
+              <li><strong>Eficiență:</strong> η ≈ 1.1 × 10⁻⁹ × Z × V &mdash; doar ~1% din energia electronilor devine raze X la 100 kV pe wolfram</li>
+            </ul>
+          </div>
+          <div class="ib">
+            <h3>&#128142; Radiație caracteristică</h3>
+            <p>
+              Când energia electronului incident depășește energia de legătură a
+              unui electron din stratul K (sau L) al atomului țintă, electronul
+              orbital este ejectat. Lacuna este umplută de un electron dintr-un
+              strat superior, iar diferența de energie este emisă ca foton X:
+            </p>
+            <ul class="dose-list">
+              <li><strong>Kα:</strong> tranziția L → K (cea mai intensă linie caracteristică)</li>
+              <li><strong>Kβ:</strong> tranziția M → K (energie mai mare, intensitate ~15-20% din Kα)</li>
+              <li><strong>Prag de excitare:</strong> energia electronului trebuie să depășească energia de legătură K-edge (69.5 keV pentru W)</li>
+              <li><strong>Spectru discret:</strong> liniile sunt unice fiecărui element &mdash; „amprenta digitală" atomică (legea lui Moseley)</li>
+            </ul>
+          </div>
+          <div class="ib">
+            <h3>&#9881; Componentele tubului Röntgen</h3>
+            <ul class="dose-list">
+              <li><strong>Catodul:</strong> filament de wolfram încălzit la ~2200 °C prin efect Joule, emite electroni prin emisie termoionică</li>
+              <li><strong>Anodul (ținta):</strong> disc metalic (W, Mo, Cu, Rh) înclinat la 12-17°, unde electronii sunt opriți și produc raze X</li>
+              <li><strong>Vidul:</strong> ~10⁻⁶ Pa, pentru ca electronii să nu fie absorbiți de molecule de aer</li>
+              <li><strong>Diferența de potențial:</strong> 20-150 kV accelerează electronii de la catod la anod</li>
+              <li><strong>Fereastra de Be:</strong> beriliul (Z=4) permite trecerea razelor X cu absorbție minimă</li>
+              <li><strong>Răcire:</strong> ~99% din energie devine căldură &mdash; anode rotative (3000-10000 rpm) sau răcire cu ulei/apă</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide" data-slide="3">
+        <div class="slide-inner">
+          <span class="s-number">01</span>
+          <h2 class="s-title">Medicină &amp; sănătate</h2>
+          <div class="s-accent"></div>
+          <p class="s-desc">
+            Radiațiile X sunt coloana vertebrală a diagnosticului medical
+            modern. Ele permit vizualizarea non-invazivă a structurilor interne
+            ale corpului uman &mdash; de la oase și organe până la vasele de
+            sânge și celulele canceroase. Aproximativ 70% din toate deciziile
+            clinice sunt influențate de imagistica medicală bazată pe raze X.
           </p>
           <div class="s-img">
             <img
               src="https://images.unsplash.com/photo-1530497610245-94d3c16cda28?w=1200&q=80"
-              alt="Radiografie medicala"
+              alt="Radiografie medicală"
               loading="lazy"
             />
           </div>
           <div class="ib">
-            <h3>&#9762; Doze de radiatie &mdash; context</h3>
+            <h3>&#9762; Doze de radiație &mdash; context</h3>
             <ul class="dose-list">
               <li><strong>&#9992; Zbor intern (1-2 ore):</strong> ~0.01 mSv</li>
               <li>
-                <strong>&#129723; Radiografie toracica:</strong> ~0.02 mSv
-                &mdash; echivalent cu 2-3 zile de radiatie naturala
+                <strong>&#129723; Radiografie toracică:</strong> ~0.02 mSv
+                &mdash; echivalent cu 2-3 zile de radiație naturală
               </li>
               <li><strong>&#127758; Zbor transatlantic:</strong> ~0.08 mSv</li>
               <li><strong>&#129658; Mamografie:</strong> ~0.4 mSv</li>
@@ -841,56 +931,56 @@
               </li>
               <li>
                 <strong
-                  >&#128105;&#8205;&#9877;&#65039; Limita profesionala
-                  anuala:</strong
+                  >&#128105;&#8205;&#9877;&#65039; Limită profesională
+                  anuală:</strong
                 >
                 20 mSv
               </li>
               <li>
                 <strong>&#9888;&#65039; Prag efecte detectabile:</strong> 100
-                mSv &middot; Doza letala: ~4000-5000 mSv
+                mSv &middot; Doză letală: ~4000-5000 mSv
               </li>
             </ul>
           </div>
         </div>
       </div>
 
-      <div class="slide" data-slide="2">
+      <div class="slide" data-slide="4">
         <div class="slide-inner">
-          <span class="s-number">01 &mdash; Aplicatii medicale (1/2)</span>
+          <span class="s-number">01 &mdash; Aplicații medicale (1/2)</span>
           <div class="app-list">
             <div class="app-item">
-              <div class="app-name">Radiografie conventionala</div>
+              <div class="app-name">Radiografie convențională</div>
               <div class="app-detail">
-                Cea mai veche aplicatie a razelor X, din 1896. Un fascicul
-                traverseaza corpul, creand o imagine 2D pe un detector. Oasele
-                apar albe, tesuturile moi in gri. Folosita pentru fracturi,
-                infectii pulmonare, afectiuni dentare.
+                Cea mai veche aplicație a razelor X, din 1896. Un fascicul
+                traversează corpul, creând o imagine 2D pe un detector. Oasele
+                apar albe, țesuturile moi în gri. Folosită pentru fracturi,
+                infecții pulmonare, afecțiuni dentare.
               </div>
             </div>
             <div class="app-item">
-              <div class="app-name">Tomografie computerizata (CT)</div>
+              <div class="app-name">Tomografie computerizată (CT)</div>
               <div class="app-detail">
-                Inventata in 1971 (Nobel 1979). Roteste un tub de raze X in
-                jurul pacientului, captand sute de imagini din unghiuri
-                diferite. Genereaza sectiuni transversale si reconstructii 3D.
-                Un scan complet dureaza sub 5 secunde.
+                Inventată în 1971 (Nobel 1979). Rotește un tub de raze X în
+                jurul pacientului, captând sute de imagini din unghiuri
+                diferite. Generează secțiuni transversale și reconstrucții 3D.
+                Un scan complet durează sub 5 secunde.
               </div>
             </div>
             <div class="app-item">
               <div class="app-name">Mamografie</div>
               <div class="app-detail">
-                Radiografie specializata cu doze reduse pentru examinarea
-                sanului. Detecteaza tumori si microcalcificari cu 2-3 ani
-                inainte de a fi palpabile. A redus mortalitatea prin cancer de
-                san cu 20-40%.
+                Radiografie specializată cu doze reduse pentru examinarea
+                sânului. Detectează tumori și microcalcificări cu 2-3 ani
+                înainte de a fi palpabile. A redus mortalitatea prin cancer de
+                sân cu 20-40%.
               </div>
             </div>
             <div class="app-item">
               <div class="app-name">Fluoroscopie</div>
               <div class="app-detail">
-                Imagine continua, in timp real &mdash; &bdquo;film&rdquo; cu
-                raze X. Permite observarea miscarii organelor si ghidarea
+                Imagine continuă, în timp real &mdash; &bdquo;film&rdquo; cu
+                raze X. Permite observarea mișcării organelor și ghidarea
                 cateterismului cardiac, studii digestive cu bariu, plasarea de
                 proteze.
               </div>
@@ -899,57 +989,57 @@
         </div>
       </div>
 
-      <div class="slide" data-slide="3">
+      <div class="slide" data-slide="5">
         <div class="slide-inner">
-          <span class="s-number">01 &mdash; Aplicatii medicale (2/2)</span>
+          <span class="s-number">01 &mdash; Aplicații medicale (2/2)</span>
           <div class="app-list">
             <div class="app-item">
               <div class="app-name">Radioterapie</div>
               <div class="app-detail">
                 Fascicule focalizate de raze X de 6-18 MeV distrug celulele
-                canceroase prin deteriorarea ADN-ului. IMRT si radioterapia
-                stereotactica livreaza doze cu precizie sub-milimetrica. ~50%
-                din pacientii cu cancer beneficiaza de radioterapie.
+                canceroase prin deteriorarea ADN-ului. IMRT și radioterapia
+                stereotactică livrează doze cu precizie sub-milimetrică. ~50%
+                din pacienții cu cancer beneficiază de radioterapie.
               </div>
             </div>
             <div class="app-item">
-              <div class="app-name">Densitometrie osoasa (DEXA)</div>
+              <div class="app-name">Densitometrie osoasă (DEXA)</div>
               <div class="app-detail">
-                Doua fascicule cu energii diferite masoara densitatea minerala
-                osoasa. Standard de aur pentru osteoporoza. T-score sub -2.5 =
-                osteoporoza. Doza de 10x mai mica decat o radiografie toracica.
+                Două fascicule cu energii diferite măsoară densitatea minerală
+                osoasă. Standard de aur pentru osteoporoză. T-score sub -2.5 =
+                osteoporoză. Doză de 10x mai mică decât o radiografie toracică.
               </div>
             </div>
             <div class="app-item">
               <div class="app-name">Angiografie</div>
               <div class="app-detail">
-                Substanta de contrast iodata injectata prin cateter face vasele
-                vizibile pe fluoroscopie. Detecteaza stenoze, anevrisme,
-                disectii de aorta. Permite angioplastie si plasare de stenturi
+                Substanță de contrast iodată injectată prin cateter face vasele
+                vizibile pe fluoroscopie. Detectează stenoze, anevrisme,
+                disecții de aortă. Permite angioplastie și plasare de stenturi
                 imediat.
               </div>
             </div>
             <div class="app-item">
-              <div class="app-name">Brachiterapie</div>
+              <div class="app-name">Brahiterapie</div>
               <div class="app-detail">
-                Radioterapie interna: surse radioactive miniaturale (Ir-192,
-                Cs-137, I-125) plasate direct in tumora. Razele X ghideaza
-                plasarea. Doza scade rapid cu distanta, protejand tesuturile
-                sanatoase.
+                Radioterapie internă: surse radioactive miniaturale (Ir-192,
+                Cs-137, I-125) plasate direct în tumoră. Razele X ghidează
+                plasarea. Doza scade rapid cu distanța, protejând țesuturile
+                sănătoase.
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="slide" data-slide="4">
+      <div class="slide" data-slide="6">
         <div class="slide-inner">
           <span class="s-number">02</span>
           <h2 class="s-title">Securitate &amp; control</h2>
           <div class="s-accent"></div>
           <p class="s-desc">
-            Razele X sunt esentiale in securitatea publica &mdash; inspectia
-            non-invaziva a bagajelor, vehiculelor si persoanelor. Miliarde de
+            Razele X sunt esențiale în securitatea publică &mdash; inspecția
+            non-invazivă a bagajelor, vehiculelor și persoanelor. Miliarde de
             obiecte sunt scanate anual.
           </p>
           <div class="s-img">
@@ -965,110 +1055,32 @@
               <div class="app-detail">
                 Imagini color codificate cromatic: organic &rarr; portocaliu,
                 metal &rarr; albastru, intermediar &rarr; verde. Sisteme CT 3D
-                cu AI pentru detectarea automata a explozivilor. 500-1800
-                bagaje/ora.
+                cu AI pentru detectarea automată a explozivilor. 500-1800
+                bagaje/oră.
               </div>
             </div>
             <div class="app-item">
               <div class="app-name">Scanarea containerelor</div>
               <div class="app-detail">
-                Acceleratoare liniare de 2-9 MeV scaneaza containere de 6-12 m.
-                Penetreaza 300-400 mm otel. Detecteaza contrabanda, persoane
+                Acceleratoare liniare de 2-9 MeV scanează containere de 6-12 m.
+                Penetrează 300-400 mm oțel. Detectează contrabandă, persoane
                 ascunse, materiale nucleare.
               </div>
             </div>
             <div class="app-item">
               <div class="app-name">Scanere corporale</div>
               <div class="app-detail">
-                Backscatter cu raze X de joasa energie reflectate de piele.
-                Doza: 3-9 minute de fond natural. Versiunile moderne afiseaza
+                Backscatter cu raze X de joasă energie reflectate de piele.
+                Doză: 3-9 minute de fond natural. Versiunile moderne afișează
                 doar anomalii pe avatar generic.
               </div>
             </div>
             <div class="app-item">
               <div class="app-name">Detectarea bug-urilor</div>
               <div class="app-detail">
-                Raze X portabile detecteaza microfoane si camere ascunse in
-                pereti, mobilier sau electronice. Folosita in ambasade si
+                Raze X portabile detectează microfoane și camere ascunse în
+                pereți, mobilier sau electronice. Folosită în ambasade și
                 birouri securizate.
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="slide" data-slide="5">
-        <div class="slide-inner">
-          <span class="s-number">03</span>
-          <h2 class="s-title">Industrie &mdash; Testare non-distructiva</h2>
-          <div class="s-accent"></div>
-          <p class="s-desc">
-            Testarea non-distructiva (NDT) cu raze X este obligatorie in
-            industriile unde un defect intern invizibil poate avea consecinte
-            catastrofale.
-          </p>
-          <div class="s-img">
-            <img
-              src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=1200&q=80"
-              alt="Inspectie industriala"
-              loading="lazy"
-            />
-          </div>
-          <div class="app-list">
-            <div class="app-item">
-              <div class="app-name">Inspectarea sudurilor</div>
-              <div class="app-detail">
-                Dezvaluie porozitati, incluziuni, fisuri interne. Obligatorie
-                (ASME, ISO) pentru conducte de gaz, reactoare nucleare, poduri.
-                Surse X (100-450 kV) sau gamma (Ir-192).
-              </div>
-            </div>
-            <div class="app-item">
-              <div class="app-name">Micro-fisuri in aviatie</div>
-              <div class="app-detail">
-                Detecteaza fisuri de micrometri in paleti turbine, longeroni
-                aripi, tren de aterizare. Obligatorie la intervale regulate
-                (EASA/FAA).
-              </div>
-            </div>
-            <div class="app-item">
-              <div class="app-name">Microelectronica</div>
-              <div class="app-detail">
-                Singura metoda non-distructiva de inspectat lipituri BGA, wire
-                bond, PCB-uri multilayer. Rezolutie sub 1 um. Sisteme AXI
-                integrate in liniile SMT.
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="slide" data-slide="6">
-        <div class="slide-inner">
-          <span class="s-number">03 &mdash; Industrie (continuare)</span>
-          <div class="app-list">
-            <div class="app-item">
-              <div class="app-name">Inspectia alimentelor</div>
-              <div class="app-detail">
-                Detecteaza contaminanti fizici: sticla, pietre, oase, ceramica.
-                Functioneaza prin folii metalizate. Viteze de 30-100 m/min,
-                sensibilitate 0.3 mm.
-              </div>
-            </div>
-            <div class="app-item">
-              <div class="app-name">Masurarea grosimii</div>
-              <div class="app-detail">
-                Gauge-uri X masoara fara contact grosimea pe linii de productie
-                continua. Tolerante de &plusmn;0.1-1 um pe otel, aluminiu,
-                plastic, hartie, sticla.
-              </div>
-            </div>
-            <div class="app-item">
-              <div class="app-name">Analiza anvelopelor</div>
-              <div class="app-detail">
-                Vizualizeaza structura interna: corduri otel, benzi Kevlar,
-                straturi cauciuc. Detecteaza delaminare, rupturi ale cordurilor,
-                vulcanizare defectuoasa.
               </div>
             </div>
           </div>
@@ -1077,11 +1089,89 @@
 
       <div class="slide" data-slide="7">
         <div class="slide-inner">
-          <span class="s-number">04</span>
-          <h2 class="s-title">Cercetare stiintifica &amp; analiza</h2>
+          <span class="s-number">03</span>
+          <h2 class="s-title">Industrie &mdash; Testare non-distructivă</h2>
           <div class="s-accent"></div>
           <p class="s-desc">
-            De la structura ADN-ului pana la fabricarea tranzistorilor atomici,
+            Testarea non-distructivă (NDT) cu raze X este obligatorie în
+            industriile unde un defect intern invizibil poate avea consecințe
+            catastrofale.
+          </p>
+          <div class="s-img">
+            <img
+              src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=1200&q=80"
+              alt="Inspecție industrială"
+              loading="lazy"
+            />
+          </div>
+          <div class="app-list">
+            <div class="app-item">
+              <div class="app-name">Inspectarea sudurilor</div>
+              <div class="app-detail">
+                Dezvăluie porozități, incluziuni, fisuri interne. Obligatorie
+                (ASME, ISO) pentru conducte de gaz, reactoare nucleare, poduri.
+                Surse X (100-450 kV) sau gamma (Ir-192).
+              </div>
+            </div>
+            <div class="app-item">
+              <div class="app-name">Micro-fisuri în aviație</div>
+              <div class="app-detail">
+                Detectează fisuri de micrometri în paleți turbine, longeroni
+                aripi, tren de aterizare. Obligatorie la intervale regulate
+                (EASA/FAA).
+              </div>
+            </div>
+            <div class="app-item">
+              <div class="app-name">Microelectronică</div>
+              <div class="app-detail">
+                Singura metodă non-distructivă de inspectat lipituri BGA, wire
+                bond, PCB-uri multilayer. Rezoluție sub 1 µm. Sisteme AXI
+                integrate în liniile SMT.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide" data-slide="8">
+        <div class="slide-inner">
+          <span class="s-number">03 &mdash; Industrie (continuare)</span>
+          <div class="app-list">
+            <div class="app-item">
+              <div class="app-name">Inspecția alimentelor</div>
+              <div class="app-detail">
+                Detectează contaminanți fizici: sticlă, pietre, oase, ceramică.
+                Funcționează prin folii metalizate. Viteze de 30-100 m/min,
+                sensibilitate 0.3 mm.
+              </div>
+            </div>
+            <div class="app-item">
+              <div class="app-name">Măsurarea grosimii</div>
+              <div class="app-detail">
+                Gauge-uri X măsoară fără contact grosimea pe linii de producție
+                continuă. Toleranțe de &plusmn;0.1-1 µm pe oțel, aluminiu,
+                plastic, hârtie, sticlă.
+              </div>
+            </div>
+            <div class="app-item">
+              <div class="app-name">Analiza anvelopelor</div>
+              <div class="app-detail">
+                Vizualizează structura internă: corduri oțel, benzi Kevlar,
+                straturi cauciuc. Detectează delaminare, rupturi ale cordurilor,
+                vulcanizare defectuoasă.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide" data-slide="9">
+        <div class="slide-inner">
+          <span class="s-number">04</span>
+          <h2 class="s-title">Cercetare științifică &amp; analiză</h2>
+          <div class="s-accent"></div>
+          <p class="s-desc">
+            De la structura ADN-ului până la fabricarea tranzistorilor atomici,
             razele X au generat peste 29 de Premii Nobel.
           </p>
           <div class="s-img">
@@ -1093,7 +1183,7 @@
           </div>
           <div class="ib">
             <h3>&#128202; Spectrul electromagnetic interactiv</h3>
-            <p class="ib-sub">Apasa pe o zona a spectrului pentru detalii.</p>
+            <p class="ib-sub">Apasă pe o zonă a spectrului pentru detalii.</p>
             <div class="spectrum-container" id="spectrumContainer">
               <div class="spectrum-bar-wrap">
                 <span class="spectrum-xray-indicator" style="left: 73%"
@@ -1167,8 +1257,8 @@
                 <p>
                   <strong>&#955;:</strong> 0.01&ndash;10 nm &middot;
                   <strong>E:</strong> 100 eV &ndash; 100 keV<br />Descoperite de
-                  Roentgen in 1895. Penetreaza tesuturile moi dar sunt absorbite
-                  de oase si metale.
+                  Röntgen în 1895. Penetrează țesuturile moi dar sunt absorbite
+                  de oase și metale.
                 </p>
               </div>
             </div>
@@ -1176,12 +1266,12 @@
         </div>
       </div>
 
-      <div class="slide sim-slide" data-slide="8">
+      <div class="slide sim-slide" data-slide="10">
         <div class="slide-inner">
-          <span class="s-number">04 &mdash; Simulatorul tubului Roentgen</span>
+          <span class="s-number">04 &mdash; Simulatorul tubului Röntgen</span>
           <p class="ib-sub" style="margin-bottom: 8px">
-            Controleaza tensiunea, curentul si materialul anodului. Tine
-            cursorul peste componente pentru explicatii.
+            Controlează tensiunea, curentul și materialul anodului. Ține
+            cursorul peste componente pentru explicații.
           </p>
           <div class="tube-sim" id="tubeSim">
             <div class="tube-svg-wrap" id="tubeSvgWrap">
@@ -1386,7 +1476,7 @@
                 </text>
                 <g
                   class="tube-part"
-                  data-tip="Catodul (filament de wolfram) este incalzit la ~2200 C prin efect Joule. Electronii sunt emisi prin emisie termoionica."
+                  data-tip="Catodul (filament de wolfram) este încălzit la ~2200 °C prin efect Joule. Electronii sunt emiși prin emisie termoionică."
                 >
                   <rect
                     x="92"
@@ -1449,7 +1539,7 @@
                 </g>
                 <g
                   class="tube-part"
-                  data-tip="Anodul (tinta) &mdash; disc metalic inclinat la 12-17 grade. ~1% energie devine raze X, ~99% devine caldura."
+                  data-tip="Anodul (țintă) &mdash; disc metalic înclinat la 12-17 grade. ~1% energie devine raze X, ~99% devine căldură."
                 >
                   <polygon
                     points="540,105 558,105 545,245 527,245"
@@ -1523,12 +1613,12 @@
                     transform="rotate(-90,565,180)"
                     opacity=".5"
                   >
-                    RACIRE
+                    RĂCIRE
                   </text>
                 </g>
                 <g
                   class="tube-part"
-                  data-tip="Fereastra de beriliu (Be, Z=4) &mdash; permite trecerea razelor X, mentine vidul."
+                  data-tip="Fereastra de beriliu (Be, Z=4) &mdash; permite trecerea razelor X, menține vidul."
                 >
                   <rect
                     x="590"
@@ -1559,7 +1649,7 @@
                     font-family="system-ui"
                     opacity=".4"
                   >
-                    fereastra
+                    fereastră
                   </text>
                 </g>
                 <g
@@ -1809,7 +1899,7 @@
                 <div class="tube-controls">
                   <div
                     class="tube-ctrl"
-                    data-info="Tensiunea accelereaza electronii. Mai mare = fotoni X cu energie mai mare."
+                    data-info="Tensiunea accelerează electronii. Mai mare = fotoni X cu energie mai mare."
                   >
                     <label>TENSIUNE (kV)</label>
                     <input
@@ -1824,7 +1914,7 @@
                   </div>
                   <div
                     class="tube-ctrl"
-                    data-info="Curentul controleaza cati electroni/s. Mai mult curent = mai multi fotoni X, dar energia maxima ramane aceeasi."
+                    data-info="Curentul controlează câți electroni/s. Mai mult curent = mai mulți fotoni X, dar energia maximă rămâne aceeași."
                   >
                     <label>CURENT (mA)</label>
                     <input
@@ -1839,7 +1929,7 @@
                   </div>
                   <div
                     class="tube-ctrl"
-                    data-info="Materialul anodului determina varfurile caracteristice. W = radiografie. Mo/Rh = mamografie. Cu = cristalografie."
+                    data-info="Materialul anodului determină vârfurile caracteristice. W = radiografie. Mo/Rh = mamografie. Cu = cristalografie."
                   >
                     <label>MATERIAL ANOD</label>
                     <select id="tubeAnodeMat">
@@ -1856,21 +1946,21 @@
                 <div class="tube-readout" style="margin-top: 8px">
                   <div
                     class="ro-item"
-                    data-info="P = U x I. Doar ~1% devine raze X, restul = caldura."
+                    data-info="P = U × I. Doar ~1% devine raze X, restul = căldură."
                   >
                     <span class="ro-label">PUTERE</span
                     ><span class="ro-val" id="roPower">0 W</span>
                   </div>
                   <div
                     class="ro-item"
-                    data-info="Duane-Hunt: lambda_min = 1240/kV (pm). Toata energia devine un foton."
+                    data-info="Duane-Hunt: λ_min = 1240/kV (pm). Toată energia devine un foton."
                   >
                     <span class="ro-label">&#955; MIN</span
                     ><span class="ro-val" id="roWavelength">&#8734;</span>
                   </div>
                   <div
                     class="ro-item"
-                    data-info="E_max = kV (keV). Majoritatea fotonilor au energie mai mica."
+                    data-info="E_max = kV (keV). Majoritatea fotonilor au energie mai mică."
                   >
                     <span class="ro-label">E MAX</span
                     ><span class="ro-val" id="roEnergy">0 keV</span>
@@ -1879,19 +1969,19 @@
                     class="ro-item"
                     data-info="Moale (<20 kV), Diagnostic (20-50), Dur (50-100), Foarte dur (>100)."
                   >
-                    <span class="ro-label">TIP RADIATIE</span
+                    <span class="ro-label">TIP RADIAȚIE</span
                     ><span class="ro-val" id="roType">&mdash;</span>
                   </div>
                   <div
                     class="ro-item"
                     data-info="eta = 1.1e-9 x Z x V. La 100 kV cu W: ~0.8%."
                   >
-                    <span class="ro-label">EFICIENTA</span
+                    <span class="ro-label">EFICIENȚĂ</span
                     ><span class="ro-val" id="roEfficiency">~0%</span>
                   </div>
                   <div
                     class="ro-item"
-                    data-info="La puteri >50 kW, anodul depaseste 2000 C. De aceea se folosesc anode rotative."
+                    data-info="La puteri >50 kW, anodul depășește 2000 °C. De aceea se folosesc anode rotative."
                   >
                     <span class="ro-label">T ANOD</span
                     ><span class="ro-val" id="roTemp">25 &#176;C</span>
@@ -1902,9 +1992,9 @@
                 <div class="tube-spectrum">
                   <canvas id="spectrumCanvas" width="640" height="180"></canvas>
                   <p class="tube-spectrum-label">
-                    Curba albastra = <strong>Bremsstrahlung</strong> + varfuri
-                    violet = linii <strong>caracteristice</strong> (Ka, Kb).
-                    Linia rosie = &#955;<sub>min</sub> (Duane-Hunt).
+                    Curba albastră = <strong>Bremsstrahlung</strong> + vârfuri
+                    violet = linii <strong>caracteristice</strong> (Kα, Kβ).
+                    Linia roșie = &#955;<sub>min</sub> (Duane-Hunt).
                   </p>
                 </div>
               </div>
@@ -1913,151 +2003,53 @@
         </div>
       </div>
 
-      <div class="slide" data-slide="9">
+      <div class="slide" data-slide="11">
         <div class="slide-inner">
-          <span class="s-number">04 &mdash; Aplicatii in cercetare</span>
+          <span class="s-number">04 &mdash; Aplicații în cercetare</span>
           <div class="app-list">
             <div class="app-item">
               <div class="app-name">Cristalografie cu raze X</div>
               <div class="app-detail">
-                Difractia prin cristale reconstruieste structura atomica. A
-                dezvaluit ADN-ul (Watson &amp; Crick 1953, Fotografia 51 &mdash;
+                Difracția prin cristale reconstruiește structura atomică. A
+                dezvăluit ADN-ul (Watson &amp; Crick 1953, Fotografia 51 &mdash;
                 Rosalind Franklin). Nobel: Laue 1914, Bragg 1915, Hodgkin 1964.
               </div>
             </div>
             <div class="app-item">
               <div class="app-name">Spectroscopie XRF</div>
               <div class="app-detail">
-                Bombardeaza materialul cu raze X primare, electroni expulzati,
-                raze X secundare caracteristice. Identifica elemente de la Na la
+                Bombardează materialul cu raze X primare, electroni expulzați,
+                raze X secundare caracteristice. Identifică elemente de la Na la
                 U. Dispozitive portabile pentru analize de teren.
               </div>
             </div>
             <div class="app-item">
-              <div class="app-name">Difractie XRD</div>
+              <div class="app-name">Difracție XRD</div>
               <div class="app-detail">
-                Identifica faze cristaline &mdash; amprenta digitala. Distinge
-                compusi (calcit vs aragonit CaCO3). Esentiala in geologie,
-                farmaceutica, criminalistica.
+                Identifică faze cristaline &mdash; amprenta digitală. Distinge
+                compuși (calcit vs aragonit CaCO₃). Esențială în geologie,
+                farmaceutică, criminalistică.
               </div>
             </div>
             <div class="app-item">
               <div class="app-name">Micro-CT</div>
               <div class="app-detail">
-                CT miniaturizat cu rezolutie sub 1 micron. Anatomia insectelor,
+                CT miniaturizat cu rezoluție sub 1 micron. Anatomia insectelor,
                 fosile, porozitatea cimentului, implantologie.
               </div>
             </div>
             <div class="app-item">
               <div class="app-name">Litografie cu raze X</div>
               <div class="app-detail">
-                Scrie pattern-uri sub 10 nm &mdash; depasind limita UV.
+                Scrie pattern-uri sub 10 nm &mdash; depășind limita UV.
                 Tranzistori experimentali, nanostructuri fotonice.
               </div>
             </div>
             <div class="app-item">
               <div class="app-name">Microscopie cu raze X</div>
               <div class="app-detail">
-                Rezolutie 20-50 nm pe probe hidratate si vii. Imagistica 3D
-                celulara prin cryo-tomografie.
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="slide" data-slide="10">
-        <div class="slide-inner">
-          <span class="s-number">05</span>
-          <h2 class="s-title">Arta, arheologie &amp; istorie</h2>
-          <div class="s-accent"></div>
-          <p class="s-desc">
-            Razele X permit privirea sub suprafata operelor de arta, a mumiilor
-            si a artefactelor milenare, fara a le deteriora.
-          </p>
-          <div class="s-img">
-            <img
-              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRKuM13kkHMt0p4ciClAm_Yw1ev_8pNbueVMA&s"
-              alt="Mumie egipteana - analiza cu raze X"
-              loading="lazy"
-            />
-          </div>
-          <div class="app-list">
-            <div class="app-item">
-              <div class="app-name">Analiza picturilor</div>
-              <div class="app-detail">
-                Dezvaluie schite initiale, pentimenti, picturi acoperite. A
-                dezvaluit o femeie sub Peticul de iarba al lui Van Gogh.
-                Macro-XRF cartografiaza pigmentii element cu element.
-              </div>
-            </div>
-            <div class="app-item">
-              <div class="app-name">Scanarea mumiilor</div>
-              <div class="app-detail">
-                Despachetare digitala prin CT &mdash; amulete intre bandaje,
-                proteze antice, cauze ale mortii, reconstructie faciala
-                digitala.
-              </div>
-            </div>
-            <div class="app-item">
-              <div class="app-name">Autentificarea artei</div>
-              <div class="app-detail">
-                XRF + XRD verifica autenticitatea. Albul de titan (TiO2, din
-                1920) intr-o pictura din sec. XVII = fals. Han van Meegeren
-                demascat 1945.
-              </div>
-            </div>
-            <div class="app-item">
-              <div class="app-name">Restaurare metalica</div>
-              <div class="app-detail">
-                Dezvaluie inscriptii invizibile sub coroziune &mdash; pe spade
-                vikinge, monede romane, instrumente medievale.
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="slide" data-slide="11">
-        <div class="slide-inner">
-          <span class="s-number">06</span>
-          <h2 class="s-title">Astronomie &amp; geostiinte</h2>
-          <div class="s-accent"></div>
-          <p class="s-desc">
-            Razele X din cosmos sunt emise de cele mai energetice fenomene din
-            univers. Observarea lor ne permite sa studiem fizica in conditii
-            imposibil de reprodus pe Pamant.
-          </p>
-          <div class="s-img">
-            <img
-              src="https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=1200&q=80"
-              alt="Nebuloasa"
-              loading="lazy"
-            />
-          </div>
-          <div class="app-list">
-            <div class="app-item">
-              <div class="app-name">Telescoape spatiale X</div>
-              <div class="app-detail">
-                Atmosfera absoarbe razele X, de aceea telescoapele sunt in
-                spatiu: Chandra, XMM-Newton, eROSITA. Observa gauri negre,
-                supernove, pulsari, gaz fierbinte intergalactic.
-              </div>
-            </div>
-            <div class="app-item">
-              <div class="app-name">Analiza rocilor planetare</div>
-              <div class="app-detail">
-                XRF pe roverele Curiosity/Perseverance analizeaza roci martiene.
-                PIXL: micro-XRF cu rezolutie 120 um. Au demonstrat prezenta apei
-                pe Marte.
-              </div>
-            </div>
-            <div class="app-item">
-              <div class="app-name">Interiorul Pamantului</div>
-              <div class="app-detail">
-                Sincrotroane studiaza minerale la milioane de atmosfere. Au
-                descoperit post-perovskita (2004) &mdash; principalul mineral al
-                mantalei inferioare.
+                Rezoluție 20-50 nm pe probe hidratate și vii. Imagistică 3D
+                celulară prin cryo-tomografie.
               </div>
             </div>
           </div>
@@ -2066,75 +2058,173 @@
 
       <div class="slide" data-slide="12">
         <div class="slide-inner">
-          <span class="s-number">07</span>
-          <h2 class="s-title">Alte aplicatii</h2>
+          <span class="s-number">05</span>
+          <h2 class="s-title">Artă, arheologie &amp; istorie</h2>
           <div class="s-accent"></div>
           <p class="s-desc">
-            De la sterilizarea echipamentelor medicale la conservarea
-            alimentelor si modificarea materialelor plastice.
+            Razele X permit privirea sub suprafața operelor de artă, a mumiilor
+            și a artefactelor milenare, fără a le deteriora.
           </p>
           <div class="s-img">
             <img
-              src="https://images.unsplash.com/photo-1582719471384-894fbb16e074?w=1200&q=80"
-              alt="Aplicatii diverse"
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRKuM13kkHMt0p4ciClAm_Yw1ev_8pNbueVMA&s"
+              alt="Mumie egipteană - analiză cu raze X"
               loading="lazy"
             />
           </div>
           <div class="app-list">
             <div class="app-item">
-              <div class="app-name">Sterilizare medicala</div>
+              <div class="app-name">Analiza picturilor</div>
               <div class="app-detail">
-                Distrug ADN/ARN-ul microorganismelor. Sterilizeaza echipamente
-                ambalate fara caldura. Doza standard: 25 kGy. Seringi, catetere,
+                Dezvăluie schițe inițiale, pentimenti, picturi acoperite. A
+                dezvăluit o femeie sub Peticul de iarbă al lui Van Gogh.
+                Macro-XRF cartografiază pigmenții element cu element.
+              </div>
+            </div>
+            <div class="app-item">
+              <div class="app-name">Scanarea mumiilor</div>
+              <div class="app-detail">
+                Despachetare digitală prin CT &mdash; amulete între bandaje,
+                proteze antice, cauze ale morții, reconstrucție facială
+                digitală.
+              </div>
+            </div>
+            <div class="app-item">
+              <div class="app-name">Autentificarea artei</div>
+              <div class="app-detail">
+                XRF + XRD verifică autenticitatea. Albul de titan (TiO₂, din
+                1920) într-o pictură din sec. XVII = fals. Han van Meegeren
+                demascat 1945.
+              </div>
+            </div>
+            <div class="app-item">
+              <div class="app-name">Restaurare metalică</div>
+              <div class="app-detail">
+                Dezvăluie inscripții invizibile sub coroziune &mdash; pe spade
+                vikinge, monede romane, instrumente medievale.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide" data-slide="13">
+        <div class="slide-inner">
+          <span class="s-number">06</span>
+          <h2 class="s-title">Astronomie &amp; geoștiințe</h2>
+          <div class="s-accent"></div>
+          <p class="s-desc">
+            Razele X din cosmos sunt emise de cele mai energetice fenomene din
+            univers. Observarea lor ne permite să studiem fizica în condiții
+            imposibil de reprodus pe Pământ.
+          </p>
+          <div class="s-img">
+            <img
+              src="https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=1200&q=80"
+              alt="Nebuloasă"
+              loading="lazy"
+            />
+          </div>
+          <div class="app-list">
+            <div class="app-item">
+              <div class="app-name">Telescoape spațiale X</div>
+              <div class="app-detail">
+                Atmosfera absoarbe razele X, de aceea telescoapele sunt în
+                spațiu: Chandra, XMM-Newton, eROSITA. Observă găuri negre,
+                supernove, pulsari, gaz fierbinte intergalactic.
+              </div>
+            </div>
+            <div class="app-item">
+              <div class="app-name">Analiza rocilor planetare</div>
+              <div class="app-detail">
+                XRF pe roverele Curiosity/Perseverance analizează roci marțiene.
+                PIXL: micro-XRF cu rezoluție 120 µm. Au demonstrat prezența apei
+                pe Marte.
+              </div>
+            </div>
+            <div class="app-item">
+              <div class="app-name">Interiorul Pământului</div>
+              <div class="app-detail">
+                Sincrotroane studiază minerale la milioane de atmosfere. Au
+                descoperit post-perovskita (2004) &mdash; principalul mineral al
+                mantalei inferioare.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide" data-slide="14">
+        <div class="slide-inner">
+          <span class="s-number">07</span>
+          <h2 class="s-title">Alte aplicații</h2>
+          <div class="s-accent"></div>
+          <p class="s-desc">
+            De la sterilizarea echipamentelor medicale la conservarea
+            alimentelor și modificarea materialelor plastice.
+          </p>
+          <div class="s-img">
+            <img
+              src="https://images.unsplash.com/photo-1582719471384-894fbb16e074?w=1200&q=80"
+              alt="Aplicații diverse"
+              loading="lazy"
+            />
+          </div>
+          <div class="app-list">
+            <div class="app-item">
+              <div class="app-name">Sterilizare medicală</div>
+              <div class="app-detail">
+                Distrug ADN/ARN-ul microorganismelor. Sterilizează echipamente
+                ambalate fără căldură. Doză standard: 25 kGy. Seringi, catetere,
                 implanturi.
               </div>
             </div>
             <div class="app-item">
               <div class="app-name">Iradierea alimentelor</div>
               <div class="app-detail">
-                Elimina Salmonella, E. coli, Listeria. Nu face alimentele
+                Elimină Salmonella, E. coli, Listeria. Nu face alimentele
                 radioactive. Aprobat de OMS, FAO, FDA. Doze: 0.1-10 kGy.
               </div>
             </div>
             <div class="app-item">
               <div class="app-name">Polimerizare/reticulare</div>
               <div class="app-detail">
-                Cross-linking polimeric: imbunatateste rezistenta termica si
-                chimica. Izolatie cabluri XLPE, tuburi termocontractibile,
+                Cross-linking polimeric: îmbunătățește rezistența termică și
+                chimică. Izolație cabluri XLPE, tuburi termocontractibile,
                 hidrogeli biomedicale.
               </div>
             </div>
             <div class="app-item">
-              <div class="app-name">Deseuri periculoase</div>
+              <div class="app-name">Deșeuri periculoase</div>
               <div class="app-detail">
-                CT/radiografie investigheaza containere fara deschidere.
-                Iradierea neutralizeaza agenti biologici. Esential in
-                decommissionarea nucleara.
+                CT/radiografie investighează containere fără deschidere.
+                Iradierea neutralizează agenți biologici. Esențial în
+                decommissionarea nucleară.
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="slide footer-slide" data-slide="13">
+      <div class="slide footer-slide" data-slide="15">
         <div>
-          <div class="footer-logo">Radiatii<span class="x">X</span></div>
+          <div class="footer-logo">Radiații<span class="x">X</span></div>
           <div class="footer-line"></div>
-          <p class="footer-tagline">Lumina invizibila care a schimbat lumea.</p>
+          <p class="footer-tagline">Lumina invizibilă care a schimbat lumea.</p>
           <p class="footer-credit">
-            Wilhelm Conrad Roentgen &mdash; Premiul Nobel pentru Fizica, 1901
+            Wilhelm Conrad Röntgen &mdash; Premiul Nobel pentru Fizică, 1901
           </p>
         </div>
       </div>
     </div>
 
     <div class="slide-nav">
-      <button id="prevBtn" disabled aria-label="Slide anterioara">
+      <button id="prevBtn" disabled aria-label="Slide anterioară">
         &larr;
       </button>
-      <button id="nextBtn" aria-label="Slide urmatoare">&rarr;</button>
+      <button id="nextBtn" aria-label="Slide următoare">&rarr;</button>
     </div>
-    <div class="slide-counter" id="slideCounter">1 / 14</div>
+    <div class="slide-counter" id="slideCounter">1 / 16</div>
 
     <script>
       (function () {
@@ -2173,7 +2263,7 @@
           dots.forEach(function (dd, i) {
             dd.classList.toggle("active", i === currentSlide);
           });
-          if (currentSlide === 8 && typeof updateTube === "function") {
+          if (currentSlide === 10 && typeof updateTube === "function") {
             setTimeout(updateTube, 80);
           }
         }
@@ -2255,25 +2345,25 @@
             name: "Unde radio",
             wave: "1 mm \u2013 100 km",
             energy: "< 0.001 eV",
-            desc: "Cele mai lungi unde EM. Comunicatii radio, TV, Wi-Fi, Bluetooth, radar.",
+            desc: "Cele mai lungi unde EM. Comunicații radio, TV, Wi-Fi, Bluetooth, radar.",
           },
           {
             name: "Microunde",
             wave: "1 mm \u2013 30 cm",
             energy: "0.001\u20130.01 eV",
-            desc: "Cuptoare cu microunde, comunicatii satelitare, telefonie 4G/5G, radiatia cosmica de fond (CMB).",
+            desc: "Cuptoare cu microunde, comunicații satelitare, telefonie 4G/5G, radiația cosmică de fond (CMB).",
           },
           {
             name: "Infrarosu",
             wave: "700 nm \u2013 1 mm",
             energy: "0.01\u20131.7 eV",
-            desc: "Radiatie termica. Telecomenzi, camere termice, fibra optica, telescopul James Webb.",
+            desc: "Radiație termică. Telecomenzi, camere termice, fibră optică, telescopul James Webb.",
           },
           {
             name: "Lumina vizibila",
             wave: "380\u2013700 nm",
             energy: "1.7\u20133.3 eV",
-            desc: "Singura radiatie vizibila ochiului uman. Violet (380 nm) \u2192 rosu (700 nm).",
+            desc: "Singura radiație vizibilă ochiului uman. Violet (380 nm) \u2192 roșu (700 nm).",
           },
           {
             name: "Ultraviolet (UV)",
@@ -2285,13 +2375,13 @@
             name: "Raze X",
             wave: "0.01\u201310 nm",
             energy: "100 eV \u2013 100 keV",
-            desc: "Descoperite de Roentgen 1895. Penetreaza tesuturi moi, absorbite de oase. Medicina, securitate, industrie, cercetare.",
+            desc: "Descoperite de Röntgen 1895. Penetrează țesuturi moi, absorbite de oase. Medicină, securitate, industrie, cercetare.",
           },
           {
             name: "Raze gamma",
             wave: "< 0.01 nm",
             energy: "> 100 keV",
-            desc: "Cele mai energetice radiatii. Dezintegrari nucleare, supernovae, GRB-uri. Sterilizare, radioterapie.",
+            desc: "Cele mai energetice radiații. Dezintegrări nucleare, supernovae, GRB-uri. Sterilizare, radioterapie.",
           },
         ];
         spectrumSegs.forEach(function (seg) {
@@ -2441,13 +2531,13 @@
           specCtx.save();
           specCtx.translate(11, padT + gh / 2);
           specCtx.rotate(-Math.PI / 2);
-          specCtx.fillText("I relativa", 0, 0);
+          specCtx.fillText("I relativă", 0, 0);
           specCtx.restore();
           if (kv <= 0 || ma <= 0) {
             specCtx.fillStyle = "#888";
             specCtx.font = "10px system-ui";
             specCtx.textAlign = "center";
-            specCtx.fillText("Creste tensiunea si curentul", w / 2, h / 2);
+            specCtx.fillText("Crește tensiunea și curentul", w / 2, h / 2);
             return;
           }
           var info = anodeMaterials[mat];
